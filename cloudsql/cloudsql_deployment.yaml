@@ -37,9 +37,9 @@ spec:
         # project, the region of your Cloud SQL instance and the name
         # of your Cloud SQL instance. The format is
         # $PROJECT:$REGION:$INSTANCE
-        # Insert the port number used by your database.
+        # Change [PORT] here to the port number used by your database (e.g. 3306).
         # [START proxy_container]
-        - image: b.gcr.io/cloudsql-docker/gce-proxy:1.05
+        - image: gcr.io/cloudsql-docker/gce-proxy:1.06
           name: cloudsql-proxy
           command: ["/cloud_sql_proxy", "--dir=/cloudsql",
                     "-instances=[INSTANCE_CONNECTION_NAME]=tcp:[PORT]",
