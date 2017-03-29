@@ -15,11 +15,19 @@
  */
 
 var http = require('http');
+var os = require('os');
+
+process.on('SIGINT', function() {
+  console.log('shutting down...');
+  process.exit();
+});
 
 var handleRequest = function(request, response) {
   console.log('Received request for URL: ' + request.url);
   response.writeHead(200);
-  response.end('Hello, World!');
+  response.end('Hello, World!\nHostname: ' + os.hostname() + '\n');
 };
+
 var www = http.createServer(handleRequest);
+console.log('server listening on port 8080');
 www.listen(8080);
