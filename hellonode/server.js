@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-var http = require('http');
-var os = require('os');
+const http = require('http');
+const os = require('os');
+
+const port = process.env.PORT || 8080;
 
 process.on('SIGINT', function() {
   console.log('shutting down...');
-  process.exit();
+  process.exit(1);
 });
 
 var handleRequest = function(request, response) {
-  console.log('Received request for URL: ' + request.url);
+  console.log(`Received request for URL: ${request.url}`);
   response.writeHead(200);
-  response.end('Hello, World!\nHostname: ' + os.hostname() + '\n');
+  response.end(`Hello, World!\nHostname: ${os.hostname()}\n`);
 };
 
 var www = http.createServer(handleRequest);
-console.log('server listening on port 8080');
-www.listen(8080);
+www.listen(port, () => {
+  console.log(`server listening on port ${port}`);
+});
