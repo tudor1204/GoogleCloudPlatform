@@ -4,7 +4,7 @@ This example shows how to connect to
 [Google Cloud SQL](https://cloud.google.com/sql/docs/) from an application
 running on [Google Container Engine](https://cloud.google.com/container-engine).
 
-The [deployment manifest file](cloudsql_deployment.yaml)
+The [`mysql_wordpress_deployment.yaml` manifest file](mysql_wordpress_deployment.yaml)
 that consists of two containers:
 
 - A web frontend container running WordPress.
@@ -17,6 +17,8 @@ ready to use in production, as it does not configure a persistent disk for the
 WordPress set up and may yield in data loss.
 > Follow the [Using Persistent Disks with WordPress and
 MySQL](https://cloud.google.com/container-engine/docs/tutorials/persistent-disk) for an example that is ready to use.
+
+If you are looking for a PostgreSQL example, see [`postgres_deployment.yaml`](postgres_deployment.yaml).
 
 ### Prerequisites
 
@@ -35,13 +37,13 @@ cloudsql-instance-credentials   Opaque                                1         
 
 ### Deploy WordPress with Cloud SQL
 
-Open `cloudsql_deployment.yaml` and modify `<INSTANCE_CONNECTION_NAME>` with
+Open `mysql_wordpress_deployment.yaml` and modify `<INSTANCE_CONNECTION_NAME>` with
 your the connection name of your Cloud SQL instance.
 
 Then apply the manifest:
 
 ```sh
-$ kubectl apply -f cloudsql_deployment.yaml
+$ kubectl apply -f mysql_wordpress_deployment.yaml
 deployment "wordpress" created
 ```
 
