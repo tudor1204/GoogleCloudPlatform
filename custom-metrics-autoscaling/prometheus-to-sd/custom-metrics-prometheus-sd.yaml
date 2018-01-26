@@ -1,3 +1,5 @@
+# Copyright 2018 Google Inc.
+
 apiVersion: v1
 kind: Pod
 metadata:
@@ -7,8 +9,9 @@ spec:
   - command:
     - /bin/sh
     - -c
-    - ./prometheus_dummy_exporter --metric-name=foo --metric-value=40 --port=8080
-    image: gcr.io/google-containers/prometheus-dummy-exporter:v0.1.0
+    - ./prometheus-dummy-exporter --metric-name=foo --metric-value=40 --port=8080
+    image: gcr.io/google-samples/prometheus-dummy-exporter:dev
+    imagePullPolicy: Always
     name: prometheus-dummy-exporter
     resources:
       requests:
