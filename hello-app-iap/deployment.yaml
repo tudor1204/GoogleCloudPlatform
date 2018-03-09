@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-app-iap
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hello-app-iap
+    spec:
+      containers:
+      - name: app
+        image: gcr.io/google-samples/hello-app-iap:1.0.0
+        ports:
+          - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            host: "{{ENDPOINT}}"
+            path: /_gcp_iap/identity
+            port: 443
+            scheme: HTTPS
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 2
