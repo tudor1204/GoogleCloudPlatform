@@ -15,8 +15,7 @@ The sample highlights a number of Kubernetes and Open Service Broker concepts:
 *   *Binding* the provisioned *service instance* to a Kubernetes application.
 *   Use of the *binding* by the application to access the *service instance*.
 
-The sample application allows users to store and retrieve very simple musician
-information.
+The sample application allows users to store and retrieve musician information.
 
 At the center of the sample is a Cloud SQL (MySQL) instance, which will be
 provisioned in your project by the Service Broker. A Kubernetes application
@@ -24,7 +23,7 @@ will access the MySQL instance using a *binding*.
 
 ## Objectives
 
-To deploy and run the simple musician application, you must:
+To deploy and run the musician application, you must:
 
 1.  Create a new namespace for all Kubernetes resources used by the sample.
 2.  Provision Cloud SQL (MySQL) instance using Kubernetes Service Catalog.
