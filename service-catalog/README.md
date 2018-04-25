@@ -32,11 +32,11 @@ The Service Catalog samples demonstrate use of the services provided by the
 Service Broker.
 
 | Service                               | Admin job | Application Service Account | Per-Binding Service Account |
-| ------------------------------------- |:---------:|:--------------------------:|:----------------------------:|
-| [BigQuery](bigquery/)                 |     *     |             *              |               *              |
-| [Cloud Pub/Sub](cloud-pubsub/)        |     *     |             *              |               *              |
-| [Cloud Spanner](cloud-spanner/)       |     *     |             *              |               *              |
-| [Cloud Storage](cloud-storage/)       |     *     |                            |               *              |
+| ------------------------------------- |:---------:|:---------------------------:|:---------------------------:|
+| [BigQuery](bigquery/)                 |     *     |             *               |               *             |
+| [Cloud Pub/Sub](cloud-pubsub/)        |     *     |             *               |               *             |
+| [Cloud Spanner](cloud-spanner/)       |     *     |             *               |               *             |
+| [Cloud Storage](cloud-storage/)       |     *     |                             |               *             |
 
 ### Admin job
 
