@@ -53,4 +53,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, world!\n")
 	fmt.Fprintf(w, "Protocol: %s!\n", r.Proto)
 	fmt.Fprintf(w, "Hostname: %s\n", host)
+	if headerIP := r.Header.Get("X-Forwarded-For"); headerIP != "" {
+		fmt.Fprintf(w, "Client IP (X-Forwarded-For): %s\n", headerIP)
+	}
 }
