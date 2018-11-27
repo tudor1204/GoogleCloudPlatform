@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Google Inc.
+ * Copyright 2019 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-// [START all]
 package main
 
 import (
@@ -25,28 +24,29 @@ import (
 )
 
 func main() {
-	// register hello function to handle all requests
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", hello)
-
 	// use PORT environment variable, or default to 8080
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	port := "8080"
+	if fromEnv := os.Getenv("PORT"); fromEnv != "" {
+		port = fromEnv
 	}
+
+	// register hello function to handle all requests
+	server := http.NewServeMux()
+	server.HandleFunc("/", hello)
 
 	// start the web server on port and accept requests
 	log.Printf("Server listening on port %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, mux))
+	err := http.ListenAndServe(":"+port, server)
+	log.Fatal(err)
 }
 
 // hello responds to the request with a plain-text "Hello, world" message.
+// It also returns the appropriate headers to enable caching w/ the GCP CDN feature.
 func hello(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Serving request: %s", r.URL.Path)
 	host, _ := os.Hostname()
+	w.Header().Set("Cache-Control", "max-age=86400,public")
 	fmt.Fprintf(w, "Hello, world!\n")
 	fmt.Fprintf(w, "Version: 1.0.0\n")
-	fmt.Fprintf(w, "Hostname: %s\n", host)
+	fmt.Fprintf(w, "Hostname: %s\n", host)	
 }
-
-// [END all]

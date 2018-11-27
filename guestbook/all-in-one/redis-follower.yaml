@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-slave
+  name: redis-follower
   labels:
     app: redis
-    role: slave
+    role: follower
     tier: backend
 spec:
   ports:
@@ -12,18 +12,18 @@ spec:
   - port: 6379
   selector:
     app: redis
-    role: slave
+    role: follower
     tier: backend
 ---
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: redis-slave
+  name: redis-follower
   # these labels can be applied automatically
   # from the labels in the pod template if not set
   labels:
     app: redis
-    role: slave
+    role: follower
     tier: backend
 spec:
   # this replicas value is default
@@ -33,18 +33,18 @@ spec:
   # from the labels in the pod template if not set
   # selector:
   #   app: guestbook
-  #   role: slave
+  #   role: follower
   #   tier: backend
   template:
     metadata:
       labels:
         app: redis
-        role: slave
+        role: follower
         tier: backend
     spec:
       containers:
-      - name: slave
-        image: gcr.io/google_samples/gb-redisslave:v1
+      - name: follower
+        image: gcr.io/google_samples/gb-redis-follower:v2
         resources:
           requests:
             cpu: 100m
@@ -53,7 +53,7 @@ spec:
         - name: GET_HOSTS_FROM
           value: dns
           # If your cluster config does not include a dns service, then to
-          # instead access an environment variable to find the master
+          # instead access an environment variable to find the leader
           # service's host, comment out the 'value: dns' line above, and
           # uncomment the line below.
           # value: env
