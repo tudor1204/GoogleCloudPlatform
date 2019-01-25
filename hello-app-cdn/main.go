@@ -48,6 +48,5 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=86400,public")
 	fmt.Fprintf(w, "Hello, world!\n")
 	fmt.Fprintf(w, "Version: 1.0.0\n")
-	fmt.Fprintf(w, "Hostname: %s\n", host)
-	
+	fmt.Fprintf(w, "Hostname: %s\n", host)	
 }
