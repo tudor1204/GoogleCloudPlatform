@@ -1,14 +1,8 @@
-# Hello Application w/ CDN example
+# Hello Application with CDN example
 
-This example shows how to build and deploy a containerized Go web server
-application using [Kubernetes](https://kubernetes.io).
+> **Note:** This application is a copy of [hello-app](../hello-app) sample.
+> See that directory for more details on this sample.
 
-This application is compatible with the CDN feature of Google Cloud Platform in
-that it returns the appropriate header to ensure responses are cached.
-
-This directory contains:
-
-- `main.go` contains the HTTP server implementation. It responds to all HTTP
-  requests with a  `Hello, world!` response.
-- `Dockerfile` is used to build the Docker image for the application.
-
+This sample web application is designed to be compatible with the Cloud CDN.
+It responds the requests with the appropriate HTTP header to ensure the responses
+are cached.
