@@ -48,5 +48,5 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, world!\n")
 	fmt.Fprintf(w, "Version: 1.0.0\n")
 	fmt.Fprintf(w, "Hostname: %s\n", host)
-	fmt.Fprintf(w, "Cache-Control: max-age=86400,public")
+	w.Header().Set("Cache-Control", "max-age=86400,public")
 }
