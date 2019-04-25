@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: hello-app-iap-container
-        image: gcr.io/lxn-training/hello-app-iap:v2
+        image: gcr.io/[YOUR_PROJECT]/hello-app-iap:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 8081
