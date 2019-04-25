@@ -25,6 +25,11 @@ kubectl apply -f manifests/backendconfig.yaml
 kubectl apply -f manifests/service1.yaml
 kubectl apply -f manifests/service2.yaml
 ```
+## Create SSL cert
+
+```
+kubectl apply -f manifests/cert.yaml
+```
 
 ## Create ingress
 

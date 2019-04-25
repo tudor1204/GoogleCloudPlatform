@@ -3,11 +3,11 @@ kind: Ingress
 metadata:
   name: iap-ingress
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: ushishi
-    ingress.gcp.kubernetes.io/pre-shared-cert: ushishi
+    kubernetes.io/ingress.global-static-ip-name: iap-test
+    ingress.gcp.kubernetes.io/pre-shared-cert: iap-test-certificate
 spec:
   rules:
-    - host: ushishi.net 
+    - host: iap-test.tk 
       http:
         paths:
           - backend:
