@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: iap-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: ushishi
+    ingress.gcp.kubernetes.io/pre-shared-cert: ushishi
+spec:
+  rules:
+    - host: ushishi.net 
+      http:
+        paths:
+          - backend:
+              serviceName: service1
+              servicePort: 8081
+          - path: /page1/*
+            backend:
+              serviceName: service1
+              servicePort: 8081
+          - path: /page2/*
+            backend:
+              serviceName: service2
+              servicePort: 8082
