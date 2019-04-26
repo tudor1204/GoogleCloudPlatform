@@ -10,6 +10,7 @@ will create a Google managed SSL certificate for the endpoint, so make sure you 
 cluster.
 
 ## Build the image
+
 ```
 export PROJ=YOUR_PROJECT
 docker build -t gcr.io/${PROJ}/hello-app-iap:v1 -f Dockerfile  .
@@ -17,12 +18,14 @@ docker push gcr.io/${PROJ}/hello-app-iap:v1
 ```
 
 ## Deploy the containers
+
 Replace `YOUR_PROJECT` in `deployment.yaml` and apply it.
 ```
 kubectl apply -f manifests/deployment.yaml
 ```
 
 ## Reserve a static IP
+
 We will assign the static IP `iap-test` to the ingress later.
 ```
 gcloud compute addresses create iap-test --global
@@ -40,7 +43,9 @@ kubectl apply -f manifests/cert.yaml
 
 ## Create OAuth credentials and add authorized domains
 
-Follow the [offical guide](https://cloud.google.com/iap/docs/enabling-kubernetes-howto#oauth-credentials) to create the credentials. Cloud IAP protects the domain, so use the your own domain for the redirect and add it to the authorized domains.
+Follow the [offical guide](https://cloud.google.com/iap/docs/enabling-kubernetes-howto#oauth-credentials)
+to create the credentials. Cloud IAP protects the domain, so use the your own domain
+for the redirect and add it to the authorized domains.
 
 
 ## Create a secret
@@ -75,5 +80,5 @@ Then if you use this account to access `https://iap-test.tk`, you will
 see an error page. But if `https://iap-test.tk/page2/#`, you can see:
 ```
 Hello, world from service2
-Full path: deployment-59fb4975f-4lz4h/page2/
+Full path: deployment-59fb4975f-4lz4h/page2/#
 ```
