@@ -28,7 +28,7 @@ func main() {
 	// use port1 serves service1 and port2 serves service2
 	const (
 		port1 = "8081"
-        	port2 = "8082"
+		port2 = "8082"
 	)
 
 	finish := make(chan bool)
@@ -36,28 +36,17 @@ func main() {
 	server1 := http.NewServeMux()
 	server1.HandleFunc("/", hello1)
 
-    	server2 := http.NewServeMux()
+	server2 := http.NewServeMux()
 	server2.HandleFunc("/", hello2)
 
-   	go func() {
-        	log.Printf("Server listening on port %s", port1)
-	    	err := http.ListenAndServe(":"+port1, server1)
-        	log.Fatal(err)
-	}()
-
-	go func() {
-        	log.Printf("Server listening on port %s", port2)
-	    	err := http.ListenAndServe(":"+port2, server2)
-        	log.Fatal(err)
-	}()
-
-    	<-finish
-	
+	go log.Fatal(http.ListenAndServe(":"+port1, server1))
+	go log.Fatal(http.ListenAndServe(":"+port2, server2))
+		
 }
 
 // hello1 prints "Hello world from service1"
 func hello1(w http.ResponseWriter, r *http.Request) {
-    	log.Printf("Server1, %s", r.URL.Path)
+	log.Printf("Server1, %s", r.URL.Path)
 	host, _ := os.Hostname()
 	fmt.Fprintf(w, "Hello world from service1\n")
 	fmt.Fprintf(w, "Full path: %s%s\n", host, r.URL.Path)
@@ -65,9 +54,10 @@ func hello1(w http.ResponseWriter, r *http.Request) {
 
 // hello2 prints "Hello world from service2"
 func hello2(w http.ResponseWriter, r *http.Request) {
-     	log.Printf("Server2, %s", r.URL.Path)
+	log.Printf("Server2, %s", r.URL.Path)
 	host, _ := os.Hostname()
 	fmt.Fprintf(w, "Hello world from service2\n")
 	fmt.Fprintf(w, "Full path: %s%s\n", host, r.URL.Path)
 }
+
 // [END all]
