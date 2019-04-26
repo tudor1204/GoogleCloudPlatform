@@ -42,7 +42,6 @@ func main() {
 	}()
 
 	log.Fatal(http.ListenAndServe(":"+port2, server2))
-
 }
 
 // hello1 prints "Hello world from service1"
