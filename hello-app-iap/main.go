@@ -31,17 +31,18 @@ func main() {
 		port2 = "8082"
 	)
 
-	finish := make(chan bool)
-
 	server1 := http.NewServeMux()
 	server1.HandleFunc("/", hello1)
 
 	server2 := http.NewServeMux()
 	server2.HandleFunc("/", hello2)
 
-	go log.Fatal(http.ListenAndServe(":"+port1, server1))
-	go log.Fatal(http.ListenAndServe(":"+port2, server2))
-		
+	go func() {
+		log.Fatal(http.ListenAndServe(":"+port1, server1))
+	}()
+
+	log.Fatal(http.ListenAndServe(":"+port2, server2))
+
 }
 
 // hello1 prints "Hello world from service1"
