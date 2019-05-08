@@ -4,4 +4,4 @@ metadata:
   name: iap-test-certificate
 spec:
   domains:
-    - iap-test.tk
+    - [YOUR_DOMAIN]
