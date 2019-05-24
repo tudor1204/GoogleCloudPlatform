@@ -44,7 +44,7 @@ spec:
             - name: DB_DBNAME
               value: musicians
         - name: cloudsql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          image: gcr.io/cloudsql-docker/gce-proxy:1.14
           env:
             - name: CONNECTION_NAME
               valueFrom:
