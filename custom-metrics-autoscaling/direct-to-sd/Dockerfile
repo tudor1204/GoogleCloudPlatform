@@ -12,14 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.7.3
-ADD . /go/src/direct-to-sd
-RUN go get cloud.google.com/go/compute/metadata
-RUN go get golang.org/x/oauth2
-RUN go get google.golang.org/api/monitoring/v3
-RUN CGO_ENABLED=0 GOOS=linux go install direct-to-sd
+FROM golang:1.12.5
+WORKDIR /
+ADD . .
+RUN CGO_ENABLED=0 GOOS=linux go build .
 
 FROM alpine:latest
 RUN apk -U add ca-certificates
-COPY --from=0 /go/bin/direct-to-sd .
-
+COPY --from=0 direct-to-sd .
