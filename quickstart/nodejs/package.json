@@ -1,7 +1,7 @@
 {
-  "name": "knative-serving-helloworld",
+  "name": "gke-helloworld",
   "version": "1.0.0",
-  "description": "Simple hello world sample in Node",
+  "description": "GKE hello world sample in Node",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
