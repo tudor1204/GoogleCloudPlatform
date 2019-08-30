@@ -8,7 +8,7 @@ COPY Gemfile ./
 RUN bundle install
 
 # Copy local code to the container image.
-COPY . .
+COPY . ./
 
 # Run the web service on container startup.
 CMD ["ruby", "./app.rb"]
