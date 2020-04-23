@@ -22,7 +22,7 @@ If you are looking for a PostgreSQL example, see [`postgres_deployment.yaml`](po
 
 ### Prerequisites
 
-Follow the tutorial at [Connecting from Google Container
+Follow the tutorial at [Connecting from Google Kubernetes
 Engine](https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine).
 
 After you follow the tutorial, you must have Secrets named
