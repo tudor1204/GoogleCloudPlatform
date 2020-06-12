@@ -31,15 +31,14 @@ spec:
         run: custom-metric-sd
     spec:
       containers:
-      - command:
-        - /bin/sh
-        - -c
-        - ./sd_dummy_exporter \
-            --metric-name=custom-stackdriver \
-            --metric-value=40 \
-            --use-new-resource-model \
-            --pod-name=$(POD_NAME) \
-            --namespace=$(NAMESPACE)
+      - command: ["./sd_dummy_exporter"]
+        args:
+        - --use-new-resource-model=true
+        - --use-old-resource-model=false
+        - --metric-name=custom-stackdriver
+        - --metric-value=40
+        - --pod-name=$(POD_NAME)
+        - --namespace=$(NAMESPACE)
         image: gcr.io/google-containers/sd-dummy-exporter:v0.2.0
         name: sd-dummy-exporter
         resources:
