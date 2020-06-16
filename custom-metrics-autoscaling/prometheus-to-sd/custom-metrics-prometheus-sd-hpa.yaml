@@ -13,43 +13,21 @@
 # limitations under the License.
 
 # [START gke_autoscale_prometheus_hpa]
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: dummy-deployment
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      k8s-app: dummy-deployment
-  template:
-    metadata:
-      labels:
-        k8s-app: dummy-deployment
-    spec:
-      containers:
-      - name: long
-        image: busybox
-        command: ["/bin/sh",  "-c", "sleep 180000000"]
----
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: dummy-deployment-hpa
+  name: custom-prometheus-hpa
   namespace: default
 spec:
   scaleTargetRef:
     apiVersion: apps/v1beta1
     kind: Deployment
-    name: dummy-deployment
+    name: custom-metric-prometheus-sd
   minReplicas: 1
   maxReplicas: 5
   metrics:
-  - type: Object
-    object:
-      target:
-        kind: Pod
-        name: custom-metric-prometheus-sd
-      metricName: foo
-      targetValue: 20
+  - type: Pods
+    pods:
+      metricName: custom_prometheus
+      targetAverageValue: 20
 # [END gke_autoscale_prometheus_hpa]
