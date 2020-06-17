@@ -50,6 +50,7 @@ spec:
         - --pod-id=$(POD_ID)
         - --namespace-id=$(POD_NAMESPACE)
         env:
+        # save Kubernetes metadata as environment variables for use in metrics
         - name: POD_ID
           valueFrom:
             fieldRef:
