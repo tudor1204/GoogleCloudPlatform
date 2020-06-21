@@ -17,6 +17,9 @@ spec:
       containers:
       - name: php-redis
         image: gcr.io/google_samples/gb-frontend:v4
+        env:
+        - name: GET_HOSTS_FROM
+          value: "dns"
         resources:
           requests:
             cpu: 100m
