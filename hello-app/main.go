@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// [START gke_hello_app]
+// [START kubernetes_engine_hello_app]
 package main
 
 import (
@@ -49,4 +49,4 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hostname: %s\n", host)
 }
 
-// [END gke_hello_app]
+// [END kubernetes_engine_hello_app]

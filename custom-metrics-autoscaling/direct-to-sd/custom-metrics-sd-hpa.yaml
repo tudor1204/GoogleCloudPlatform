@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_autoscale_stackdriver_horizontal_pod_autoscaler]
+# [START kubernetes_engine_autoscale_stackdriver_horizontal_pod_autoscaler]
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -30,4 +30,4 @@ spec:
     pods:
       metricName: custom-stackdriver
       targetAverageValue: 20
-# [END gke_autoscale_stackdriver_horizontal_pod_autoscaler]
+# [END kubernetes_engine_autoscale_stackdriver_horizontal_pod_autoscaler]
