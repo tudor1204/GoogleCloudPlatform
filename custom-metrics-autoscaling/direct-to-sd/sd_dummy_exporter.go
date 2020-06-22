@@ -143,7 +143,7 @@ func getResourceLabelsForNewModel(namespace, name string) map[string]string {
 	}
 }
 
-// [START kubernetes_engine_autoscale_stackdriver_exporter]
+// [START kubernetes_engine_custom_metrics_direct_exporter]
 func exportMetric(stackdriverService *monitoring.Service, metricName string,
 	metricValue int64, metricLabels map[string]string, monitoredResource string, resourceLabels map[string]string) error {
 	dataPoint := &monitoring.Point{
@@ -177,4 +177,4 @@ func exportMetric(stackdriverService *monitoring.Service, metricName string,
 	return err
 }
 
-// [END kubernetes_engine_autoscale_stackdriver_exporter]
+// [END kubernetes_engine_custom_metrics_direct_exporter]
