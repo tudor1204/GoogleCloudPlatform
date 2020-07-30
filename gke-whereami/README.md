@@ -18,18 +18,20 @@ export COMPUTE_REGION=#YOUR_COMPUTE_REGION# # this expects a region, not a zone
 export CLUSTER_NAME=whereami
 ```
 
-Now create your resources:
+Now create your cluster:
 
 ```
 gcloud beta container clusters create $CLUSTER_NAME \
   --enable-ip-alias \
   --enable-stackdriver-kubernetes \
   --region=$COMPUTE_REGION \
-  --num-nodes=2 \
+  --num-nodes=1 \
   --release-channel=regular
 
 gcloud container clusters get-credentials $CLUSTER_NAME --region $COMPUTE_REGION
 ```
+
+This will create a regional cluster with a single node per zone (3 nodes in total). 
 
 #### Step 2 - Deploy the service/pods:
 
@@ -111,4 +113,3 @@ If you wish to call a different backend service, modify `k8s/configmap.yaml`'s `
 If you'd like to build & publish via Google's [buildpacks](https://github.com/GoogleCloudPlatform/buildpacks), something like this should do the trick (leveraging the local `Procfile`):
 
 ```pack build --builder gcr.io/buildpacks/builder:v1 --publish gcr.io/${PROJECT_ID}/whereami```
-
