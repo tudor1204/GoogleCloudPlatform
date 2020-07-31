@@ -21,8 +21,14 @@ CORS(app)  # enable CORS
 emoji_list = list(emoji.unicode_codes.UNICODE_EMOJI.keys())
 
 
-@app.route('/')
-def home():
+@app.route('/healthz')  # healthcheck endpoint
+def i_am_healthy():
+    return ('OK')
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def home(path):
 
     # define the response payload
     payload = {}
@@ -127,11 +133,6 @@ def home():
         payload['backend_result'] = backend_result
 
     return jsonify(payload)
-
-
-@app.route('/healthz')  # healthcheck endpoint
-def i_am_healthy():
-    return ('OK')
 
 
 if __name__ == '__main__':
