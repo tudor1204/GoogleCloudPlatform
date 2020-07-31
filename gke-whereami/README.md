@@ -35,11 +35,15 @@ This will create a regional cluster with a single node per zone (3 nodes in tota
 
 #### Step 2 - Deploy the service/pods:
 
-```kubectl apply -k k8s```
+```
+kubectl apply -k k8s
+```
 
 *or via [kustomize](https://kustomize.io/)*
 
-```kustomize build k8s | kubectl apply -f -```
+```
+kustomize build k8s | kubectl apply -f -
+```
 
 Get the service endpoint:
 ```
@@ -48,44 +52,52 @@ WHEREAMI_ENDPOINT=$(kubectl get svc | grep -v EXTERNAL-IP | awk '{ print $4}')
 
 Wrap things up by `curl`ing the `EXTERNAL-IP` of the service. 
 
-```curl $WHEREAMI_ENDPOINT```
+```
+curl $WHEREAMI_ENDPOINT
+```
 
 Result:
 
 ```{"cluster_name":"cluster-1","host_header":"34.72.90.134","metadata":"frontend","node_name":"gke-cluster-1-default-pool-c91b5644-v8kg.c.alexmattson-scratch.internal","pod_ip":"10.4.2.34","pod_name":"whereami-7b79956dd6-vmm9z","pod_name_emoji":"🧚🏼‍♀️","pod_namespace":"default","pod_service_account":"whereami-ksa","project_id":"alexmattson-scratch","timestamp":"2020-07-30T05:44:14","zone":"us-central1-c"}```
 
+### [Optional] Setup backend service call
 
-#### Step 3 - [Optional] Use gke-whereami to call downstream services 
+`gke-whereami` has an optional flag within its configmap that will cause it to call another backend service within your GKE cluster (for example, a different, non-public instance of itself). This is helpful for demonstrating a public microservice call to a non-public microservice, and then including the responses of both microservices in the payload delivered back to the user.
 
-`gke-whereami` has an optional flag within its configmap that will cause it to call another backend service within your GKE cluster (for example, a different, non-public instance of itself). This is helpful for demonstrating a public microservice call to a non-public microservice, and then including the responses of both microservices in the payload delivered back to the user.  
+#### [Optional] Step 1 - Remove existing deployment 
 
-*NOTE:* this backend call assumes the downstream service is returning JSON.
+First, remove the default deployment, as the default deployment won't attempt to call the downstream service, since updating a configmap referenced by a pod will not automatically redeploy that pod:
 
-First, remove the default deployment, as the default deployment won't attempt to call the downstream service:
+```
+kubectl delete -k k8s
+```
 
-```kubectl delete -k k8s```
+#### [Optional] Step 2 - Deploy the backend instance
 
-Then, build the "backend" instance of `gke-whereami`:
-
-```kubectl apply -k k8s-backend-overlay-example```
+```
+kubectl apply -k k8s-backend-overlay-example
+```
 
 *or via [kustomize](https://kustomize.io/)*
 
-```kustomize build k8s-backend-overlay-example | kubectl apply -f -```
+```
+kustomize build k8s-backend-overlay-example | kubectl apply -f -
+```
 
-Once that service is up and running, modify `k8s/configmap.yaml`'s `BACKEND_ENABLED` to `"True"`.
+#### [Optional] Step 3 - Configure & deploy the frontend
+
+Modify `k8s/configmap.yaml`'s `BACKEND_ENABLED` field to `"True"`.
 
 Next, redeploy the "frontend" instance of `gke-whereami`:
 
-```kubectl apply -k k8s```
+```
+kubectl apply -k k8s
+```
 
 *or via [kustomize](https://kustomize.io/)*
 
-```kustomize build k8s | kubectl apply -f -```
-
-Get the service endpoint:
 ```
-WHEREAMI_ENDPOINT=$(kubectl get svc | grep -v EXTERNAL-IP | awk '{ print $4}')
+kustomize build k8s | kubectl apply -f -
 ```
 
 Get the service endpoint:
@@ -95,13 +107,13 @@ WHEREAMI_ENDPOINT=$(kubectl get svc | grep -v EXTERNAL-IP | awk '{ print $4}')
 
 Wrap things up by `curl`ing the `EXTERNAL-IP` of the service. 
 
-```curl $WHEREAMI_ENDPOINT```
+```
+curl $WHEREAMI_ENDPOINT
+```
 
 The (*slightly* busy-looking) result should look like this:
 
-```
-{"backend_result":{"cluster_name":"cluster-1","host_header":"whereami-backend","metadata":"backend","node_name":"gke-cluster-1-default-pool-c91b5644-v8kg.c.alexmattson-scratch.internal","pod_ip":"10.4.2.37","pod_name":"whereami-backend-86bdc7b596-z4dqk","pod_name_emoji":"💪🏾","pod_namespace":"default","pod_service_account":"whereami-ksa-backend","project_id":"alexmattson-scratch","timestamp":"2020-07-30T05:56:15","zone":"us-central1-c"},"cluster_name":"cluster-1","host_header":"34.72.90.134","metadata":"frontend","node_name":"gke-cluster-1-default-pool-c91b5644-1z7l.c.alexmattson-scratch.internal","pod_ip":"10.4.1.29","pod_name":"whereami-7888579d9d-qdmbg","pod_name_emoji":"🧜","pod_namespace":"default","pod_service_account":"whereami-ksa","project_id":"alexmattson-scratch","timestamp":"2020-07-30T05:56:15","zone":"us-central1-c"}
-```
+```{"backend_result":{"cluster_name":"cluster-1","host_header":"whereami-backend","metadata":"backend","node_name":"gke-cluster-1-default-pool-c91b5644-v8kg.c.alexmattson-scratch.internal","pod_ip":"10.4.2.37","pod_name":"whereami-backend-86bdc7b596-z4dqk","pod_name_emoji":"💪🏾","pod_namespace":"default","pod_service_account":"whereami-ksa-backend","project_id":"alexmattson-scratch","timestamp":"2020-07-30T05:56:15","zone":"us-central1-c"},"cluster_name":"cluster-1","host_header":"34.72.90.134","metadata":"frontend","node_name":"gke-cluster-1-default-pool-c91b5644-1z7l.c.alexmattson-scratch.internal","pod_ip":"10.4.1.29","pod_name":"whereami-7888579d9d-qdmbg","pod_name_emoji":"🧜","pod_namespace":"default","pod_service_account":"whereami-ksa","project_id":"alexmattson-scratch","timestamp":"2020-07-30T05:56:15","zone":"us-central1-c"}```
 
 Look at the `backend_result` field from the response. That portion of the JSON is from the backend service.
 
@@ -113,3 +125,4 @@ If you wish to call a different backend service, modify `k8s/configmap.yaml`'s `
 If you'd like to build & publish via Google's [buildpacks](https://github.com/GoogleCloudPlatform/buildpacks), something like this should do the trick (leveraging the local `Procfile`):
 
 ```pack build --builder gcr.io/buildpacks/builder:v1 --publish gcr.io/${PROJECT_ID}/whereami```
+
