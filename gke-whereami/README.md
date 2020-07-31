@@ -46,8 +46,9 @@ kustomize build k8s | kubectl apply -f -
 ```
 
 Get the service endpoint:
+> Note: this may be `pending` for a few minutes while the service provisions
 ```
-WHEREAMI_ENDPOINT=$(kubectl get svc | grep -v EXTERNAL-IP | awk '{ print $4}')
+WHEREAMI_ENDPOINT=$(kubectl get svc whereami | grep -v EXTERNAL-IP | awk '{ print $4}')
 ```
 
 Wrap things up by `curl`ing the `EXTERNAL-IP` of the service. 
@@ -101,8 +102,9 @@ kustomize build k8s | kubectl apply -f -
 ```
 
 Get the service endpoint:
+> Note: this may be `pending` for a few minutes while the service provisions
 ```
-WHEREAMI_ENDPOINT=$(kubectl get svc | grep -v EXTERNAL-IP | awk '{ print $4}')
+WHEREAMI_ENDPOINT=$(kubectl get svc whereami | grep -v EXTERNAL-IP | awk '{ print $4}')
 ```
 
 Wrap things up by `curl`ing the `EXTERNAL-IP` of the service. 
