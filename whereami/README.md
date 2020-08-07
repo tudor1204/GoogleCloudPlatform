@@ -282,7 +282,52 @@ $ for i in {1..3}; do curl $ENDPOINT -s | jq '{frontend: .pod_name, backend: .ba
 {"frontend":"🏃🏻‍♀️","backend":"🏀"}
 ```
 
+### Return headers in wherami response  
 
+'whereami' has an additional feature flag that, when enabled, will include all received headers in its reply. If, in `k8s/configmap.yaml`, `ECHO_HEADERS` is set to `True`, the response payload will include an `echo_headers` field, populated with the headers included in the client's request. 
+
+#### Step 1 - Deploy whereami with header echoing enabled 
+
+```bash
+$ kubectl apply -k k8s-echo-headers-overlay-example
+serviceaccount/whereami-ksa-frontend created
+configmap/whereami-configmap-frontend created
+service/whereami-frontend created
+deployment.apps/whereami-frontend created
+```
+
+#### Step 2 - Query whereami
+
+Get the external Service endpoint again:
+
+```bash
+$ ENDPOINT=$(kubectl get svc whereami-frontend | grep -v EXTERNAL-IP | awk '{ print $4}')
+```
+
+Curl the endpoint to get the response. Again, we us [jq]() to provide a little more structure to the response:
+
+```bash
+$ curl $ENDPOINT -s | jq .
+{
+  "cluster_name": "cluster-1",
+  "echo_headers": {
+    "Accept": "*/*",
+    "Host": "34.67.116.242",
+    "User-Agent": "curl/7.64.1"
+  },
+  "host_header": "34.67.116.242",
+  "metadata": "echo_headers",
+  "node_name": "gke-cluster-1-default-pool-c91b5644-v8kg.c.alexmattson-scratch.internal",
+  "pod_ip": "10.4.2.45",
+  "pod_name": "whereami-frontend-98d865569-bjj4m",
+  "pod_name_emoji": "💂🏻‍♀️",
+  "pod_namespace": "default",
+  "pod_service_account": "whereami-ksa-frontend",
+  "project_id": "alexmattson-scratch",
+  "timestamp": "2020-08-07T04:15:34",
+  "zone": "us-central1-c"
+}
+```
 
 
 ### Notes
