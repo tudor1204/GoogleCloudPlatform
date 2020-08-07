@@ -304,7 +304,7 @@ Get the external Service endpoint again:
 $ ENDPOINT=$(kubectl get svc whereami-frontend | grep -v EXTERNAL-IP | awk '{ print $4}')
 ```
 
-Curl the endpoint to get the response. Again, we us [jq]() to provide a little more structure to the response:
+Curl the endpoint to get the response. Yet again, we us [jq]() to provide a little more structure to the response:
 
 ```bash
 $ curl $ENDPOINT -s | jq .
