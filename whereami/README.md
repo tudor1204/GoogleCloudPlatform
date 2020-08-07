@@ -282,7 +282,7 @@ $ for i in {1..3}; do curl $ENDPOINT -s | jq '{frontend: .pod_name, backend: .ba
 {"frontend":"🏃🏻‍♀️","backend":"🏀"}
 ```
 
-### Include all headers in wherami response  
+### Include all received headers in the response  
 
 `whereami` has an additional feature flag that, when enabled, will include all received headers in its reply. If, in `k8s/configmap.yaml`, `ECHO_HEADERS` is set to `True`, the response payload will include an `echo_headers` field, populated with the headers included in the client's request. 
 
