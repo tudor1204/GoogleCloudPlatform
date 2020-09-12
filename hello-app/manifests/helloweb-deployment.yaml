@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: hello-app
-        image: gcr.io/google-samples/hello-app:1.0
+        image: hello-app-k8
         ports:
         - containerPort: 8080
 # [END container_helloapp_deployment]
