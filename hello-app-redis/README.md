@@ -1,0 +1,16 @@
+# Hello Application example on redis
+
+This example shows how to build and deploy a containerized Go web server
+application on redis using [Kubernetes](https://kubernetes.io).
+
+Visit https://cloud.google.com/kubernetes-engine/docs/tutorials/TBD
+to follow the tutorial and deploy this application on [Google Kubernetes
+Engine](https://cloud.google.com/kubernetes-engine).
+
+This directory contains:
+
+- `main.go` contains the HTTP server implementation. The application uses Redis as a cache database, counts the number of requests it receives, and prints out the number on the website. If the Redis service works, the number should keep increasing.
+- `Dockerfile` is used to build the Docker image for the application.
+
+The container image for this directory is publicly available at `gcr.io/google-samples/hello-app-redis:1.0`
+
