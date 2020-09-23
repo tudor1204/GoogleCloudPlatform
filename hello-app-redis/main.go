@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-// [START all]
 package main
 
 import (
@@ -126,4 +125,3 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "I have been hit [%v] times since deployment!", count)
 }
 
-// [END all]
