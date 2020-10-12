@@ -29,4 +29,4 @@ echo "Success rate: $SUCCESS/$TOTAL (${SUCCESS_RATE}%)"
 echo "App network Error rate: $ERROR1/$TOTAL (${ERROR_RATE}%)"
 echo "Resource Error rate: $ERROR2/$TOTAL (${ERROR_RATE_2}%)"
 echo "Redis Error rate: $ERROR3/$TOTAL (${ERROR_RATE_3}%)"
-# [START container_helloapp_redis_print_errorrate]
+# [END container_helloapp_redis_print_errorrate]

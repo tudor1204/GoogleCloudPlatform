@@ -25,4 +25,4 @@ while true
     done
   sleep 1
 done
-# [START container_helloapp_redis_generate_load]
+# [END container_helloapp_redis_generate_load]
