@@ -68,3 +68,8 @@ spec:
               configMapKeyRef:
                 name: whereami-configmap
                 key: ECHO_HEADERS
+          - name: GRPC_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: whereami-configmap
+                key: GRPC_ENABLED

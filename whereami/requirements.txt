@@ -3,3 +3,4 @@ requests
 emoji
 flask-cors
 grpcio
+grpcio-reflection

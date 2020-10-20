@@ -12,8 +12,13 @@ METADATA_HEADERS = {'Metadata-Flavor': 'Google'}
 # set up emoji list
 emoji_list = list(emoji.unicode_codes.UNICODE_EMOJI.keys())
 
+# gRPC stuff
+import grpc
+import whereami_pb2
+import whereami_pb2_grpc
 
-class Whereami(object):
+
+class WhereamiPayload(object):
 
     def __init__(self):
 
@@ -102,18 +107,30 @@ class Whereami(object):
 
             backend_service = os.getenv('BACKEND_SERVICE')
 
-            try:
-                r = requests.get('http://' + backend_service)
-                if r.ok:
-                    backend_result = r.json()
-                else:
+            if os.getenv('GRPC_ENABLED') == "True":
+
+                try:
+                    channel = grpc.insecure_channel(backend_service + ':9090')
+                    stub = whereami_pb2_grpc.WhereamiStub(channel)
+                    self.payload['backend_result'] = stub.GetPayload()
+
+                except:
+                    pass
+
+            else:
+
+                try:
+                    r = requests.get('http://' + backend_service)
+                    if r.ok:
+                        backend_result = r.json()
+                    else:
+                        backend_result = None
+                except:
+
+                    print(sys.exc_info()[0])
                     backend_result = None
-            except:
 
-                print(sys.exc_info()[0])
-                backend_result = None
-
-            self.payload['backend_result'] = backend_result
+                self.payload['backend_result'] = backend_result
 
         echo_headers = os.getenv('ECHO_HEADERS')
 
