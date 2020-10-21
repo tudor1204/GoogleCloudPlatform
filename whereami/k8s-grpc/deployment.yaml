@@ -16,25 +16,18 @@ spec:
       serviceAccountName: whereami-grpc-ksa
       containers:
       - name: whereami-grpc
-        image: gcr.io/alexmattson-scratch/whereami-kw-empty:v0.2
+        image: gcr.io/alexmattson-scratch/whereami:latest
         ports:
           - name: grpc
             containerPort: 9090
-        livenessProbe:
-          httpGet:
-              path: /healthz
-              port: 8080
-              scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 15
-          timeoutSeconds: 5
         readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-            scheme: HTTP
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:9090"]
           initialDelaySeconds: 5
-          timeoutSeconds: 1
+        livenessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:9090"]
+          initialDelaySeconds: 10
         env:
           - name: POD_NAMESPACE
             valueFrom:

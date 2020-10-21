@@ -338,15 +338,19 @@ If you'd like to build & publish via Google's [buildpacks](https://github.com/Go
 cat > run.Dockerfile << EOF
 FROM gcr.io/buildpacks/gcp/run:v1
 USER root
-RUN curl https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v0.3.3/grpc_health_probe-linux-amd64 \ 
---output bin/grpc_health_probe-linux-amd64 && \
-chmod +x bin/grpc_health_probe-linux-amd64
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  wget && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  wget -O /bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v0.3.3/grpc_health_probe-linux-amd64 && \ 
+  chmod +x /bin/grpc_health_probe
 USER cnb
 EOF
 
-docker build -t my-run-image -f run.Dockerfile .
+docker build -t gcr.io/${PROJECT_ID}/whereami-run-image -f run.Dockerfile .
+docker push gcr.io/${PROJECT_ID}/whereami-run-image
 ```
 
-```pack build --builder gcr.io/buildpacks/builder:v1 --publish gcr.io/${PROJECT_ID}/whereami --run-image my-run-image```
+```pack build --builder gcr.io/buildpacks/builder:v1 --publish gcr.io/${PROJECT_ID}/whereami --run-image gcr.io/${PROJECT_ID}/whereami-run-image```
 
 
