@@ -332,8 +332,21 @@ $ curl $ENDPOINT -s | jq .
 
 ### Notes
 
-If you'd like to build & publish via Google's [buildpacks](https://github.com/GoogleCloudPlatform/buildpacks), something like this should do the trick (leveraging the local `Procfile`):
+If you'd like to build & publish via Google's [buildpacks](https://github.com/GoogleCloudPlatform/buildpacks), something like this should do the trick (leveraging the local `Procfile`) from this directory:
 
-```pack build --builder gcr.io/buildpacks/builder:v1 --publish gcr.io/${PROJECT_ID}/whereami```
+```
+cat > run.Dockerfile << EOF
+FROM gcr.io/buildpacks/gcp/run:v1
+USER root
+RUN curl https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v0.3.3/grpc_health_probe-linux-amd64 \ 
+--output bin/grpc_health_probe-linux-amd64 && \
+chmod +x bin/grpc_health_probe-linux-amd64
+USER cnb
+EOF
+
+docker build -t my-run-image -f run.Dockerfile .
+```
+
+```pack build --builder gcr.io/buildpacks/builder:v1 --publish gcr.io/${PROJECT_ID}/whereami --run-image my-run-image```
 
 
