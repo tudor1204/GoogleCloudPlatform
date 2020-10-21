@@ -6,7 +6,9 @@ import whereami_pb2 as whereami__pb2
 
 
 class WhereamiStub(object):
-    """The whereami service definition.
+    """import "google/protobuf/struct.proto";
+
+    The whereami service definition.
     """
 
     def __init__(self, channel):
@@ -17,13 +19,15 @@ class WhereamiStub(object):
         """
         self.GetPayload = channel.unary_unary(
                 '/whereami.Whereami/GetPayload',
-                request_serializer=whereami__pb2.WhereamiRequest.SerializeToString,
+                request_serializer=whereami__pb2.Empty.SerializeToString,
                 response_deserializer=whereami__pb2.WhereamiReply.FromString,
                 )
 
 
 class WhereamiServicer(object):
-    """The whereami service definition.
+    """import "google/protobuf/struct.proto";
+
+    The whereami service definition.
     """
 
     def GetPayload(self, request, context):
@@ -38,7 +42,7 @@ def add_WhereamiServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetPayload': grpc.unary_unary_rpc_method_handler(
                     servicer.GetPayload,
-                    request_deserializer=whereami__pb2.WhereamiRequest.FromString,
+                    request_deserializer=whereami__pb2.Empty.FromString,
                     response_serializer=whereami__pb2.WhereamiReply.SerializeToString,
             ),
     }
@@ -49,7 +53,9 @@ def add_WhereamiServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class Whereami(object):
-    """The whereami service definition.
+    """import "google/protobuf/struct.proto";
+
+    The whereami service definition.
     """
 
     @staticmethod
@@ -64,7 +70,7 @@ class Whereami(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/whereami.Whereami/GetPayload',
-            whereami__pb2.WhereamiRequest.SerializeToString,
+            whereami__pb2.Empty.SerializeToString,
             whereami__pb2.WhereamiReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

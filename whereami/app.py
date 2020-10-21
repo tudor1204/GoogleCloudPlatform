@@ -5,9 +5,15 @@ import os
 from flask_cors import CORS
 import whereami_payload
 
-import grpc
 from concurrent import futures
+import multiprocessing
+
+import grpc
+
 from grpc_reflection.v1alpha import reflection
+from grpc_health.v1 import health
+from grpc_health.v1 import health_pb2
+from grpc_health.v1 import health_pb2_grpc
 
 import whereami_pb2
 import whereami_pb2_grpc
@@ -29,16 +35,39 @@ class WhereamigRPC(whereami_pb2_grpc.WhereamiServicer):
 
 
 # if selected will serve gRPC endpoint on port 9090
+# see https://github.com/grpc/grpc/blob/master/examples/python/xds/server.py
+# for reference on code below
 def grpc_serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.server(
+        futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()))
+
+    # Add the application servicer to the server.
     whereami_pb2_grpc.add_WhereamiServicer_to_server(WhereamigRPC(), server)
-    SERVICE_NAMES = (
-        whereami_pb2.DESCRIPTOR.services_by_name['Whereami'].full_name,
-        reflection.SERVICE_NAME,
-    )
-    reflection.enable_server_reflection(SERVICE_NAMES, server)
+
+    # Create a health check servicer. We use the non-blocking implementation
+    # to avoid thread starvation.
+    health_servicer = health.HealthServicer(
+        experimental_non_blocking=True,
+        experimental_thread_pool=futures.ThreadPoolExecutor(max_workers=1))
+    health_pb2_grpc.add_HealthServicer_to_server(health_servicer, server)
+
+    # Create a tuple of all of the services we want to export via reflection.
+    services = tuple(
+        service.full_name
+        for service in whereami_pb2.DESCRIPTOR.services_by_name.values()) + (
+            reflection.SERVICE_NAME, health.SERVICE_NAME)
+
+    # Add the reflection service to the server.
+    reflection.enable_server_reflection(services, server)
     server.add_insecure_port('[::]:9090')
     server.start()
+
+    # Mark all services as healthy.
+    overall_server_health = ""
+    for service in services + (overall_server_health,):
+        health_servicer.set(service, health_pb2.HealthCheckResponse.SERVING)
+
+    # Park the main application thread.
     server.wait_for_termination()
 
 
@@ -59,7 +88,8 @@ def home(path):
 
 if __name__ == '__main__':
     out_hdlr = logging.StreamHandler(sys.stdout)
-    fmt = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    fmt = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     out_hdlr.setFormatter(fmt)
     out_hdlr.setLevel(logging.INFO)
     logging.getLogger().addHandler(out_hdlr)
@@ -73,4 +103,6 @@ if __name__ == '__main__':
         grpc_serve()
 
     else:
-        app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)), threaded=True)
+        app.run(
+            host='0.0.0.0', port=int(os.environ.get('PORT', 8080)),
+            threaded=True)

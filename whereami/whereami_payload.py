@@ -113,6 +113,7 @@ class WhereamiPayload(object):
                     channel = grpc.insecure_channel(backend_service + ':9090')
                     stub = whereami_pb2_grpc.WhereamiStub(channel)
                     self.payload['backend_result'] = stub.GetPayload()
+                    logging.info(type(self.payload['backend_result']))
 
                 except:
                     pass
