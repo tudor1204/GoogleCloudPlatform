@@ -16,7 +16,7 @@ spec:
       serviceAccountName: whereami-grpc-ksa
       containers:
       - name: whereami-grpc
-        image: gcr.io/alexmattson-scratch/whereami:latest
+        image: gcr.io/alexmattson-scratch/whereami:11
         ports:
           - name: grpc
             containerPort: 9090

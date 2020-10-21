@@ -5,17 +5,17 @@ from datetime import datetime
 import emoji
 import logging
 import requests
+# gRPC stuff
+import grpc
+import whereami_pb2
+import whereami_pb2_grpc
+from google.protobuf.json_format import MessageToDict
 
 METADATA_URL = 'http://metadata.google.internal/computeMetadata/v1/'
 METADATA_HEADERS = {'Metadata-Flavor': 'Google'}
 
 # set up emoji list
 emoji_list = list(emoji.unicode_codes.UNICODE_EMOJI.keys())
-
-# gRPC stuff
-import grpc
-import whereami_pb2
-import whereami_pb2_grpc
 
 
 class WhereamiPayload(object):
@@ -74,9 +74,10 @@ class WhereamiPayload(object):
 
         # get pod name, emoji & datetime
         self.payload['pod_name'] = socket.gethostname()
-        self.payload['pod_name_emoji'] = emoji_list[hash(socket.gethostname()) %
-                                                    len(emoji_list)]
-        self.payload['timestamp'] = datetime.now().replace(microsecond=0).isoformat()
+        self.payload['pod_name_emoji'] = emoji_list[hash(
+            socket.gethostname()) % len(emoji_list)]
+        self.payload['timestamp'] = datetime.now().replace(
+            microsecond=0).isoformat()
 
         # get namespace, pod ip, and pod service account via downstream API
         if os.getenv('POD_NAMESPACE'):
@@ -90,7 +91,8 @@ class WhereamiPayload(object):
             logging.warning("Unable to capture pod IP address.")
 
         if os.getenv('POD_SERVICE_ACCOUNT'):
-            self.payload['pod_service_account'] = os.getenv('POD_SERVICE_ACCOUNT')
+            self.payload['pod_service_account'] = os.getenv(
+                'POD_SERVICE_ACCOUNT')
         else:
             logging.warning("Unable to capture pod KSA.")
 
@@ -112,11 +114,11 @@ class WhereamiPayload(object):
                 try:
                     channel = grpc.insecure_channel(backend_service + ':9090')
                     stub = whereami_pb2_grpc.WhereamiStub(channel)
-                    self.payload['backend_result'] = stub.GetPayload()
-                    logging.info(type(self.payload['backend_result']))
+                    tmp = stub.GetPayload(whereami_pb2.Empty())
+                    self.payload['backend_result'] = MessageToDict(tmp)
 
                 except:
-                    pass
+                    logging.warning("Unable to capture backend result.")
 
             else:
 

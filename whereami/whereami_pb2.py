@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0ewhereami.proto\x12\x08whereami\"\x07\n\x05\x45mpty\"\xbe\x02\n\rWhereamiReply\x12\x11\n\thost_name\x18\x01 \x01(\t\x12\x10\n\x08pod_name\x18\x02 \x01(\t\x12\x16\n\x0epod_name_emoji\x18\x03 \x01(\t\x12\x11\n\ttimestamp\x18\x04 \x01(\t\x12\x12\n\nproject_id\x18\x05 \x01(\t\x12\x0c\n\x04zone\x18\x06 \x01(\t\x12\x11\n\tnode_name\x18\x07 \x01(\t\x12\x14\n\x0c\x63luster_name\x18\x08 \x01(\t\x12\x13\n\x0bhost_header\x18\t \x01(\t\x12\x15\n\rpod_namespace\x18\n \x01(\t\x12\x0e\n\x06pod_ip\x18\x0b \x01(\t\x12\x1b\n\x13pod_service_account\x18\x0c \x01(\t\x12\x10\n\x08metadata\x18\r \x01(\t\x12\x16\n\x0e\x62\x61\x63kend_result\x18\x0e \x01(\t\x12\x0f\n\x07headers\x18\x0f \x01(\t2D\n\x08Whereami\x12\x38\n\nGetPayload\x12\x0f.whereami.Empty\x1a\x17.whereami.WhereamiReply\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0ewhereami.proto\x12\x08whereami\"\x07\n\x05\x45mpty\"\xe7\x02\n\rWhereamiReply\x12\x42\n\x0e\x62\x61\x63kend_result\x18\x01 \x03(\x0b\x32*.whereami.WhereamiReply.BackendResultEntry\x12\x14\n\x0c\x63luster_name\x18\x02 \x01(\t\x12\x10\n\x08metadata\x18\x03 \x01(\t\x12\x11\n\tnode_name\x18\x04 \x01(\t\x12\x0e\n\x06pod_ip\x18\x05 \x01(\t\x12\x10\n\x08pod_name\x18\x06 \x01(\t\x12\x16\n\x0epod_name_emoji\x18\x07 \x01(\t\x12\x15\n\rpod_namespace\x18\x08 \x01(\t\x12\x1b\n\x13pod_service_account\x18\t \x01(\t\x12\x12\n\nproject_id\x18\n \x01(\t\x12\x11\n\ttimestamp\x18\x0b \x01(\t\x12\x0c\n\x04zone\x18\x0c \x01(\t\x1a\x34\n\x12\x42\x61\x63kendResultEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x32\x44\n\x08Whereami\x12\x38\n\nGetPayload\x12\x0f.whereami.Empty\x1a\x17.whereami.WhereamiReply\"\x00\x62\x06proto3'
 )
 
 
@@ -50,115 +50,24 @@ _EMPTY = _descriptor.Descriptor(
 )
 
 
-_WHEREAMIREPLY = _descriptor.Descriptor(
-  name='WhereamiReply',
-  full_name='whereami.WhereamiReply',
+_WHEREAMIREPLY_BACKENDRESULTENTRY = _descriptor.Descriptor(
+  name='BackendResultEntry',
+  full_name='whereami.WhereamiReply.BackendResultEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='host_name', full_name='whereami.WhereamiReply.host_name', index=0,
+      name='key', full_name='whereami.WhereamiReply.BackendResultEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='pod_name', full_name='whereami.WhereamiReply.pod_name', index=1,
+      name='value', full_name='whereami.WhereamiReply.BackendResultEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pod_name_emoji', full_name='whereami.WhereamiReply.pod_name_emoji', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='timestamp', full_name='whereami.WhereamiReply.timestamp', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='project_id', full_name='whereami.WhereamiReply.project_id', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='zone', full_name='whereami.WhereamiReply.zone', index=5,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='node_name', full_name='whereami.WhereamiReply.node_name', index=6,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='cluster_name', full_name='whereami.WhereamiReply.cluster_name', index=7,
-      number=8, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='host_header', full_name='whereami.WhereamiReply.host_header', index=8,
-      number=9, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pod_namespace', full_name='whereami.WhereamiReply.pod_namespace', index=9,
-      number=10, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pod_ip', full_name='whereami.WhereamiReply.pod_ip', index=10,
-      number=11, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pod_service_account', full_name='whereami.WhereamiReply.pod_service_account', index=11,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='metadata', full_name='whereami.WhereamiReply.metadata', index=12,
-      number=13, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='backend_result', full_name='whereami.WhereamiReply.backend_result', index=13,
-      number=14, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='headers', full_name='whereami.WhereamiReply.headers', index=14,
-      number=15, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -169,6 +78,114 @@ _WHEREAMIREPLY = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=345,
+  serialized_end=397,
+)
+
+_WHEREAMIREPLY = _descriptor.Descriptor(
+  name='WhereamiReply',
+  full_name='whereami.WhereamiReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='backend_result', full_name='whereami.WhereamiReply.backend_result', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cluster_name', full_name='whereami.WhereamiReply.cluster_name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='metadata', full_name='whereami.WhereamiReply.metadata', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='node_name', full_name='whereami.WhereamiReply.node_name', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pod_ip', full_name='whereami.WhereamiReply.pod_ip', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pod_name', full_name='whereami.WhereamiReply.pod_name', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pod_name_emoji', full_name='whereami.WhereamiReply.pod_name_emoji', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pod_namespace', full_name='whereami.WhereamiReply.pod_namespace', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pod_service_account', full_name='whereami.WhereamiReply.pod_service_account', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='project_id', full_name='whereami.WhereamiReply.project_id', index=9,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='whereami.WhereamiReply.timestamp', index=10,
+      number=11, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='zone', full_name='whereami.WhereamiReply.zone', index=11,
+      number=12, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[_WHEREAMIREPLY_BACKENDRESULTENTRY, ],
+  enum_types=[
+  ],
   serialized_options=None,
   is_extendable=False,
   syntax='proto3',
@@ -176,9 +193,11 @@ _WHEREAMIREPLY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=38,
-  serialized_end=356,
+  serialized_end=397,
 )
 
+_WHEREAMIREPLY_BACKENDRESULTENTRY.containing_type = _WHEREAMIREPLY
+_WHEREAMIREPLY.fields_by_name['backend_result'].message_type = _WHEREAMIREPLY_BACKENDRESULTENTRY
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
 DESCRIPTOR.message_types_by_name['WhereamiReply'] = _WHEREAMIREPLY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -191,13 +210,22 @@ Empty = _reflection.GeneratedProtocolMessageType('Empty', (_message.Message,), {
 _sym_db.RegisterMessage(Empty)
 
 WhereamiReply = _reflection.GeneratedProtocolMessageType('WhereamiReply', (_message.Message,), {
+
+  'BackendResultEntry' : _reflection.GeneratedProtocolMessageType('BackendResultEntry', (_message.Message,), {
+    'DESCRIPTOR' : _WHEREAMIREPLY_BACKENDRESULTENTRY,
+    '__module__' : 'whereami_pb2'
+    # @@protoc_insertion_point(class_scope:whereami.WhereamiReply.BackendResultEntry)
+    })
+  ,
   'DESCRIPTOR' : _WHEREAMIREPLY,
   '__module__' : 'whereami_pb2'
   # @@protoc_insertion_point(class_scope:whereami.WhereamiReply)
   })
 _sym_db.RegisterMessage(WhereamiReply)
+_sym_db.RegisterMessage(WhereamiReply.BackendResultEntry)
 
 
+_WHEREAMIREPLY_BACKENDRESULTENTRY._options = None
 
 _WHEREAMI = _descriptor.ServiceDescriptor(
   name='Whereami',
@@ -206,8 +234,8 @@ _WHEREAMI = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=358,
-  serialized_end=426,
+  serialized_start=399,
+  serialized_end=467,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetPayload',
