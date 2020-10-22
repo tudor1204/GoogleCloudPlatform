@@ -351,7 +351,7 @@ deployment.apps/whereami-grpc-backend created
 
 #### Step 2 - Deploy the whereami-grpc frontend
 
-Now we're going to deploy the `whereami-grpc` frontend from the `k8s-grpc-frontend-overlay-example`(k8s-grpc-frontend-overlay-example):
+Now we're going to deploy the `whereami-grpc` frontend from the [k8s-grpc-frontend-overlay-example](k8s-grpc-frontend-overlay-example):
 
 ```bash
 $ kubectl apply -k k8s-grpc-frontend-overlay-example
