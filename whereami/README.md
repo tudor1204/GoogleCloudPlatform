@@ -333,13 +333,13 @@ $ curl $ENDPOINT -s | jq .
 
 ### gRPC support
 
-By enabling a feature flag in the `whereami` configmap, `whereami-grpc` can be interacted with using [gRPC](https://grpc.io/), with support for the gRPC [health check protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md). The examples below leverage [grpcurl](https://github.com/fullstorydev/grpcurl), and assume you've already deployed a GKE cluster.
+By enabling a feature flag in the `whereami` configmap, `whereami` can be interacted with using [gRPC](https://grpc.io/), with support for the gRPC [health check protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md). The examples below leverage [grpcurl](https://github.com/fullstorydev/grpcurl), and assume you've already deployed a GKE cluster.
 
-> Note: because gRPC is used at the protocol, the output of `whereami`, when using gRPC, will omit any `header` fields *and* it's listening on port `9090`
+> Note: because gRPC is used at the protocol, the output of `whereami-grpc`, when using gRPC, will omit any `header` fields *and* it's listening on port `9090`
 
 #### Step 1 - Deploy the whereami-grpc backend
 
-Deploy `whereami-grpc` using the manifests from [k8s-grpc-backend-overlay-example](k8s-grpc-backend-overlay-example):
+Deploy the `whereami-grpc` backend using the manifests from [k8s-grpc-backend-overlay-example](k8s-grpc-backend-overlay-example):
 
 ```bash
 $ kubectl apply -k k8s-grpc-backend-overlay-example
