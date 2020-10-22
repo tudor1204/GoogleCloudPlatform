@@ -335,7 +335,7 @@ $ curl $ENDPOINT -s | jq .
 
 By enabling a feature flag in the `whereami` configmap, `whereami` can be interacted with using [gRPC](https://grpc.io/), with support for the gRPC [health check protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md). The examples below leverage [grpcurl](https://github.com/fullstorydev/grpcurl), and assume you've already deployed a GKE cluster.
 
-> Note: because gRPC is used at the protocol, the output of `whereami-grpc`, when using gRPC, will omit any `header` fields *and* it's listening on port `9090`
+> Note: because gRPC is used as the protocol, the output of `whereami-grpc`, when using gRPC, will omit any `header` fields *and* the service listens on port `9090`
 
 #### Step 1 - Deploy the whereami-grpc backend
 
