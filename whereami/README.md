@@ -335,7 +335,7 @@ $ curl $ENDPOINT -s | jq .
 
 By enabling a feature flag in the `whereami` configmap, `whereami` can be interacted with using [gRPC](https://grpc.io/), with support for the gRPC [health check protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md). The examples below leverage [grpcurl](https://github.com/fullstorydev/grpcurl), and assume you've already deployed a GKE cluster.
 
-> Note: because gRPC is used as the protocol, the output of `whereami-grpc`, when using gRPC, will omit any `header` fields *and* the service listens on port `9090`
+> Note: because gRPC is used as the protocol, the output of `whereami-grpc` will omit any `header` fields *and* listens on port `9090`
 
 #### Step 1 - Deploy the whereami-grpc backend
 
@@ -369,7 +369,7 @@ Get the external Service gRPC endpoint:
 $ ENDPOINT=$(kubectl get svc whereami-grpc-frontend | grep -v EXTERNAL-IP | awk '{ print $4}')
 ```
 
-Call the endpoint (using [grpcurl](https://github.com/fullstorydev/grpcurl)) to get the response. In this example we use [jq](https://stedolan.github.io/jq/) to provide a little more structure to the response:
+Call the endpoint using [grpcurl](https://github.com/fullstorydev/grpcurl) to get the response. In this example, we use [jq](https://stedolan.github.io/jq/) to provide a little more structure to the response:
 
 ```bash
 $ grpcurl -plaintext $ENDPOINT:9090 whereami.Whereami.GetPayload | jq .
