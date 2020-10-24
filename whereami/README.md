@@ -2,7 +2,7 @@
 
 `whereami` is a simple Kubernetes-oriented python app for describing the location of the pod serving a request via its attributes (cluster name, cluster region, pod name, namespace, service account, etc). This is useful for a variety of demos where you just need to understand how traffic is getting to and returning from your app. 
 
-`whereami`, by default, is a Flask-based python app. It also can operate as a [gRPC](https://grpc.io/) server. The instructions for using gRPC are at the bottom of this document.
+`whereami`, by default, is a Flask-based python app. It also can operate as a [gRPC](https://grpc.io/) server. The instructions for using gRPC are at the bottom of this document [here](#gRPC-support).
 
 ### Simple deployment 
 
@@ -337,7 +337,7 @@ All of the prior examples for `whereami` are based on its default operating mode
 
 By enabling a feature flag in the `whereami` configmap (see [here](k8s-grpc/configmap.yaml), [here](k8s-grpc/deployment.yaml) and [here](k8s-grpc/service.yaml)), `whereami` can be interacted with using [gRPC](https://grpc.io/), with support for the gRPC [health check protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md). The examples below leverage [grpcurl](https://github.com/fullstorydev/grpcurl), and assume you've already deployed a GKE cluster.
 
-> Note: because gRPC is used as the protocol, the `whereami-grpc` reponse will omit any `header` fields *and* it listens on port `9090`
+> Note: because gRPC is used as the protocol, the `whereami-grpc` reponse will omit any `header` fields *and* listens on port `9090` instead of port `8080`
 
 #### Step 1 - Deploy the whereami-grpc backend
 
