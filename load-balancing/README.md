@@ -8,6 +8,6 @@ Visit https://cloud.google.com/kubernetes-engine/docs/tutorials/http-balancer to
 
 This directory contains:
 
-- `basic-ingress.yaml` defines an Ingress resource
-- `basic-ingress-static.yaml` defines an Ingress resource that uses a reserved IP address
-- `fanout-ingress.yaml` defines an Ingress resource that routes requests to different Services by path
+- `basic-ingress.yaml` defines an Ingress resource.
+- `basic-ingress-static.yaml` defines an Ingress resource that uses a reserved IP address.
+- `fanout-ingress.yaml` defines an Ingress resource that routes requests to different Services by path.
