@@ -81,7 +81,7 @@ spec:
       serviceAccountName: whereami-ksa
       containers:
       - name: whereami
-        image: gcr.io/google-samples/whereami:v1.0.1
+        image: gcr.io/google-samples/whereami:v1.1.1
         ports:
           - name: http
             containerPort: 8080 #The application is listening on port 8080
