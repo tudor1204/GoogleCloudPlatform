@@ -11,3 +11,7 @@ This directory contains:
 - `basic-ingress.yaml` defines an Ingress resource.
 - `basic-ingress-static.yaml` defines an Ingress resource that uses a reserved IP address.
 - `fanout-ingress.yaml` defines an Ingress resource that routes requests to different Services by path.
+- `web-deployment.yaml` defines a Deployment resource.
+- `web-deployment-v2.yaml` defines a second Deployment resource.
+- `web-service.yaml` defines a Service resource that makes the deployment reachable within your cluster.
+- `web-service-v2.yaml` defines a second Service resource.
