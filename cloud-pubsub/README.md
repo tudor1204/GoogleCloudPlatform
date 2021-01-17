@@ -1,6 +1,6 @@
 # Pub/Sub on Kubernetes Engine
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/kubernetes-engine-samples&cloudshell_tutorial=cloud-pubsub/README.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/kubernetes-engine-samples&cloudshell_tutorial=README.md&cloudshell_workspace=cloud-pubsub/)
 
 This repository contains source code, Docker image build file and Kubernetes
 manifests for Pub/Sub on Kubernetes Engine tutorial. Please follow the tutorial
