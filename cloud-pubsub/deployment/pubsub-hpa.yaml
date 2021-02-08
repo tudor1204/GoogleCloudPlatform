@@ -35,4 +35,4 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: pubsub
-# [START container_pubsub_horizontal_pod_autoscaler]
+# [END container_pubsub_horizontal_pod_autoscaler]

@@ -13,24 +13,6 @@
 # limitations under the License.
 
 # [START container_custom_metrics_prometheus_horizontal_pod_autoscaler]
-# apiVersion: autoscaling/v2beta1
-# kind: HorizontalPodAutoscaler
-# metadata:
-#   name: custom-prometheus-hpa
-#   namespace: default
-# spec:
-#   scaleTargetRef:
-#     apiVersion: apps/v1beta1
-#     kind: Deployment
-#     name: custom-metric-prometheus-sd
-#   minReplicas: 1
-#   maxReplicas: 5
-#   metrics:
-#   - type: Pods
-#     pods:
-#       metricName: custom_prometheus
-#       targetAverageValue: 20
-# [END container_custom_metrics_prometheus_horizontal_pod_autoscaler]
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -51,3 +33,4 @@ spec:
       target:
         type: AverageValue
         averageValue: 20
+# [END container_custom_metrics_prometheus_horizontal_pod_autoscaler]
