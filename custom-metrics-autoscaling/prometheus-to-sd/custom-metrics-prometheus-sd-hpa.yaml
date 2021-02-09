@@ -16,7 +16,7 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: custom-prometheus-sd
+  name: custom-prometheus-hpa
   namespace: default
 spec:
   scaleTargetRef:
