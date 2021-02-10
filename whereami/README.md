@@ -193,6 +193,17 @@ $ curl $ENDPOINT
 }
 ```
 
+The JSON payload example above covers the majority of fields that `whereami` can return. In the following sections, you will see how it's possible to have `whereami` to call downstream services, adding additional data to that payload. Before you do that, it's worth pointing out that `whereami` can also return individual fields from that JSON payload as plaintext, so long as you include the field's name as a suffix to the path you're calling. Let's see an example.
+
+Suppose you only care about the `pod_name_emoji` value. You can do the following to capture only that value in the response:
+
+```bash
+$ curl $ENDPOINT/path12345/pod_name_emoji
+
+🧚🏽
+```
+
+`whereami` will evaluate the path you're accessing, and as long as the last part of the path matches a valid field name of the JSON response, it will return that value. Otherwise, you'll get the full JSON response.
 
 
 ### Setup a backend service call
