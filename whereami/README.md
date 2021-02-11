@@ -203,7 +203,14 @@ $ curl $ENDPOINT/path12345/pod_name_emoji
 🧚🏽
 ```
 
-`whereami` will evaluate the path you're accessing, and as long as the last part of the path matches a valid field name of the JSON response, it will return that value. Otherwise, you'll get the full JSON response.
+`whereami` will evaluate the path you're accessing, and as long as the last part of the path matches a valid field name of the JSON response, it will return that value. Otherwise, you'll get the full JSON response. 
+
+The fields/path suffixes that are *always* available in a HTTP `whereami` response are:
+
+- `host_header`
+- `pod_name`
+- `pod_name_emoji`
+- `timestamp`
 
 
 ### Setup a backend service call
@@ -378,7 +385,7 @@ By setting the feature flag `GRPC_ENABLED` in the `whereami` configmap (see [her
 
 If gRPC is enabled for a given pod, that `whereami` pod will not respond to HTTP requests, and any downstream service calls that the pod makes will also use gRPC only.
 
-> Note: because gRPC is used as the protocol, the `whereami-grpc` response will omit any `header` fields *and* listens on port `9090` instead of port `8080`.
+> Note: because gRPC is used as the protocol, the `whereami-grpc` response will omit any `header` fields *and* listens on port `9090` instead of port `8080`. 
 
 #### Step 1 - Deploy the whereami-grpc backend
 

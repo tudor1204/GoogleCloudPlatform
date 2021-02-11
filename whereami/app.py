@@ -1,7 +1,8 @@
-from flask import Flask, request, Response, jsonify
+from flask import Flask, request, Response, jsonify, make_response
 import logging
 import sys
 import os
+import json
 from flask_cors import CORS
 import whereami_payload
 
@@ -89,6 +90,7 @@ def home(path):
     # split the path to see if user wants to read a specific field
     requested_value = path.split('/')[-1]
     if requested_value in payload.keys():
+        
         return payload[requested_value]
 
     return jsonify(payload)
