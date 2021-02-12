@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, jsonify, make_response
+from flask import Flask, request, Response, jsonify
 import logging
 import sys
 import os
@@ -90,7 +90,7 @@ def home(path):
     # split the path to see if user wants to read a specific field
     requested_value = path.split('/')[-1]
     if requested_value in payload.keys():
-        
+
         return payload[requested_value]
 
     return jsonify(payload)
