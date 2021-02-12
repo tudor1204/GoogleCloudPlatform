@@ -2,7 +2,6 @@ from flask import Flask, request, Response, jsonify
 import logging
 import sys
 import os
-import json
 from flask_cors import CORS
 import whereami_payload
 
