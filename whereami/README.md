@@ -198,7 +198,7 @@ The JSON payload example above covers the majority of fields that `whereami` can
 Suppose you only care about the `pod_name_emoji` value. You can do the following to capture only that value in the response:
 
 ```bash
-$ curl $ENDPOINT/path12345/pod_name_emoji
+$ curl $ENDPOINT/some/path/prefix/pod_name_emoji
 
 🧚🏽
 ```
