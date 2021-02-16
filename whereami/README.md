@@ -381,7 +381,7 @@ $ curl $ENDPOINT -s | jq .
 
 All of the prior examples for `whereami` are based on its default operating mode of using [Flask](https://flask.palletsprojects.com/en/1.1.x/) as its server. The following section details how `whereami` can be configured to use [gRPC](https://grpc.io/) instead.
 
-By setting the feature flag `GRPC_ENABLED` in the `whereami` configmap (see [here](k8s-grpc/configmap.yaml) to `"True"`, `whereami` can be interacted with using [gRPC](https://grpc.io/), with support for the gRPC [health check protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md). The examples below leverage [grpcurl](https://github.com/fullstorydev/grpcurl), and assume you've already deployed a GKE cluster.
+By setting the feature flag `GRPC_ENABLED` in the `whereami` configmap (see [here](k8s-grpc/configmap.yaml)) to `"True"`, `whereami` can be interacted with using [gRPC](https://grpc.io/), with support for the gRPC [health check protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md). The examples below leverage [grpcurl](https://github.com/fullstorydev/grpcurl), and assume you've already deployed a GKE cluster.
 
 If gRPC is enabled for a given pod, that `whereami` pod will not respond to HTTP requests, and any downstream service calls that the pod makes will also use gRPC only.
 
