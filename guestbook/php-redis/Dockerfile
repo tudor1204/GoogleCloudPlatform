@@ -11,10 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-FROM php:7.4-apache-buster
-RUN apt update && apt -y install zip unzip git-all
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+FROM php:7.4.7-apache
 
-COPY . .
+RUN pear channel-discover pear.nrk.io
+RUN pear install nrk/Predis
 
-RUN composer update
+ADD guestbook.php /var/www/html/guestbook.php
+ADD controllers.js /var/www/html/controllers.js
+ADD index.html /var/www/html/index.html
