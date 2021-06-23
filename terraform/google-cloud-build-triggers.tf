@@ -5,8 +5,16 @@
 // How to use this file:
 //     1. Install Terraform.
 //     2. From this directory, run "terraform init". This will download the Google Terraform plugin.
+//        If you get an error similar to "querying Cloud Storage failed: storage: bucket doesn't exist",
+//        try running: gcloud auth application-default login
 //     3. Finally, run "terraform apply" to create any missing Google Cloud Build Triggers.
-//        You'll see errors for the Google Cloud Build Triggers that already exist.
+
+terraform {
+  backend "gcs" {
+    bucket = "kubernetes-engine-samples"
+    prefix = "terraform-state"
+  }
+}
 
 provider "google" {
     project = "google-samples"
