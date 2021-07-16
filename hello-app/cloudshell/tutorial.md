@@ -106,7 +106,7 @@ You should see one `hello-server` Pod running on your cluster.
 ```bash
 kubectl get service hello-server
 ```
-From this command's output, copy the Service's external IP address from the `EXTERNAL-IP` column.
+From this command's output, copy the Service's external IP address from the `EXTERNAL-IP` column. (It may take a minute for the external IP address to show up. If the output reads `<pending>`, retry the command.)
 
 3. View the application from your web browser by using the external IP address with the exposed port:
 ```
