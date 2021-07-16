@@ -58,7 +58,7 @@ Next, let's deploy an app to the cluster.
 
 ## Deploy an application to the cluster
 
-Now that you have created a cluster, you can deploy a [containerized application](https://cloud.google.com/kubernetes-engine/docs/concepts/kubernetes-engine-overview#workloads) to it. For this tutorial, let's deploy the example web application `hello-app`.
+Now that you have created a cluster, you can deploy a [containerized application](https://cloud.google.com/kubernetes-engine/docs/concepts/kubernetes-engine-overview#workloads) to it. For this tutorial, let's deploy the [example web application](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/tree/master/hello-app) `hello-app`.
 
 GKE uses Kubernetes objects to create and manage your cluster's resources. This example has two types of Kubernetes objects:
 - a [Deployment](https://cloud.google.com/kubernetes-engine/docs/concepts/deployment) object, which deploys stateless applications like web servers 
