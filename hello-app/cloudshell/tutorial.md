@@ -15,23 +15,32 @@ You can use an existing Google Cloud Platform project for this tutorial, or you 
 
 Open the <walkthrough-editor-spotlight spotlightId="menu-terminal">terminal</walkthrough-editor-spotlight> and follow the steps below:
 
-### 1. Set the default project    
-```bash
-gcloud config set project PROJECT_ID
-```     
-Replace PROJECT_ID with your [project id](https://support.google.com/cloud/answer/6158840).
+### 1. Set environment variables
+In the terminal, set your `PROJECT_ID` and `COMPUTE_ZONE` variables if you don't already have them configured.
 
-### 2. Set the default compute/zone    
 ```bash
-gcloud config set compute/zone COMPUTE_ZONE
-```    
+PROJECT_ID=my-project
+```
+Replace `my-project` with your [project id](https://support.google.com/cloud/answer/6158840).
+
+```bash
+COMPUTE_ZONE=us-west1-a
+```
 Replace COMPUTE_ZONE with your [compute zone](https://cloud.google.com/compute/docs/regions-zones#available), such as `us-west1-a`.
+
+### 2. Set the default project and compute zone 
+```bash
+gcloud config set project $PROJECT_ID
+gcloud config set compute/zone $COMPUTE_ZONE
+```    
+
+Next, you'll create a GKE cluster.
 
 
 ## Create a GKE cluster
 A cluster consists of at least one cluster control plane machine and multiple worker machines called nodes. Nodes are [Compute Engine virtual machine (VM) instances](https://cloud.google.com/compute/docs/instances) that run the Kubernetes processes necessary to make them part of the cluster. 
 
-GKE offers two [modes of operation](https://cloud.google.com/kubernetes-engine/docs/concepts/types-of-clusters#modes) for clusters: Standard and Autopilot. For this tutorial, we'll use Standard mode.
+GKE offers two [modes of operation](https://cloud.google.com/kubernetes-engine/docs/concepts/types-of-clusters#modes) for clusters: [Standard](https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture) and [Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-architecture). For this tutorial, we'll use Standard mode.
 
 ### 1. Create a Standard GKE cluster
 
