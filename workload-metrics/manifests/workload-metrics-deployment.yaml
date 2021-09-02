@@ -1,0 +1,32 @@
+# Copyright 2021 Google Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: workload-metrics
+  name: workload-metrics
+  namespace: gke-workload-metrics
+spec:
+  selector:
+    matchLabels:
+      app: workload-metrics
+  template:
+    metadata:
+      labels:
+        app: workload-metrics
+    spec:
+      containers:
+      - image: us-docker.pkg.dev/google-samples/containers/workload-metrics:1.0
+        imagePullPolicy: Always
+        name: workload-metrics
+        ports:
+        - name: metrics-port
+          containerPort: 1234
+        command:
+        - "/workload-metrics"
+        - "--process-metrics"
+        - "--go-metrics"
+

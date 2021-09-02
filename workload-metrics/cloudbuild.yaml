@@ -1,0 +1,18 @@
+# Copyright 2021 Google Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/google-samples/workload-metrics:1.0'
+      - '-t'
+      - 'us-docker.pkg.dev/google-samples/containers/workload-metrics:1.0'
+      - '.'
+    dir: 'workload-metrics'
+
+images:
+  - 'gcr.io/google-samples/workload-metrics:1.0'
+  - 'us-docker.pkg.dev/google-samples/containers/workload-metrics:1.0'

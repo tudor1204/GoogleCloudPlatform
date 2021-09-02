@@ -1,0 +1,35 @@
+# Copyright 2021 Google Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Note that this PodMonitor is in the monitoring.gke.io domain,
+# rather than the monitoring.coreos.com domain used with the
+# Prometheus Operator
+apiVersion: monitoring.gke.io/v1alpha1
+kind: PodMonitor
+metadata:
+  name: workload-metrics-podmon
+# spec describes how to monitor a set of pods in a cluster.
+spec:
+  # namespaceSelector determines which namespace is searched for pods. Required
+  namespaceSelector:
+    matchNames:
+    - gke-workload-metrics
+  # selector determines which pods are monitored.  Required
+  # This example matches pods with the `app: workload-metrics-example` label
+  selector:
+    matchLabels:
+      app: workload-metrics
+  podMetricsEndpoints:
+    # port is the name of the port of the container to be scraped.
+  - port: metrics-port
+    # path is the path of the endpoint to be scraped.
+    # Default /metrics
+    path: /metrics
+    # scheme is the scheme of the endpoint to be scraped.
+    # Default http
+    scheme: http
+    # interval is the time interval at which metrics should
+    # be scraped. Default 60s
+    interval: 20s
+

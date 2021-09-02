@@ -1,0 +1,24 @@
+# Copyright 2021 Google Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: workload-metrics-hpa
+  namespace: gke-workload-metrics
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: workload-metrics
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Pods
+    pods:
+      metric:
+        name: workload.googleapis.com|example_requests_total
+      target:
+        type: AverageValue
+        averageValue: 1
