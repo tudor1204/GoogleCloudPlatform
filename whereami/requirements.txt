@@ -5,3 +5,5 @@ flask-cors
 grpcio
 grpcio-reflection
 grpcio-health-checking
+prometheus-flask-exporter
+py-grpc-prometheus
