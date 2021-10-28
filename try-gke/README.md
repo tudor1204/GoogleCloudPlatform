@@ -122,7 +122,8 @@ curl http://[IP-ADDRESS]
 ## Step 13: Deploy a new version of the web application from Google Container Registry.
 
 ```
-kubectl set image deployment web-app web-app=us-docker.pkg.dev/google-samples/containers/gke/hello-app:2.0; watch kubectl get pods
+kubectl set image deployment web-app web-app=us-docker.pkg.dev/google-samples/containers/gke/hello-app:2.0
+watch kubectl get pods
 ```
 
 ## Step 14: Watch the changes roll out.
