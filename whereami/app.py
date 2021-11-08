@@ -3,9 +3,7 @@ import logging
 import sys
 import os
 from flask_cors import CORS
-from opencensus import trace
 import whereami_payload
-import requests
 
 from concurrent import futures
 import multiprocessing
@@ -25,47 +23,53 @@ from prometheus_flask_exporter import PrometheusMetrics
 from py_grpc_prometheus.prometheus_server_interceptor import PromServerInterceptor
 from prometheus_client import start_http_server
 
-# OpenCensus imports
-from opencensus.ext.flask.flask_middleware import FlaskMiddleware
-from opencensus.ext.grpc import client_interceptor
-from opencensus.ext.stackdriver import trace_exporter as stackdriver_exporter
-from opencensus.trace import config_integration, samplers, span_context
-from opencensus.trace.propagation import google_cloud_format
-from opencensus.trace.propagation import trace_context_http_header_format
-from opencensus.trace.propagation import b3_format
+# OpenTelemetry setup
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+os.environ["OTEL_PYTHON_FLASK_EXCLUDED_URLS"] = "healthz,metrics"  # set exclusions
+from opentelemetry import trace
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
+from opentelemetry.propagate import set_global_textmap
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.propagators.cloud_trace_propagator import (
+    CloudTraceFormatPropagator,
+)
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.trace.sampling import TraceIdRatioBased
 
-# see if GCP PROJECT ID is available via env or METADATA
-project_id = os.getenv('project_id')
-if not project_id:
+# Set trace sampling
+sampler = TraceIdRatioBased(1/10)  # sample 10% of requests
 
-    r = requests.get(whereami_payload.METADATA_URL + 'project/project-id',
-                                headers=whereami_payload.METADATA_HEADERS)
-    if r.ok:
-        project_id = r.text
+# OTEL setup
+set_global_textmap(CloudTraceFormatPropagator())
+
+tracer_provider = TracerProvider(sampler=sampler)
+cloud_trace_exporter = CloudTraceSpanExporter()
+tracer_provider.add_span_processor(
+    # BatchSpanProcessor buffers spans and sends them in batches in a
+    # background thread. The default parameters are sensible, but can be
+    # tweaked to optimize your performance
+    BatchSpanProcessor(cloud_trace_exporter)
+)
+trace.set_tracer_provider(tracer_provider)
+
+tracer = trace.get_tracer(__name__)
 
 # flask setup
 app = Flask(__name__)
-exporter = stackdriver_exporter.StackdriverExporter(project_id=project_id)
-sampler = samplers.ProbabilitySampler(rate=1)
-# check to see if backend; if so, expect headers
-# TODO - add check to see if service is a backend service
-#middleware = FlaskMiddleware(app, exporter=exporter, sampler=sampler, propagator=GoogleCloudFormatPropagator, excludelist_paths=['healthz'])
-# do we have a valid project ID? if so, enable tracing middleware
-if project_id:
-    logging.info("Project ID %s detected; enabling Cloud Trace exports" % project_id)
-    #middleware = FlaskMiddleware(app, exporter=exporter, sampler=sampler, excludelist_paths=['healthz', 'metrics'], propagator=google_cloud_format.GoogleCloudFormatPropagator())
-    middleware = FlaskMiddleware(app, exporter=exporter, sampler=sampler, excludelist_paths=['healthz', 'metrics'], propagator=b3_format.B3FormatPropagator())
-    #middleware = FlaskMiddleware(app, exporter=exporter, sampler=sampler, excludelist_paths=['healthz', 'metrics'], propagator=trace_context_http_header_format.TraceContextPropagator())
+FlaskInstrumentor().instrument_app(app)
+RequestsInstrumentor().instrument()  # enable tracing for Requests
 app.config['JSON_AS_ASCII'] = False  # otherwise our emojis get hosed
 CORS(app)  # enable CORS
-metrics = PrometheusMetrics(app) # enable Prom metrics
+metrics = PrometheusMetrics(app)  # enable Prom metrics
 
 # gRPC setup
 grpc_serving_port = 9090
-grpc_metrics_port = 8080 # prometheus /metrics, same as flask port
+grpc_metrics_port = 8080  # prometheus /metrics, same as flask port
 
 # define Whereami object
 whereami_payload = whereami_payload.WhereamiPayload()
+
 
 # create gRPC class
 class WhereamigRPC(whereami_pb2_grpc.WhereamiServicer):
@@ -83,7 +87,7 @@ def grpc_serve():
     # working on a proper workaround
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()+5),
-        interceptors=(PromServerInterceptor(),)) # interceptor for metrics
+        interceptors=(PromServerInterceptor(),))  # interceptor for metrics
 
     # Add the application servicer to the server.
     whereami_pb2_grpc.add_WhereamiServicer_to_server(WhereamigRPC(), server)
@@ -102,7 +106,7 @@ def grpc_serve():
             reflection.SERVICE_NAME, health.SERVICE_NAME)
 
     # Start an end point to expose metrics at host:$grpc_metrics_port/metrics
-    start_http_server(grpc_metrics_port) # starts a flask server for metrics
+    start_http_server(grpc_metrics_port)  # starts a flask server for metrics
 
     # Add the reflection service to the server.
     reflection.enable_server_reflection(services, server)
@@ -120,7 +124,7 @@ def grpc_serve():
 
 # HTTP heathcheck
 @app.route('/healthz')  # healthcheck endpoint
-@metrics.do_not_track() # exclude from prom metrics
+@metrics.do_not_track()  # exclude from prom metrics
 def i_am_healthy():
     return ('OK')
 
@@ -130,13 +134,7 @@ def i_am_healthy():
 @app.route('/<path:path>')
 def home(path):
 
-    #print(middleware.propagator.from_headers(request))
-    trace_id = middleware.propagator.from_headers(request.headers).trace_id
-    span_id = span_context.generate_span_id()
-    print(span_context.SpanContext)
-    print(trace_id)
-    print(span_id)
-    payload = whereami_payload.build_payload(request.headers, trace_id, span_id)
+    payload = whereami_payload.build_payload(request.headers)
 
     # split the path to see if user wants to read a specific field
     requested_value = path.split('/')[-1]
@@ -147,19 +145,15 @@ def home(path):
     return jsonify(payload)
 
 if __name__ == '__main__':
-    config_integration.trace_integrations(['logging'])
     out_hdlr = logging.StreamHandler(sys.stdout)
     fmt = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    #     '%(asctime)s - %(name)s - %(levelname)s - traceId=%(traceId)s - spanId=%(spanId)s - %(message)s')
     out_hdlr.setFormatter(fmt)
     out_hdlr.setLevel(logging.INFO)
     logging.getLogger().addHandler(out_hdlr)
     logging.getLogger().setLevel(logging.INFO)
     app.logger.handlers = []
     app.logger.propagate = True
-    config_integration.trace_integrations(['logging'])
-    #logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - traceId=%(traceId)s - spanId=%(spanId)s - %(message)s')
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
     # decision point - HTTP or gRPC?
