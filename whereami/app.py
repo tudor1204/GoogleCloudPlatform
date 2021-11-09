@@ -4,28 +4,24 @@ import sys
 import os
 from flask_cors import CORS
 import whereami_payload
-
+# gRPC stuff
 from concurrent import futures
 import multiprocessing
-
 import grpc
-
 from grpc_reflection.v1alpha import reflection
 from grpc_health.v1 import health
 from grpc_health.v1 import health_pb2
 from grpc_health.v1 import health_pb2_grpc
-
+# whereami protobufs
 import whereami_pb2
 import whereami_pb2_grpc
-
 # Prometheus export setup
 from prometheus_flask_exporter import PrometheusMetrics
 from py_grpc_prometheus.prometheus_server_interceptor import PromServerInterceptor
 from prometheus_client import start_http_server
-
 # OpenTelemetry setup
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
 os.environ["OTEL_PYTHON_FLASK_EXCLUDED_URLS"] = "healthz,metrics"  # set exclusions
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry import trace
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
@@ -37,8 +33,16 @@ from opentelemetry.propagators.cloud_trace_propagator import (
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.sdk.trace.sampling import TraceIdRatioBased
 
-# Set trace sampling
-sampler = TraceIdRatioBased(1/10)  # sample 10% of requests
+
+# check to see if tracing enabled and sampling probability
+trace_sampling_ratio = 0  # default to not sampling if absense of environment var
+if os.getenv("TRACE_SAMPLING_RATIO"):
+
+    try:
+        trace_sampling_ratio = float(os.getenv("TRACE_SAMPLING_RATIO"))
+    except:
+        logging.warning("Invalid trace ratio provided; disabling.")  # invalid value? just keep at 0%
+sampler = TraceIdRatioBased(trace_sampling_ratio)
 
 # OTEL setup
 set_global_textmap(CloudTraceFormatPropagator())
