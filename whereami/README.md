@@ -12,6 +12,8 @@ Tracing to `whereami` is instrumented via [OpenTelemetry](https://cloud.google.c
 
 Prometheus metrics are exposed from `whereami` at `x.x.x.x/metrics` in both Flask and gRPC modes.
 
+> Note: when running the `whereami` pod(s) with [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) enabled, make sure that the associated GSA has a role attached to it with permissions to write to Cloud Trace, such as `roles/cloudtrace.agent`
+
 ### Simple deployment
 
 `whereami` is a single-container app, designed and packaged to run on Kubernetes. In its simplest form it can be deployed in a single line with only a few parameters.
