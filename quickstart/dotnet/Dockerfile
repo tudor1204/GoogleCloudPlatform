@@ -16,7 +16,7 @@ COPY . ./
 RUN dotnet publish -c Release -o out
 
 # Run the web service on container startup in a lean production image.
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine
 WORKDIR /app
 
 COPY --from=build /app/out ./
