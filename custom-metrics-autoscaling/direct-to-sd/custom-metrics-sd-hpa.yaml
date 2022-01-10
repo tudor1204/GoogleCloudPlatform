@@ -35,5 +35,6 @@ spec:
       target:
         type: AverageValue
         averageValue: 20
-# [END container_custom_metrics_direct_horizontal_pod_autoscaler]# [END gke_direct_to_sd_custom_metrics_sd_hpa_horizontalpodautoscaler_custom_metric_sd]
+# [END container_custom_metrics_direct_horizontal_pod_autoscaler]
+# [END gke_direct_to_sd_custom_metrics_sd_hpa_horizontalpodautoscaler_custom_metric_sd]
 ---
