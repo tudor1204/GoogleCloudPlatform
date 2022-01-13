@@ -14,9 +14,9 @@ ADD . /app
 RUN go mod download
 
 RUN protoc --go_out=. --go_opt=paths=source_relative   \
-  --go-grpc_out=. --go-grpc_opt=paths=source_relative     src/echo/echo.proto
+  --go-grpc_out=. --go-grpc_opt=paths=source_relative     ../echo/echo.proto
 
-RUN export GOBIN=/app/bin && go install src/grpc_server.go
+RUN export GOBIN=/app/bin && go install grpc_server.go
 
 FROM gcr.io/distroless/base
 COPY --from=build /app/certs/CA_crt.pem /certs/
