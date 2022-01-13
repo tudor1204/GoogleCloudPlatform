@@ -21,7 +21,7 @@ import (
 	"os"
 	"sync"
 
-	echo "github.com/boredabdel/grpc-hc-proxy/grpc-sample/echo"
+	echo "github.com/boredabdel/kubernetes-engine-samples/grpc-hc-proxy/grpc-sample/echo"
 
 	log "github.com/golang/glog"
 
