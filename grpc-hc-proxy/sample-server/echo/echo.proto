@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package echo;
-option go_package = "https://github.com/boredabdel/kubernetes-engine-samples/grpc-hc-proxy/sample-server/echo";
+option go_package = "github.com/boredabdel/kubernetes-engine-samples/grpc-hc-proxy/sample-server/echo";
 
 service EchoServer {
   rpc SayHello (EchoRequest) returns (EchoReply) {}

@@ -2,7 +2,7 @@
 This folder contains a sample gRPC Server to use with the gRPC HealthCheck proxy
 
 ## Pre-requisites
-You need to deploy [grpcurl](https://github.com/fullstorydev/grpcurl) to test the server
+You need to install [grpcurl](https://github.com/fullstorydev/grpcurl) to test the server
 
 ## Build the Server
 ```bash
@@ -38,8 +38,15 @@ docker run --net=host -p 50051:50051 \
   --tlsKey=certs/grpc_server_key.pem
 
 # Client
-docker run --net=host -p 50051:50051 \
-   -t docker.io/salrashid123/grpc_app /grpc_client \
-      --host localhost:50051 --tlsCert certs/CA_crt.pem \
-      -skipHealthCheck --servername grpc.domain.com
+grpcurl -cacert certs/CA_crt.pem \
+  -authority grpc.domain.com localhost:50051 echo.EchoServer.SayHello
+```
+
+The output should look like
+
+```bash
+{
+  "message": "Hello   from hostname HOSTNAME"
+}
+
 ```

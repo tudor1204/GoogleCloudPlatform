@@ -120,7 +120,7 @@ func main() {
 		if *tlsCert == "" || *tlsKey == "" {
 			log.Fatalf("Must set --tlsCert and tlsKey if --insecure flags is not set")
 		}
-		log.Info("TLS Options passed to the server")
+		log.Info("Loading TLS certificates")
 		ce, err := credentials.NewServerTLSFromFile(*tlsCert, *tlsKey)
 		if err != nil {
 			log.Fatalf("Failed to generate credentials %v", err)

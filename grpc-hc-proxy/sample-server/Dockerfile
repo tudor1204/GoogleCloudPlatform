@@ -28,4 +28,4 @@ COPY --from=build /app/bin /
 
 EXPOSE 50051
 
-ENTRYPOINT ["/grpc_server", "--grpcport", ":50051", "--insecure"]
+ENTRYPOINT ["/grpc_server", "--grpcport", ":50051"]
