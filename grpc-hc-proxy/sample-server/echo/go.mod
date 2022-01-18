@@ -1,4 +1,4 @@
-module echo
+module github.com/boredabdel/kubernetes-engine-samples/grpc-hc-proxy/sample-server/echo
 
 go 1.17
 
