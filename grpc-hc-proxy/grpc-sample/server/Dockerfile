@@ -10,11 +10,12 @@ RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 WORKDIR /app
-ADD . /app
+ADD server/ /app
+ADD echo/ /app
 RUN go mod download
 
-RUN protoc --go_out=. --go_opt=paths=source_relative   \
-  --go-grpc_out=. --go-grpc_opt=paths=source_relative     ../echo/echo.proto
+#RUN protoc --go_out=. --go_opt=paths=source_relative   \
+#  --go-grpc_out=. --go-grpc_opt=paths=source_relative ./echo/echo.proto
 
 RUN export GOBIN=/app/bin && go install grpc_server.go
 
@@ -29,3 +30,4 @@ COPY --from=build /app/bin /
 EXPOSE 50051
 
 ENTRYPOINT ["/grpc_server", "--grpcport", ":50051", "--insecure"]
+#ENTRYPOINT ["tail", "-f", "/dev/null"]
