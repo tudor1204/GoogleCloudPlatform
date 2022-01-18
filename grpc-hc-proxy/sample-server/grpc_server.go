@@ -21,7 +21,7 @@ import (
 	"os"
 	"sync"
 
-	echo "github.com/boredabdel/kubernetes-engine-samples/grpc-hc-proxy/grpc-sample/echo"
+	echo "github.com/boredabdel/kubernetes-engine-samples/grpc-hc-proxy/sample-server/echo"
 
 	log "github.com/golang/glog"
 
@@ -120,6 +120,7 @@ func main() {
 		if *tlsCert == "" || *tlsKey == "" {
 			log.Fatalf("Must set --tlsCert and tlsKey if --insecure flags is not set")
 		}
+		log.Info("TLS Options passed to the server")
 		ce, err := credentials.NewServerTLSFromFile(*tlsCert, *tlsKey)
 		if err != nil {
 			log.Fatalf("Failed to generate credentials %v", err)
