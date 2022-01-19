@@ -1,28 +1,28 @@
 # gRPC Health-Check Proxy
 
-`grpc-hc-proxy` is a webserver proxy for [gRPC Health Checking Protocol][https://github.com/grpc/grpc/blob/master/doc/health-checking.md].
+`grpc-hc-proxy` is a webserver proxy for [gRPC Health Checking Protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md).
 
-This utility starts up an HTTP(S_ server which responds back to a client after making an RPC
-call to a downstream server's gRPC healthcheck endpoint (`/grpc.health.v1.Health/Check`).
+This utility starts up an HTTP(S) server which responds back to a client after making an RPC
+call to a downstream server's gRPC healthcheck endpoint `/grpc.health.v1.Health/Check`.
 
 If the healthcheck passes, it responses back to the original http client will be `200`. If the
 gRPC HealthCheck failed, a `503` is returned. If the service is not registered, a `404` is returned
 
 Basically, this is an http proxy for the gRPC healthcheck protocol.
 
-  `client--->http-->grpc_heatlh_proxy-->gRPC HealthCheck-->gRPC Server`
+  `client-->(http/s or mTLS)-->grpc_heatlh_proxy-->(gRPC HealthCheck with TLS or mTLS)-->gRPC Server`
 
-This utility uses similar flags, cancellation and timing snippets for the grpc call from [grpc-health-probe](https://github.com/grpc-ecosystem/grpc-health-probe). Use that tool as a specific [Liveness and Readiness Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/) for Kubernetes.
+This utility uses similar flags, cancellation and timing snippets for the grpc call from [grpc-health-probe](https://github.com/grpc-ecosystem/grpc-health-probe).
 
-This utility can be used in the same cli mode but also as a generic HTTP interface (eg, as httpHealthCheck probe for Cloud Load Balancers that doesn't support gRPC).
+You can use this proxy with [Liveness and Readiness Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/) for Kubernetes gRPC apps.
 
-For more information on the CLI mode without http listener, see the section at the end.
+This utility can also be used in cli mode but also as a generic HTTP interface (eg, as httpHealthCheck probe for Cloud Load Balancers that doesn't support gRPC).
 
 > This is not an official Google project and is unsupported by Google
 
 ## gRPC Health Checking Protocol
 
-The gRPC server must implement the [gRPC Health Checking Protocol v1][https://github.com/grpc/grpc/blob/master/doc/health-checking.md]. This means you must register the `Health` service and implement the `rpc Check` that returns a `SERVING` status.
+The gRPC server must implement the [gRPC Health Checking Protocol v1](https://github.com/grpc/grpc/blob/master/doc/health-checking.md). This means you must register the `Health` service and implement the `rpc Check` that returns a `SERVING` status.
 
 The [sample](https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server) gRPC server included in this repo below for golang implements it at:
 
@@ -32,7 +32,7 @@ func (s *Server) Check(ctx context.Context, in *healthpb.HealthCheckRequest) (*h
 
 ## Sample gRPC Server
 
-The [example-server/](https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server) folder contains certificates and sample gRPC server application to test with. 
+The [example-server/](https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server) folder contains certificates and a sample gRPC server application to test with. 
 
 ## Building the proxy
 
@@ -58,9 +58,9 @@ You can enable verbose logging with glog levels by appending `--logtostderr=1 -v
 
 ### HTTP to the gRPC HealthCheck proxy
 
-`grpc-hc-proxy` will listen on `:8080` for HTTP healthcheck requests on path `/healthz`.
+The `grpc-hc-proxy` will listen on `:8080` for HTTP healthcheck requests on path `/healthz`.
 
-`client->http->grpc_health_proxy->gRPC Server`
+`client-->(http)-->grpc_health_proxy-->(gRPC HealthCheck)-->gRPC Server`
 
 ```bash
 ./grpc-hc-proxy \
@@ -70,8 +70,6 @@ You can enable verbose logging with glog levels by appending `--logtostderr=1 -v
   --service-name echo.EchoServer \
   --logtostderr=1 -v 1
 ```
-
-- Invoke the http proxy
 
 ```bash
 curl http://localhost:8080/healthz
@@ -83,7 +81,9 @@ curl http://localhost:8080/healthz
 
 The `grpc-hc-proxy` will listen on `:8080` for HTTPS healthcheck requests on path `/healthz`.
 
-The proxy will use the keypairs [http_server_crt.pem, http_server_key.pem] (https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server/certs)
+`client-->(https)-->grpc_health_proxy-->(gRPC HealthCheck)-->gRPC Server`
+
+The proxy uses the keypairs [http_server_crt.pem,http_server_key.pem] (https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server/certs)
 
 ```bash
 ./grpc-hc-proxy \
@@ -105,11 +105,14 @@ curl \
 
 ---
 
-## mTLS to the gRPC HealthCheck proxy
+## mTLS from the client to the gRPC HealthCheck proxy
 
 The `grpc-hc-proxy` will listen on `:8080` for HTTPS with mTLS healthcheck requests on path `/healthz`.
 
-The proxy will use the keypairs [http_server_crt.pem, http_server_key.pem] (https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server/certs) for the proxy and verify client certificates issued using the keypairs [client_crt.pem, client_key.pem] (https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server/certs)
+`client-->(mTLS)-->grpc_health_proxy-->(gRPC HealthCheck)-->gRPC Server`
+
+The proxy will use the keypairs [http_server_crt.pem,http_server_key.pem] (https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server/certs) for the proxy and verify client certificates issued using the keypairs [client_crt.pem,client_key.pem] (https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server/certs)
+
 
 ```bash
 ./grpc-hc-proxy \
@@ -139,9 +142,9 @@ curl \
 
 Options to establish mTLS from the http proxy to the gRPC server
 
-- `client->http->grpc_health_proxy->mTLS->gRPC server`
+- `client-->(http)-->grpc_health_proxy-->(gRPC HealthCheck over mTLS)-->gRPC server`
 
-In the example below, `grpc_client_crt.pem` and `grpc_client_key.pem` are the TLS client credentials to present to the gRPC server
+In this example the keypair [client_crt.pem,client_key.pem](https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server/certs) are the TLS client credentials to present to the gRPC server. The gRPC Server is using the keypair [grpc_server_crt.pem,grpc_server_key.pem]((https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server/certs)). Check the [sample-server]((https://github.com/boredabdel/kubernetes-engine-samples/tree/main/grpc-hc-proxy/sample-server/certs)) instructions for how to start the gRPC Server with mTLS.
 
 ```bash
 ./grpc-hc-proxy \
@@ -156,14 +159,13 @@ In the example below, `grpc_client_crt.pem` and `grpc_client_key.pem` are the TL
   --grpc-sni-server-name grpc.domain.com --logtostderr=1 -v 1
 ```
 
-
 ```bash
 curl http://localhost:8080/healthz
 ```
 
 ### mTLS to Proxy and gRPC service
 
-`client->https->grpc_health_proxy->mTLS->gRPC Server`
+`client-->(mTLS)-->grpc_health_proxy-->(gRPC HealthCheck over mTLS)-->gRPC Server`
 
 ```bash
 ./grpc-hc-proxy \
@@ -192,7 +194,7 @@ curl  \
   https://http.domain.com:8080/healthz
 ```
 
-## grpc-hc-proxy Flags
+## The proxy Flags
 
 ### Required flags
 
@@ -202,7 +204,7 @@ curl  \
 | **`-grpcaddr`** | downstream gRPC host:port the proxy will connect to |
 | **`-service-name`** | gRPC service name to check  |
 
-### optional flags
+### Optional flags
 
 Run the proxy with --help to get the full list of flags
 
