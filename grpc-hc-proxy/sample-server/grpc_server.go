@@ -76,6 +76,7 @@ func (s *Server) Check(ctx context.Context, in *healthpb.HealthCheckRequest) (*h
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	log.Info("HealthCheck endpoint invoked")
 	if in.Service == "" {
 		// return overall status
 		return &healthpb.HealthCheckResponse{Status: healthpb.HealthCheckResponse_SERVING}, nil
