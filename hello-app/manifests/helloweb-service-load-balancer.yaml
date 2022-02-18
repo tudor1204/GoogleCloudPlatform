@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START container_helloapp_service_load_balancer]
 # [START gke_manifests_helloweb_service_load_balancer_service_helloweb]
+# [START container_helloapp_service_load_balancer]
 apiVersion: v1
 kind: Service
 metadata:
@@ -30,6 +30,6 @@ spec:
   selector:
     app: hello
     tier: web
-# [END gke_manifests_helloweb_service_load_balancer_service_helloweb]
 # [END container_helloapp_service_load_balancer]
+# [END gke_manifests_helloweb_service_load_balancer_service_helloweb]
 ---
