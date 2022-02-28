@@ -23,4 +23,4 @@ func main() {
 }
 
 // [END container_windows_multi_arch_hello_go]
-// [END gker_windows_multi_arch_hello_go]
+// [END gke_windows_multi_arch_hello_go]
