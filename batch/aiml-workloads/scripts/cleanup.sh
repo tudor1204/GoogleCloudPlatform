@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ./variables.sh
+source scripts/variables.sh
 
 echo "*********************************"
 echo "Deleting GCP resources"
