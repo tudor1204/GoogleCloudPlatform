@@ -9,4 +9,4 @@ spec:
   - ReadWriteMany
   nfs:
     path: /NFSVol
-    server: <IP_ADDRESS>
+    server: <FILESTORE_IP_ADDRESS>

@@ -4,9 +4,9 @@ echo "*********************************"
 echo "Initializing variables"
 echo "*********************************"
 # Replace the following with values for your own  project.
-export PROJECT_ID="<YOUR PROJECT ID>"
-export REGION="<YOUR REGION>"
-export ZONE="<YOUR ZONE>"
+export PROJECT_ID="<YOUR_PROJECT_ID>"
+export REGION="<YOUR_REGION>"
+export ZONE="<YOUR_ZONE>"
 
 export CLUSTER_ID="batch-aiml"
 export AR_REPO_ID="batch-aiml-docker-repo"
