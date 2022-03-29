@@ -128,7 +128,6 @@ class FraudDetectionModelTrainer:
         checkpoint_path = self._save_model(checkpoint_dir)
         return checkpoint_path
 
-
     def generate_report(self, output_path):
         """
         Accepts a output filepath.
@@ -169,13 +168,3 @@ class FraudDetectionModelTrainer:
                 test_accuracy,
             )
             f.writelines(report)
-
-
-
-
-
-
-
-
-
-
