@@ -19,14 +19,10 @@ echo "*********************************"
 echo "Deleting GCP resources"
 echo "*********************************"
 
-echo "Deleting Artifact Registry repository..."
-gcloud artifacts repositories delete ${AR_REPO_ID} --location=${REGION}
-echo "Artifact Repository repository '${AR_REPO_ID}' deleted."
-
 echo "Deleting GKE cluster..."
-gcloud container clusters delete ${CLUSTER_ID} \
+gcloud container clusters delete ${CLUSTER_NAME} \
     --project=${PROJECT_ID} --zone=${ZONE}
-echo "GKE cluster '${CLUSTER_ID}' deleted."
+echo "GKE cluster '${CLUSTER_NAME}' deleted."
 
 echo "Deleting Filestore instance..."
 gcloud filestore instances delete ${FILESTORE_ID} --zone=${ZONE}

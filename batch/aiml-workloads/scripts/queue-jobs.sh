@@ -13,11 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Set variables
-DATASETS_DIR="datasets"
-QUEUE_NAME="datasets"
-POD_NAME="redis-leader"
-PVC_PATH="/mnt/fileserver"
+source scripts/variables.sh
 
 echo "**************************************"
 echo "Populating queue for batch training..."

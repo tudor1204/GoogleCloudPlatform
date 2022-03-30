@@ -13,11 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Set variables
-DATASETS_DIR="datasets"
-QUEUE_NAME="datasets"
-POD_NAME="redis-leader"
-PVC_PATH="/mnt/fileserver"
+source scripts/variables.sh
 
 # Copy files containing training datasets from code repository to the GKE Pod
 echo "Copying datasets to Pod '${POD_NAME}'..."
