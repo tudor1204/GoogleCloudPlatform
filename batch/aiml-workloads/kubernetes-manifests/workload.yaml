@@ -27,7 +27,7 @@ spec:
         cloud.google.com/gke-spot: "true"
       containers:
       - name: workload
-        image: "<REGION>-docker.pkg.dev/<PROJECT_ID>/<AR_REPO_ID>/workload"
+        image: "us-central1-docker.pkg.dev/gke-batch-ml-workload/batch-aiml-docker-repo/workload"
         volumeMounts:
         - mountPath: /mnt/fileserver
           name: workload-pvc
