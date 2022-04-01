@@ -42,22 +42,25 @@ if os.getenv("TRACE_SAMPLING_RATIO"):
         trace_sampling_ratio = float(os.getenv("TRACE_SAMPLING_RATIO"))
     except:
         logging.warning("Invalid trace ratio provided; disabling.")  # invalid value? just keep at 0%
-sampler = TraceIdRatioBased(trace_sampling_ratio)
 
-# OTEL setup
-set_global_textmap(CloudTraceFormatPropagator())
+# if tracing is desired, set up trace provider / exporter
+if trace_sampling_ratio > 0:
+    sampler = TraceIdRatioBased(trace_sampling_ratio)
 
-tracer_provider = TracerProvider(sampler=sampler)
-cloud_trace_exporter = CloudTraceSpanExporter()
-tracer_provider.add_span_processor(
-    # BatchSpanProcessor buffers spans and sends them in batches in a
-    # background thread. The default parameters are sensible, but can be
-    # tweaked to optimize your performance
-    BatchSpanProcessor(cloud_trace_exporter)
-)
-trace.set_tracer_provider(tracer_provider)
+    # OTEL setup
+    set_global_textmap(CloudTraceFormatPropagator())
 
-tracer = trace.get_tracer(__name__)
+    tracer_provider = TracerProvider(sampler=sampler)
+    cloud_trace_exporter = CloudTraceSpanExporter()
+    tracer_provider.add_span_processor(
+        # BatchSpanProcessor buffers spans and sends them in batches in a
+        # background thread. The default parameters are sensible, but can be
+        # tweaked to optimize your performance
+        BatchSpanProcessor(cloud_trace_exporter)
+    )
+    trace.set_tracer_provider(tracer_provider)
+
+    tracer = trace.get_tracer(__name__)
 
 # flask setup
 app = Flask(__name__)

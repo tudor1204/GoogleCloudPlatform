@@ -82,42 +82,27 @@ class WhereamiPayload(object):
 
             return backend_result
 
-        # get GCP project ID
+        # grab info from GCE metadata
         try:
-            r = requests.get(METADATA_URL + 'project/project-id',
+            r = requests.get(METADATA_URL + '?recursive=true',
                              headers=METADATA_HEADERS)
-            if r.ok:
-                self.payload['project_id'] = r.text
+            # get project / zone info
+            self.payload['project_id'] = r.json()['project']['projectId']
+            self.payload['zone'] = r.json()['instance']['zone'].split('/')[-1]
+
+            # if we're running in GKE, we can also get cluster name
+            try:
+                self.payload['cluster_name'] = r.json()['instance']['attributes']['cluster-name']
+            except:
+                logging.warning("Unable to capture GKE cluster name.")
         except:
-
-            logging.warning("Unable to capture project ID.")
-
-        # get GCP zone
-        try:
-            r = requests.get(METADATA_URL + 'instance/zone',
-                             headers=METADATA_HEADERS)
-            if r.ok:
-                self.payload['zone'] = str(r.text.split("/")[3])
-        except:
-
-            logging.warning("Unable to capture zone.")
+            logging.warn("Unable to access GCE metadata endpoint.")
 
         # get node name via downward API
         if os.getenv('NODE_NAME'):
             self.payload['node_name'] = os.getenv('NODE_NAME')
         else:
             logging.warning("Unable to capture node name.")
-
-        # get GKE cluster name
-        try:
-            r = requests.get(METADATA_URL +
-                             'instance/attributes/cluster-name',
-                             headers=METADATA_HEADERS)
-            if r.ok:
-                self.payload['cluster_name'] = str(r.text)
-        except:
-
-            logging.warning("Unable to capture GKE cluster name.")
 
         # get host header
         try:
