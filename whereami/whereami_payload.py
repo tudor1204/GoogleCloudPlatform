@@ -96,7 +96,7 @@ class WhereamiPayload(object):
             except:
                 logging.warning("Unable to capture GKE cluster name.")
         except:
-            logging.warn("Unable to access GCE metadata endpoint.")
+            logging.warning("Unable to access GCE metadata endpoint.")
 
         # get node name via downward API
         if os.getenv('NODE_NAME'):
