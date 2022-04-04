@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: writer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: writer
+  template:
+    metadata:
+      labels:
+        app: writer
+    spec:
+      containers:
+      - name: content
+        image: northamerica-northeast2-docker.pkg.dev/wordpress-once/pvc-repo/pvc-repo:v15
+        volumeMounts:
+        - name: fileserver
+          mountPath: /html
+        command: ["/bin/sh", "-c"]
+        args:
+        # writes to indexData.html every 30 seconds
+        - cp /htmlTemp/indexInfo.html /html/index.html;
+          while true; do
+          echo "<b> Date :</b> <text>$(date)</text> <b> Writer :</b> <text2> ${HOSTNAME} </text2> <br>  " >> /html/indexData.html;
+          sleep 30;  
+          done
+      volumes:
+      - name: fileserver
+        persistentVolumeClaim:
+          claimName: fileserver
