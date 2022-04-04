@@ -6,7 +6,7 @@
 #
 deprecated==1.2.13
     # via redis
-importlib-metadata==4.10.1
+importlib-metadata==4.11.3
     # via redis
 joblib==1.1.0
     # via scikit-learn
