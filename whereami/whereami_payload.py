@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import emoji
 import logging
+from logging.config import dictConfig
 import requests
 # gRPC stuff
 import grpc
@@ -13,6 +14,23 @@ import whereami_pb2_grpc
 
 METADATA_URL = 'http://metadata.google.internal/computeMetadata/v1/'
 METADATA_HEADERS = {'Metadata-Flavor': 'Google'}
+
+# set up logging
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://sys.stdout',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'INFO',
+        'handlers': ['wsgi']
+    }
+})
 
 # set up emoji list
 emoji_list = list(emoji.unicode_codes.UNICODE_EMOJI['en'].keys())
@@ -143,8 +161,8 @@ class WhereamiPayload(object):
         # should we call a backend service?
         if os.getenv('BACKEND_ENABLED') == 'True':
 
-            print("making a call")
             backend_service = os.getenv('BACKEND_SERVICE')
+            logging.info("Attempting to call %s", backend_service)
 
             if os.getenv('GRPC_ENABLED') == "True":
 
