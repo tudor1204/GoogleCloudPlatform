@@ -8,8 +8,8 @@ spec:
   accessModes:
   - ReadWriteMany
   nfs:
-    path: /charlietest
-    server: 10.52.140.234
+    path: /statefulPath
+    server: <FILESTORE_IP_ADDRESS>
 
 ---
 
