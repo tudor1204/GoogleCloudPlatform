@@ -20,7 +20,6 @@ spec:
           mountPath: /html
         command: ["/bin/sh", "-c"]
         args:
-        # writes to indexData.html every 30 seconds
         - cp /htmlTemp/indexInfo.html /html/index.html;
           while true; do
           echo "<b> Date :</b> <text>$(date)</text> <b> Writer :</b> <text2> ${HOSTNAME} </text2> <br>  " >> /html/indexData.html;
