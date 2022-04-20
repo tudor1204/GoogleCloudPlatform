@@ -5,10 +5,12 @@ metadata:
 spec:
   capacity:
     storage: 1T
+  # Setting the accessModes to ReadWriteMany is essential for allowing > 2 writers to be writing to the same storage
   accessModes:
   - ReadWriteMany
   nfs:
     path: /statefulPath
+    # Replace <FILESTORE_IP_ADDRESS> with the IP address from the newly created Filestore instance
     server: <FILESTORE_IP_ADDRESS>
 
 ---

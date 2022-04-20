@@ -19,7 +19,7 @@ spec:
         - containerPort: 80
         volumeMounts:
         - name: fileserver
-          mountPath: /usr/share/nginx/html
+          mountPath: /usr/share/nginx/html # the shared directory 
           readOnly: true
       volumes:
       - name: fileserver

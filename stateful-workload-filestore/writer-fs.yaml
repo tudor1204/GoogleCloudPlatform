@@ -17,7 +17,7 @@ spec:
         image: northamerica-northeast2-docker.pkg.dev/wordpress-once/pvc-repo/pvc-repo:v15
         volumeMounts:
         - name: fileserver
-          mountPath: /html
+          mountPath: /html # the shared directory
         command: ["/bin/sh", "-c"]
         args:
         - cp /htmlTemp/indexInfo.html /html/index.html;
