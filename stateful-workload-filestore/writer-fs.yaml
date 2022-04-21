@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: writer
 spec:
-  replicas: 2
+  replicas: 2 # start with 2 replicas
   selector:
     matchLabels:
       app: writer
