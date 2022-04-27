@@ -10,8 +10,8 @@ spec:
   accessModes:
   - ReadWriteMany
   nfs:
-    path: /statefulPath
-    # Replace <FILESTORE_IP_ADDRESS> with the IP address 
+    path: /statefulpath
+    # Replace {FILESTORE_IP_ADDRESS} with the IP address 
     # from the newly created Filestore instance
     server: <FILESTORE_IP_ADDRESS>
 
