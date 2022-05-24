@@ -11,9 +11,9 @@ spec:
   - ReadWriteMany
   nfs:
     path: /statefulpath
-    # Replace {FILESTORE_IP_ADDRESS} with the IP address 
+    # Replace {IP_ADDRESS} with the IP address 
     # from the newly created Filestore instance
-    server: <FILESTORE_IP_ADDRESS>
+    server: <IP_ADDRESS>
 
 ---
 
