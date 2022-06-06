@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: content
-        image: northamerica-northeast2-docker.pkg.dev/wordpress-once/pvc-repo/pvc-repo:v16
+        image: us-docker.pkg.dev/google-samples/containers/gke/stateful-workload:latest
         volumeMounts:
         - name: fileserver
           mountPath: /html # the shared directory
