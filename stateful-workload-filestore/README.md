@@ -26,4 +26,4 @@ Technologies used in this tutorial
 - Start with 2 writer pods, then scale up to 5 pods to showcase scalability with NFS
 The user will be able to see 5 different writers all writing to the same file
 
-Please follow the tutorial at https://cloud.devsite.corp.google.com/kubernetes-engine/docs/tutorials/stateful-workload
+Please follow the tutorial at https://cloud.google.com/kubernetes-engine/docs/tutorials/stateful-workload
