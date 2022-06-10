@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/whereami-ci.yml
+      - '.github/workflows/whereami-ci.yml'
       - 'whereami/**'
   pull_request:
 jobs:
@@ -15,4 +15,4 @@ jobs:
       - name: build whereami container
         run: |
           cd whereami
-          docker build --tag ${IMAGE_NAME} .
+          docker build --tag whereami .
