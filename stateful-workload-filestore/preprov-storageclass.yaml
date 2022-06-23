@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_stateful_filestore_sc]
+# [START gke_stateful_filestore_preprov_sc]
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -20,7 +20,4 @@ metadata:
 provisioner: filestore.csi.storage.gke.io
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
-parameters:
-  tier: enterprise
-  network: default
-# [END gke_stateful_filestore_sc]
+# [END gke_stateful_filestore_preprov_sc]
