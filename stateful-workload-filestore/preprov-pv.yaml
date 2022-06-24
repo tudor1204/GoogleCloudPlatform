@@ -25,7 +25,7 @@ spec:
     storage: 1Ti
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Delete
   volumeMode: Filesystem
   csi:
     driver: filestore.csi.storage.gke.io
