@@ -21,6 +21,6 @@ provisioner: filestore.csi.storage.gke.io
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
 parameters:
-  tier: enterprise
+  tier: standard
   network: default
 # [END gke_stateful_filestore_sc]
