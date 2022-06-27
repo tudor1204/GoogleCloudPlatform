@@ -2,6 +2,8 @@
 
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/kubernetes-engine-samples&cloudshell_tutorial=README.md&cloudshell_workspace=guestbook/)
 
+Please follow the tutorial at https://cloud.google.com/kubernetes-engine/docs/tutorials/stateful-workload.
+
 ## Design
 
 This tutorial will create writer Deployments that write to the NFS (Filestore), and create reader Deployments that will read from the same file in NFS. The user can then access the reader externally to see the changes the writer made to the file. 
@@ -25,5 +27,3 @@ Technologies used in this tutorial
 - The reader/writer Deployments can be easily scaled up or down, while maintaining connection to the shared FileStore NFS with ReadWriteMany access
 - Start with 2 writer pods, then scale up to 5 pods to showcase scalability with NFS
 The user will be able to see 5 different writers all writing to the same file
-
-Please follow the tutorial at https://cloud.google.com/kubernetes-engine/docs/tutorials/stateful-workload
