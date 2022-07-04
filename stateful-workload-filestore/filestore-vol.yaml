@@ -1,0 +1,50 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# [START gke_stateful_filestore_volume]
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: fileserver
+spec:
+  capacity:
+    storage: 1T
+  # Setting the accessModes to ReadWriteMany is essential for 
+  # allowing > 2 writers to be writing to the same storage
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    # Replace <FILE_SHARE_NAME> and <IP_ADDRESS> with the path  
+    # and the IP address from the Filestore instance
+    path: /<FILE_SHARE_NAME>
+    server: <IP_ADDRESS>
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fileserver
+spec:
+  # Specify "" as the storageClassName so it matches the PersistentVolume's StorageClass.
+  # A nil storageClassName value uses the default StorageClass. For details, see
+  # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1
+  accessModes:
+  - ReadWriteMany
+  storageClassName: ""
+  volumeName: fileserver
+  resources:
+    requests:
+      storage: 1T
+# [END gke_stateful_filestore_volume]
