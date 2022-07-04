@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_stateful_filestore_lb]
 apiVersion: v1
 kind: Service
 metadata:
@@ -26,3 +27,4 @@ spec:
       protocol: TCP
   selector:
     app: reader
+# [END gke_stateful_filestore_lb]
