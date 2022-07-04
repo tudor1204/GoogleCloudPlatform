@@ -7,7 +7,7 @@ Please follow the tutorial at https://cloud.google.com/kubernetes-engine/docs/tu
 ## Design
 
 This tutorial will create writer Deployments that write to the NFS (Network File System) — specifically, Google Cloud [Filestore](https://cloud.google.com/filestore) — and create reader Deployments that will read from the same file in NFS. The user can then access the reader externally to see the changes the writer made to the file.
-Technologies used in this tutorial
+Technologies used in this tutorial:
 - Google Kubernetes Engine (GKE)
 - Google Cloud Filestore (used as NFS)
 
