@@ -7,3 +7,4 @@
 # Misc.
 .DS_Store
 .idea/
+stateful-workload-filestore/filestore-vol.yaml
