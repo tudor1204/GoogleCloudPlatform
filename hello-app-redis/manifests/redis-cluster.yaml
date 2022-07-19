@@ -84,4 +84,3 @@ spec:
         requests:
           storage: 1Gi
 # [END gke_manifests_redis_cluster_statefulset_redis]
----
