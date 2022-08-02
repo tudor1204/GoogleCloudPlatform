@@ -1,6 +1,6 @@
 module workload-metrics
 
-go 1.16
+go 1.19
 
 require (
 	github.com/prometheus/client_golang v1.12.2
