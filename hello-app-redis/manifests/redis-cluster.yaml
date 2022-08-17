@@ -63,6 +63,7 @@ spec:
             - name: cluster
               containerPort: 16379
               protocol: "TCP"
+        # [START gke_manifests_redis_cluster_statefulset_redis_probes]
         startupProbe:
           periodSeconds: 5
           timeoutSeconds: 5
@@ -84,6 +85,7 @@ spec:
           failureThreshold: 5
           exec:
             command: ["sh", "-c", "/probes/readiness.sh"]
+        # [END gke_manifests_redis_cluster_statefulset_redis_probes]
         volumeMounts:
         - name: conf
           mountPath: /conf
