@@ -8,4 +8,8 @@ spec:
   - image: google/cloud-sdk:slim
     name: workload-identity-test
     command: ["sleep","infinity"]
+    resources:
+      requests:
+        cpu: "150m"
+        memory: "150Mi"
   serviceAccountName: admin-sa
