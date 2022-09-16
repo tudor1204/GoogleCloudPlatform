@@ -44,5 +44,6 @@ spec:
           requests:
             memory: "2Gi"
             cpu: "500m"
+            ephemeral-storage: "1Gi"
 # [END gke_quickstart_deployment_deployment_helloworld_gke]
 ---
