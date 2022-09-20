@@ -1,10 +1,10 @@
-# Copyright 2021 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#      https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # This file and other cloudbuild.yaml files are used to ensure that
-# our public Docker images such as us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.2
+# our public Docker images such as gcr.io/google-samples/hello-app:1.0
 # are rebuilt and updated upon changes to the repository.
 
 steps:
@@ -21,12 +21,10 @@ steps:
   args:
     - 'build'
     - '-t'
-    - 'gcr.io/google-samples/whereami:v1.2.11'
-    - '-t'
-    - 'us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.11'
+    - 'us-docker.pkg.dev/google-samples/containers/gke/wi-secret-store'
     - '.'
-  dir: 'whereami'
+  dir: 'security/wi-secrets'
 
+# Push images.
 images:
-  - 'gcr.io/google-samples/whereami:v1.2.11'
-  - 'us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.11'
+  - 'us-docker.pkg.dev/google-samples/containers/gke/wi-secret-store'
