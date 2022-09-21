@@ -39,11 +39,10 @@ spec:
         env:
           - name: PORT
             value: "8080"
-        # Set resources to be the same as GKE Autopilot defaults http://g.co/gke/autopilot-defaults
-        resources:
+        resources:         
           requests:
-            memory: "2Gi"
+            memory: "512Mi"
             cpu: "500m"
-            ephemeral-storage: "1Gi"
+            ephemeral-storage: "500Mi" 
 # [END gke_quickstart_deployment_deployment_helloworld_gke]
 ---
