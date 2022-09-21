@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"time"
@@ -20,7 +21,7 @@ var (
 		prometheus.HistogramOpts{
 			Name:    "request_duration_seconds",
 			Help:    "Request duration distribution",
-			Buckets: prometheus.LinearBuckets(10, 10, 10),
+			Buckets: prometheus.LinearBuckets(0.5, 0.5, 10),
 		})
 
 	requestCounter = prometheus.NewCounter(
@@ -46,12 +47,15 @@ func main() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
-	time.Sleep(3 * time.Second)
-	requestCounter.Inc()
+	rand.Seed(start.UnixNano())
+	wait := rand.Intn(5)
 	agentID := gofakeit.UserAgent()
+	time.Sleep(time.Duration(wait) * time.Second)
+
 	logger.Info("Hello world received a request.",
 		zap.String("Browser", agentID))
 
+	requestCounter.Inc()
 	target := os.Getenv("TARGET")
 	if target == "" {
 		target = "World"
