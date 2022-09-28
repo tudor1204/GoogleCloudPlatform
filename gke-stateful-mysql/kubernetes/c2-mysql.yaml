@@ -48,7 +48,7 @@ spec:
       labels:
         app: mysql
     spec:
-# [START pod_placement]
+# [START gke_stateful_mysql_pod_placement]
       topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: "topology.kubernetes.io/zone"
@@ -66,7 +66,7 @@ spec:
                 values:
                 - mysql
             topologyKey: "kubernetes.io/hostname"
-# [END pod_placement]
+# [END gke_stateful_mysql_pod_placement]
       containers:
       - name: mysql
         image: mysql/mysql-server:8.0.28

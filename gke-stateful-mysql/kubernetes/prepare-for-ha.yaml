@@ -49,9 +49,9 @@ spec:
         resources:
           limits:
             cpu: "500m"
-            ephemeral-storage: "256Mi"
-            memory: "256Mi"
+            ephemeral-storage: "10Mi"
+            memory: "0.5Gi"
           requests:
             cpu: "500m"
-            ephemeral-storage: "256Mi"
-            memory: "256Mi"
+            ephemeral-storage: "10Mi"
+            memory: "0.5Gi"

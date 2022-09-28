@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# [START main_body]
+# [START gke_stateful_mysql_main_body]
 POD_ORDINAL_START=${1:-0}
 POD_ORDINAL_END=${2:-2}
 for i in $(seq ${POD_ORDINAL_START} ${POD_ORDINAL_END}); do
@@ -25,4 +25,4 @@ SET @@PERSIST.group_replication_ip_allowlist = 'mysql.mysql2.svc.cluster.local';
 SET @@PERSIST.binlog_transaction_dependency_tracking = 'WRITESET';
   EOF
 done
-# [END main_body]
+# [END gke_stateful_mysql_main_body]

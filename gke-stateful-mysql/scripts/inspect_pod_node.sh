@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# [START main_body]
+# [START gke_stateful_mysql_main_body]
 NAMESPACE=${1:+"-n ${1}"}
 shift
 APP_SELECTOR=${1:+"--selector=app=${1}"}
