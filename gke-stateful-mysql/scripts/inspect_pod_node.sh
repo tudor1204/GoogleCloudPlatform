@@ -30,3 +30,4 @@ do
   kubectl get node ${POD_NODE[1]} \
      -o jsonpath='{.metadata.name} {.metadata.labels.topology\.kubernetes\.io\/zone} {"'${POD_NODE[0]}'"}{"\n"}'
 done
+# [END gke_stateful_mysql_main_body]
