@@ -3,8 +3,8 @@ module workload-metrics
 go 1.16
 
 require (
-	github.com/prometheus/client_golang v1.12.2
 	go.uber.org/zap v1.23.0
+	github.com/prometheus/client_golang v1.13.0
 )
 
 require (
