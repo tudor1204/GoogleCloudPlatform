@@ -1,4 +1,4 @@
-FROM golang:1.16-alpine
+FROM golang:1.19.2
 RUN apk add --no-cache git
 ADD . /go/src/hello-app
 WORKDIR /go/src/hello-app

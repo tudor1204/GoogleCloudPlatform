@@ -1,6 +1,6 @@
 module workload-metrics
 
-go 1.16
+go 1.19
 
 require (
 	go.uber.org/zap v1.23.0

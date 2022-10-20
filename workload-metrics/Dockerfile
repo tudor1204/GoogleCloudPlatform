@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.17-alpine as builder
+FROM golang:1.19.2 as builder
 WORKDIR /src
 ADD . /src
 RUN CGO_ENABLED=0 go build -o /workload-metrics
