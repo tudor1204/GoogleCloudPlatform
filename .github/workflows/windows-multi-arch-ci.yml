@@ -1,0 +1,21 @@
+name: windows-multi-arch-ci
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/windows-multi-arch-ci.yml'
+      - 'windows-multi-arch/**'
+  pull_request:
+    paths:
+      - '.github/workflows/windows-multi-arch-ci.yml'
+      - 'windows-multi-arch/**'
+jobs:
+  job:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: build windows-multi-arch container
+        run: |
+          cd windows-multi-arch
+          docker build --tag windows-multi-arch .
