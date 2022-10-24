@@ -12,12 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.19.2
-ADD . /go/src/sd-dummy-exporter
+FROM golang:1.19.2 as builder
+WORKDIR /app
+RUN go mod init direct-to-sd
 RUN go get cloud.google.com/go/compute/metadata
 RUN go get golang.org/x/oauth2
 RUN go get cloud.google.com/go/monitoring/apiv3
-RUN CGO_ENABLED=0 GOOS=linux go install sd-dummy-exporter
+COPY *.go ./
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app
 
-FROM gcr.io/distroless/static:latest
-COPY --from=0 /go/bin/sd-dummy-exporter .
+FROM alpine
+WORKDIR /
+RUN apk add --no-cache ca-certificates
+COPY --from=builder /app /app
+ENV PORT 8080
+CMD ["/app"]

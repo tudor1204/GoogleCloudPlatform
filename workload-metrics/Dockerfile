@@ -13,9 +13,12 @@
 # limitations under the License.
 
 FROM golang:1.19.2 as builder
-WORKDIR /src
-ADD . /src
-RUN CGO_ENABLED=0 go build -o /workload-metrics
+WORKDIR /app
+COPY * ./
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app
 
-FROM gcr.io/distroless/static
-COPY --from=builder /workload-metrics workload-metrics
+FROM alpine
+WORKDIR /
+RUN apk add --no-cache ca-certificates
+COPY --from=builder /app /app
+CMD ["/app"]

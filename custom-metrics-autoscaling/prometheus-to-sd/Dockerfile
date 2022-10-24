@@ -12,10 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.19.2
-ADD . /go/src/prometheus-dummy-exporter
+FROM golang:1.19.2 as builder
+WORKDIR /app
+RUN go mod init prometheus-to-sd
 RUN go get github.com/prometheus/client_golang/prometheus
-RUN CGO_ENABLED=0 GOOS=linux go install prometheus-dummy-exporter
+COPY *.go ./
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app
 
-FROM gcr.io/distroless/static:latest
-COPY --from=0 /go/bin/prometheus-dummy-exporter .
+FROM alpine
+WORKDIR /
+RUN apk add --no-cache ca-certificates
+COPY --from=builder /app /app
+ENV PORT 8080
+CMD ["/app"]

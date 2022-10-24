@@ -15,7 +15,7 @@
 FROM golang:1.19.2 as builder
 WORKDIR /app
 RUN go mod init hello-app-redis
-COPY *.go ./
+COPY * ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o /app
 
 FROM alpine
