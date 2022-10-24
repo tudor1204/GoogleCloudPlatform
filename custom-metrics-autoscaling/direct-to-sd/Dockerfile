@@ -17,9 +17,8 @@ WORKDIR /app
 COPY * ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o /app
 
-FROM alpine
+FROM gcr.io/distroless/base-debian11
 WORKDIR /
-RUN apk add --no-cache ca-certificates
 COPY --from=builder /app /app
 ENV PORT 8080
 CMD ["/app"]
