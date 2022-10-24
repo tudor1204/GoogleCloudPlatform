@@ -14,9 +14,7 @@
 
 FROM golang:1.19.2 as builder
 WORKDIR /app
-RUN go mod init prometheus-to-sd
-RUN go get github.com/prometheus/client_golang/prometheus
-COPY *.go ./
+COPY * ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o /app
 
 FROM alpine

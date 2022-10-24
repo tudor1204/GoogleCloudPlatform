@@ -14,11 +14,7 @@
 
 FROM golang:1.19.2 as builder
 WORKDIR /app
-RUN go mod init direct-to-sd
-RUN go get cloud.google.com/go/compute/metadata
-RUN go get golang.org/x/oauth2
-RUN go get cloud.google.com/go/monitoring/apiv3
-COPY *.go ./
+COPY * ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o /app
 
 FROM alpine
