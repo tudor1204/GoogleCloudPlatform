@@ -12,14 +12,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// using System;
-// using Microsoft.AspNetCore.Builder;
-// using Microsoft.AspNetCore.Hosting;
-// using Microsoft.AspNetCore.Http;
-// using Microsoft.Extensions.DependencyInjection;
-// using Microsoft.Extensions.Hosting;
-// using Microsoft.AspNetCore.Mvc;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Google Cloud Run sets the PORT environment variable to tell this
