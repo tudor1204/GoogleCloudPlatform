@@ -16,9 +16,10 @@ FROM golang:1.19.2 as builder
 WORKDIR /app
 RUN go mod init hello-app-tls
 COPY *.go ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app
+RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-app-tls
 
 FROM gcr.io/distroless/base-debian11
 WORKDIR /
-COPY --from=builder /app /app
-CMD ["/app"]
+COPY --from=builder /hello-app-tls /hello-app-tls
+USER nonroot:nonroot
+CMD ["/hello-app-tls"]

@@ -16,10 +16,11 @@ FROM golang:1.19.2 as builder
 WORKDIR /app
 RUN go mod init hello-app-redis
 COPY * ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app
+RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-app-redis
 
 FROM gcr.io/distroless/base-debian11
 WORKDIR /
-COPY --from=builder /app /app
+COPY --from=builder /hello-app-redis /hello-app-redis
 ENV PORT 8080
-CMD ["/app"]
+USER nonroot:nonroot
+CMD ["/hello-app-redis"]

@@ -15,10 +15,11 @@
 FROM golang:1.19.2 as builder
 WORKDIR /app
 COPY * ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app
+RUN CGO_ENABLED=0 GOOS=linux go build -o /direct-to-sd
 
 FROM gcr.io/distroless/base-debian11
 WORKDIR /
-COPY --from=builder /app /app
+COPY --from=builder /direct-to-sd /direct-to-sd
 ENV PORT 8080
-CMD ["/app"]
+USER nonroot:nonroot
+CMD ["/direct-to-sd"]
