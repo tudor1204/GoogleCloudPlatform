@@ -31,13 +31,13 @@ module "gke-us-west1-autopilot" {
   project_id                      = var.project_id
   name                            = "gke-kafka-us-west1"
   # release_channel                 = "REGULAR" # Default version is 1.22 in REGULAR so commented it out to specify V1.24 via var.kubernetes_version
-  region                          = "us-central1"
+  region                          = "us-west1"
   regional                        = true
-  zones                           = ["us-central1-a", "us-central1-b", "us-central1-c"]
+  zones                           = ["us-west1-a", "us-west1-b", "us-west1-c"]
   network                         = module.network.network_name
   subnetwork                      = module.network.secondary_subnet_name
-  ip_range_pods                   = "ip-range-pods-us-central1"
-  ip_range_services               = "ip-range-svc-us-central1"
+  ip_range_pods                   = "ip-range-pods-us-west1"
+  ip_range_services               = "ip-range-svc-us-west1"
   horizontal_pod_autoscaling      = true
   enable_vertical_pod_autoscaling = true
   enable_private_endpoint         = false
