@@ -17,7 +17,7 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: php-apache
-# [START spec]
+# [START gke_scheduled_autoscaler_hpa]
 spec:
   maxReplicas: 20
   minReplicas: 10
@@ -32,4 +32,4 @@ spec:
       target:
         type: Utilization
         averageUtilization: 60
-# [END spec]
+# [END gke_scheduled_autoscaler_hpa]
