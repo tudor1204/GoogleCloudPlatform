@@ -15,18 +15,23 @@ postgresql-ha:
       tag: 14.5.0-debian-11-r9
     replicaCount: 3
     nodeAffinityPreset:
-      type: "hard"
+      type: "soft"
       key: "cloud.google.com/compute-class"
       operator: In
-      values: 
+      values:
         - Scale-Out
+    podAntiAffinityPreset: "hard"
+    topologySpreadConstraints:
+      - topologyKey: "topology.kubernetes.io/zone"
+        whenUnsatisfiable: DoNotSchedule
+        maxSkew: 1
     tolerations:
-    - key: "app.stateful/name"
+    - key: "app.stateful/component"
       operator: "Equal"
       value: "postgresql"
       effect: NoSchedule
     nodeSelector:
-      app.stateful/name: "postgresql"
+      app.stateful/component: "postgresql"
     pdb:
       create: true
       minAvailable: "" # keep this to mitigate the bug of helm chart: minAvailable and maxUnavailable cannot be both set
@@ -37,12 +42,12 @@ postgresql-ha:
       tag: 4.3.3-debian-11-r6
     replicaCount: 1
     tolerations:
-    - key: "app.stateful/name"
+    - key: "app.stateful/component"
       operator: "Equal"
       value: "postgresql-pgpool"
       effect: NoSchedule
     nodeSelector:
-      app.stateful/name: "postgresql-pgpool"
+      app.stateful/component: "postgresql-pgpool"
     pdb:
       create: true
       minAvailable: 1
