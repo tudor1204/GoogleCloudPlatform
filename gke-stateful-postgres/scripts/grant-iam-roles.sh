@@ -1,3 +1,4 @@
+SERVICE_ACCOUNT_ROLES="logging.logWriter monitoring.metricWriter monitoring.viewer stackdriver.resourceMetadata.writer"
 SERVICE_ACCOUNT_ROLES_ARRAY=($SERVICE_ACCOUNT_ROLES)
 for ROLE in "${SERVICE_ACCOUNT_ROLES_ARRAY[@]}"
   do
