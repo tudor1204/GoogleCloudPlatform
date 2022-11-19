@@ -118,6 +118,11 @@ output "horizontal_pod_autoscaling_enabled" {
   value       = local.cluster_horizontal_pod_autoscaling_enabled
 }
 
+output "vertical_pod_autoscaling_enabled" {
+  description = "Whether vertical pod autoscaling enabled"
+  value       = local.cluster_vertical_pod_autoscaling_enabled
+}
+
 output "node_pools_names" {
   description = "List of node pools names"
   value       = local.cluster_node_pools_names
@@ -159,4 +164,39 @@ output "master_ipv4_cidr_block" {
 output "peering_name" {
   description = "The name of the peering between this cluster and the Google owned VPC."
   value       = local.cluster_peering_name
+}
+
+output "cloudrun_enabled" {
+  description = "Whether CloudRun enabled"
+  value       = local.cluster_cloudrun_enabled
+}
+
+output "istio_enabled" {
+  description = "Whether Istio is enabled"
+  value       = local.cluster_istio_enabled
+}
+
+output "dns_cache_enabled" {
+  description = "Whether DNS Cache enabled"
+  value       = local.cluster_dns_cache_enabled
+}
+
+output "pod_security_policy_enabled" {
+  description = "Whether pod security policy is enabled"
+  value       = local.cluster_pod_security_policy_enabled
+}
+
+output "intranode_visibility_enabled" {
+  description = "Whether intra-node visibility is enabled"
+  value       = local.cluster_intranode_visibility_enabled
+}
+
+output "identity_service_enabled" {
+  description = "Whether Identity Service is enabled"
+  value       = local.cluster_pod_security_policy_enabled
+}
+
+output "tpu_ipv4_cidr_block" {
+  description = "The IP range in CIDR notation used for the TPUs"
+  value       = var.enable_tpu ? google_container_cluster.primary.tpu_ipv4_cidr_block : null
 }

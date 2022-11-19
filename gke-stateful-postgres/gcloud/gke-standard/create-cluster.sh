@@ -115,7 +115,9 @@ create_cluster ()
     --master-ipv4-cidr $GKE_MASTER_CIDR \
     --workload-pool=$PROJECT_ID.svc.id.goog \
     --cluster-secondary-range-name $GKE_POD_RANGE_NAME \
-    --services-secondary-range-name $GKE_SVC_RANGE_NAME
+    --services-secondary-range-name $GKE_SVC_RANGE_NAME \
+    --enable-managed-prometheus \
+    --addons=BackupRestore
 
   # https://cloud.google.com/sdk/gcloud/reference/container/node-pools/create
   export GKE_NODE_POOL_NAME=pool-sys

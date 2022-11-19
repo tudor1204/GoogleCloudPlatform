@@ -136,7 +136,9 @@ create_cluster ()
       --workload-pool $PROJECT_ID.svc.id.goog \
       --enable-shielded-nodes \
       --tags "gke-$GKE_CLUSTER_NAME" \
-      --node-locations $GKE_NODE_POOL_ZONES
+      --node-locations $GKE_NODE_POOL_ZONES \
+      --enable-managed-prometheus \
+      --addons=BackupRestore
 
   # https://cloud.google.com/sdk/gcloud/reference/container/node-pools/create
   export GKE_NODE_POOL_NAME=pool-system

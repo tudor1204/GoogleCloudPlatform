@@ -105,6 +105,12 @@ create_cluster ()
       --subnetwork $SUBNET_NAME \
       --cluster-secondary-range-name $GKE_POD_RANGE_NAME \
       --services-secondary-range-name $GKE_SVC_RANGE_NAME
+
+  echo Enabling BackupRestore Addon for $GKE_CLUSTER_NAME...
+  gcloud beta container clusters update $GKE_CLUSTER_NAME \
+      --project=$PROJECT_ID \
+      --region=$REGION \
+      --update-addons=BackupRestore=ENABLED
 }
 
 if [ -z "$PROJECT_ID" ]

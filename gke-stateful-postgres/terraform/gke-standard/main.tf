@@ -24,7 +24,7 @@ module "network" {
 }
 
 module "gke-db1" {
-  source                   = "../modules/gke/"
+  source                   = "../modules/beta-private-cluster"
   project_id               = var.project_id
   name                     = "cluster-db1"
   regional                 = true
@@ -40,6 +40,7 @@ module "gke-db1" {
   remove_default_node_pool = true
   network_policy           = true
   cluster_autoscaling = {
+    "autoscaling_profile": "BALANCED",
     "enabled" : true,
     "gpu_resources" : [],
     "min_cpu_cores" : 36,
@@ -85,9 +86,11 @@ module "gke-db1" {
       },
     ],
   }
+  monitoring_enable_managed_prometheus = true
+  gke_backup_agent_config = true
 }
 module "gke-db2" {
-  source                   = "../modules/gke/"
+  source                   = "../modules/beta-private-cluster"
   project_id               = var.project_id
   name                     = "cluster-db2"
   regional                 = true
@@ -104,6 +107,7 @@ module "gke-db2" {
   remove_default_node_pool = true
   network_policy           = true
   cluster_autoscaling = {
+    "autoscaling_profile": "BALANCED",
     "enabled" : true,
     "gpu_resources" : [],
     "min_cpu_cores" : 36,
@@ -149,4 +153,6 @@ module "gke-db2" {
       },
     ],
   }
+  monitoring_enable_managed_prometheus = true
+  gke_backup_agent_config = true
 }

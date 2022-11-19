@@ -12,7 +12,7 @@ module "network" {
 }
 
 module "gke-us-central1" {
-  source                 = "../modules/gke/"
+  source                 = "../modules/beta-private-cluster"
   project_id             = var.project_id
   name                   = "gke-kafka-us-central1"
   regional               = true
@@ -29,6 +29,7 @@ module "gke-us-central1" {
   remove_default_node_pool = true
   network_policy           = true
   cluster_autoscaling = {
+    "autoscaling_profile": "BALANCED",
     "enabled" : true,
     "gpu_resources" : [],
     "min_cpu_cores" : 60,
@@ -98,11 +99,13 @@ module "gke-us-central1" {
       },
     ]
   }
+  monitoring_enable_managed_prometheus = true
+  gke_backup_agent_config = true
 }
 
 
 module "gke-us-west1" {
-  source                 = "../modules/gke/"
+  source                 = "../modules/beta-private-cluster"
   project_id             = var.project_id
   name                   = "gke-kafka-us-west1"
   regional               = true
@@ -120,6 +123,7 @@ module "gke-us-west1" {
   remove_default_node_pool = true
   network_policy           = true
   cluster_autoscaling = {
+    "autoscaling_profile": "BALANCED",
     "enabled" : true,
     "gpu_resources" : [],
     "min_cpu_cores" : 60,
@@ -189,6 +193,8 @@ module "gke-us-west1" {
       },
     ]
   }
+  monitoring_enable_managed_prometheus = true
+  gke_backup_agent_config = true
 }
 
 
