@@ -3,17 +3,17 @@ module "gcp-network" {
   version = ">= 4.0.1, < 5.0.0"
 
   project_id   = var.project_id
-  network_name = "vpc-gke-kafka"
+  network_name = "vpc-gke-postgresql"
 
   subnets = [
     {
-      subnet_name           = "snet-gke-kafka-us-central1"
+      subnet_name           = "snet-gke-postgresql-us-central1"
       subnet_ip             = "10.0.0.0/17"
       subnet_region         = "us-central1"
       subnet_private_access = true
     },
     {
-      subnet_name           = "snet-gke-kafka-us-west1"
+      subnet_name           = "snet-gke-postgresql-us-west1"
       subnet_ip             = "10.0.128.0/17"
       subnet_region         = "us-west1"
       subnet_private_access = true
@@ -21,23 +21,23 @@ module "gcp-network" {
   ]
 
   secondary_ranges = {
-    ("snet-gke-kafka-us-central1") = [
+    ("snet-gke-postgresql-us-central1") = [
       {
-        range_name    = "ip-range-pods-us-central1"
+        range_name    = "ip-range-pods-db1"
         ip_cidr_range = "192.168.0.0/18"
       },
       {
-        range_name    = "ip-range-svc-us-central1"
+        range_name    = "ip-range-svc-db1"
         ip_cidr_range = "192.168.64.0/18"
       },
     ],
-    ("snet-gke-kafka-us-west1") = [
+    ("snet-gke-postgresql-us-west1") = [
       {
-        range_name    = "ip-range-pods-us-west1"
+        range_name    = "ip-range-pods-db2"
         ip_cidr_range = "192.168.128.0/18"
       },
       {
-        range_name    = "ip-range-svc-us-west1"
+        range_name    = "ip-range-svc-db2"
         ip_cidr_range = "192.168.192.0/18"
       },
     ]

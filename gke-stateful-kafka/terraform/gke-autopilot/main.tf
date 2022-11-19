@@ -7,7 +7,7 @@ module "network" {
 }
 
 module "gke-us-central1-autopilot" {
-  source                          = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
+  source                          = "../modules/beta-autopilot-private-cluster"
   project_id                      = var.project_id
   name                            = "gke-kafka-us-central1"
   # release_channel                 = "REGULAR" # Default version is 1.22 in REGULAR so commented it out to specify V1.24 via var.kubernetes_version
@@ -27,7 +27,7 @@ module "gke-us-central1-autopilot" {
 }
 
 module "gke-us-west1-autopilot" {
-  source                          = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
+  source                          = "../modules/beta-autopilot-private-cluster"
   project_id                      = var.project_id
   name                            = "gke-kafka-us-west1"
   # release_channel                 = "REGULAR" # Default version is 1.22 in REGULAR so commented it out to specify V1.24 via var.kubernetes_version

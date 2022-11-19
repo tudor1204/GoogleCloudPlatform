@@ -96,10 +96,10 @@ variable "http_load_balancing" {
   default     = true
 }
 
-variable "backup_agent" {
+variable "service_external_ips" {
   type        = bool
-  description = "Enable backup for GKE addon"
-  default     = true
+  description = "Whether external ips specified by a service will be allowed in this cluster"
+  default     = false
 }
 
 variable "datapath_provider" {
@@ -142,39 +142,12 @@ variable "ip_range_services" {
   description = "The _name_ of the secondary subnet range to use for services"
 }
 
-variable "node_pools" {
-  type        = list(map(string))
-  description = "List of maps containing node pools"
 
-  default = [
-    {
-      name = "default-node-pool"
-    },
-  ]
+variable "enable_cost_allocation" {
+  type        = bool
+  description = "Enables Cost Allocation Feature and the cluster name and namespace of your GKE workloads appear in the labels field of the billing export to BigQuery"
+  default     = false
 }
-
-variable "node_pools_labels" {
-  type        = map(map(string))
-  description = "Map of maps containing node labels by node-pool name"
-
-  # Default is being set in variables_defaults.tf
-  default = {
-    all               = {}
-    default-node-pool = {}
-  }
-}
-
-variable "node_pools_metadata" {
-  type        = map(map(string))
-  description = "Map of maps containing node metadata by node-pool name"
-
-  # Default is being set in variables_defaults.tf
-  default = {
-    all               = {}
-    default-node-pool = {}
-  }
-}
-
 variable "resource_usage_export_dataset_id" {
   type        = string
   description = "The ID of a BigQuery Dataset for using BigQuery as the destination of resource usage export."
@@ -193,58 +166,6 @@ variable "enable_resource_consumption_export" {
   default     = true
 }
 
-variable "cluster_autoscaling" {
-  type = object({
-    enabled       = bool
-    min_cpu_cores = number
-    max_cpu_cores = number
-    min_memory_gb = number
-    max_memory_gb = number
-    gpu_resources = list(object({ resource_type = string, minimum = number, maximum = number }))
-  })
-  default = {
-    enabled       = false
-    max_cpu_cores = 0
-    min_cpu_cores = 0
-    max_memory_gb = 0
-    min_memory_gb = 0
-    gpu_resources = []
-  }
-  description = "Cluster autoscaling configuration. See [more details](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1beta1/projects.locations.clusters#clusterautoscaling)"
-}
-
-variable "node_pools_taints" {
-  type        = map(list(object({ key = string, value = string, effect = string })))
-  description = "Map of lists containing node taints by node-pool name"
-
-  # Default is being set in variables_defaults.tf
-  default = {
-    all               = []
-    default-node-pool = []
-  }
-}
-
-variable "node_pools_tags" {
-  type        = map(list(string))
-  description = "Map of lists containing node network tags by node-pool name"
-
-  # Default is being set in variables_defaults.tf
-  default = {
-    all               = []
-    default-node-pool = []
-  }
-}
-
-variable "node_pools_oauth_scopes" {
-  type        = map(list(string))
-  description = "Map of lists containing node oauth scopes by node-pool name"
-
-  # Default is being set in variables_defaults.tf
-  default = {
-    all               = ["https://www.googleapis.com/auth/cloud-platform"]
-    default-node-pool = []
-  }
-}
 
 variable "stub_domains" {
   type        = map(list(string))
@@ -280,6 +201,12 @@ variable "configure_ip_masq" {
   type        = bool
   description = "Enables the installation of ip masquerading, which is usually no longer required when using aliasied IP addresses. IP masquerading uses a kubectl call, so when you have a private cluster, you will need access to the API server."
   default     = false
+}
+
+variable "cluster_telemetry_type" {
+  type        = string
+  description = "Available options include ENABLED, DISABLED, and SYSTEM_ONLY"
+  default     = null
 }
 
 variable "logging_service" {
@@ -342,12 +269,6 @@ variable "skip_provisioners" {
   default     = false
 }
 
-variable "dns_cache" {
-  type        = bool
-  description = "The status of the NodeLocal DNSCache addon."
-  default     = false
-}
-
 variable "deploy_using_private_endpoint" {
   type        = bool
   description = "(Beta) A toggle for Terraform and kubectl to connect to the master's internal IP address during deployment."
@@ -372,11 +293,17 @@ variable "master_ipv4_cidr_block" {
   default     = "10.0.0.0/28"
 }
 
-#variable "master_global_access_config_enabled" {
-#  type        = bool
-#  description = "Whether the cluster master is accessible globally or not."
-#  default     = true
-#}
+variable "master_global_access_enabled" {
+  type        = bool
+  description = "Whether the cluster master is accessible globally (from any region) or only within the same region as the private endpoint."
+  default     = true
+}
+
+variable "dns_cache" {
+  type        = bool
+  description = "The status of the NodeLocal DNSCache addon."
+  default     = true
+}
 
 variable "authenticator_security_group" {
   type        = string
@@ -393,7 +320,7 @@ variable "identity_namespace" {
 variable "release_channel" {
   type        = string
   description = "The release channel of this cluster. Accepted values are `UNSPECIFIED`, `RAPID`, `REGULAR` and `STABLE`. Defaults to `UNSPECIFIED`."
-  default     = "REGULAR"
+  default     = null
 }
 
 variable "add_cluster_firewall_rules" {
@@ -432,6 +359,11 @@ variable "shadow_firewall_rules_priority" {
   default     = 999
 }
 
+variable "enable_confidential_nodes" {
+  type        = bool
+  description = "An optional flag to enable confidential node config."
+  default     = false
+}
 
 variable "disable_default_snat" {
   type        = bool
@@ -445,48 +377,11 @@ variable "notification_config_topic" {
   default     = ""
 }
 
-variable "network_policy" {
+variable "enable_tpu" {
   type        = bool
-  description = "Enable network policy addon"
+  description = "Enable Cloud TPU resources in the cluster. WARNING: changing this after cluster creation is destructive!"
   default     = false
 }
-
-variable "network_policy_provider" {
-  type        = string
-  description = "The network policy provider."
-  default     = "CALICO"
-}
-
-variable "initial_node_count" {
-  type        = number
-  description = "The number of nodes to create in this cluster's default node pool."
-  default     = 0
-}
-
-variable "remove_default_node_pool" {
-  type        = bool
-  description = "Remove default node pool while setting up the cluster"
-  default     = false
-}
-
-variable "filestore_csi_driver" {
-  type        = bool
-  description = "The status of the Filestore CSI driver addon, which allows the usage of filestore instance as volumes"
-  default     = false
-}
-
-variable "disable_legacy_metadata_endpoints" {
-  type        = bool
-  description = "Disable the /0.1/ and /v1beta1/ metadata server endpoints on the node. Changing this value will cause all node pools to be recreated."
-  default     = true
-}
-
-variable "default_max_pods_per_node" {
-  type        = number
-  description = "The maximum number of pods to schedule per node"
-  default     = 110
-}
-
 variable "database_encryption" {
   description = "Application-layer Secrets Encryption settings. The object format is {state = string, key_name = string}. Valid values of state are: \"ENCRYPTED\"; \"DECRYPTED\". key_name is the name of a CloudKMS key."
   type        = list(object({ state = string, key_name = string }))
@@ -497,46 +392,6 @@ variable "database_encryption" {
   }]
 }
 
-variable "enable_shielded_nodes" {
-  type        = bool
-  description = "Enable Shielded Nodes features on all nodes in this cluster"
-  default     = true
-}
-
-variable "enable_binary_authorization" {
-  type        = bool
-  description = "Enable BinAuthZ Admission controller"
-  default     = false
-}
-
-variable "node_metadata" {
-  description = "Specifies how node metadata is exposed to the workload running on the node"
-  default     = "GKE_METADATA"
-  type        = string
-
-  validation {
-    condition     = contains(["GKE_METADATA", "GCE_METADATA", "UNSPECIFIED", "GKE_METADATA_SERVER", "EXPOSE"], var.node_metadata)
-    error_message = "The node_metadata value must be one of GKE_METADATA, GCE_METADATA or UNSPECIFIED."
-  }
-}
-
-variable "cluster_dns_provider" {
-  type        = string
-  description = "Which in-cluster DNS provider should be used. PROVIDER_UNSPECIFIED (default) or PLATFORM_DEFAULT or CLOUD_DNS."
-  default     = "PROVIDER_UNSPECIFIED"
-}
-
-variable "cluster_dns_scope" {
-  type        = string
-  description = "The scope of access to cluster DNS records. DNS_SCOPE_UNSPECIFIED (default) or CLUSTER_SCOPE or VPC_SCOPE. "
-  default     = "DNS_SCOPE_UNSPECIFIED"
-}
-
-variable "cluster_dns_domain" {
-  type        = string
-  description = "The suffix used for all cluster service records."
-  default     = ""
-}
 
 variable "timeouts" {
   type        = map(string)
@@ -546,4 +401,10 @@ variable "timeouts" {
     condition     = !contains([for t in keys(var.timeouts) : contains(["create", "update", "delete"], t)], false)
     error_message = "Only create, update, delete timeouts can be specified."
   }
+}
+
+variable "monitoring_enable_managed_prometheus" {
+  type        = bool
+  description = "(Beta) Configuration for Managed Service for Prometheus. Whether or not the managed collection is enabled."
+  default     = false
 }
