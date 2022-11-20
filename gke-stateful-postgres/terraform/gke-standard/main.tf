@@ -18,7 +18,7 @@ resource "google_artifact_registry_repository_iam_binding" "binding" {
   ]
 }
 // [END artifact_reg_setup]
-// [START artifact_reg_setup]
+
 module "network" {
   source     = "../modules/network"
   project_id = var.project_id
