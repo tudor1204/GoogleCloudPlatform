@@ -1,6 +1,6 @@
 # google_client_config and kubernetes provider must be explicitly specified like the following.
 data "google_client_config" "default" {}
-
+// [START artifact_reg_setup]
 resource "google_artifact_registry_repository" "main" {
   location      = "us"
   repository_id = "main"
@@ -17,12 +17,13 @@ resource "google_artifact_registry_repository_iam_binding" "binding" {
     "serviceAccount:${module.gke-db1.service_account}",
   ]
 }
-
+// [END artifact_reg_setup]
+// [START artifact_reg_setup]
 module "network" {
   source     = "../modules/network"
   project_id = var.project_id
 }
-
+// [START create_gke_cluster]
 module "gke-db1" {
   source                   = "../modules/beta-private-cluster"
   project_id               = var.project_id
@@ -48,6 +49,10 @@ module "gke-db1" {
     "max_cpu_cores" : 48,
     "max_memory_gb" : 192,
   }
+  monitoring_enable_managed_prometheus = true
+  gke_backup_agent_config = true
+// [END create_gke_cluster]
+// [START create_node_pools]
   node_pools = [
     {
       name            = "pool-sys"
@@ -86,9 +91,9 @@ module "gke-db1" {
       },
     ],
   }
-  monitoring_enable_managed_prometheus = true
-  gke_backup_agent_config = true
 }
+// [END create_node_pools]
+// [START dr_create_cluster]
 module "gke-db2" {
   source                   = "../modules/beta-private-cluster"
   project_id               = var.project_id
@@ -156,3 +161,4 @@ module "gke-db2" {
   monitoring_enable_managed_prometheus = true
   gke_backup_agent_config = true
 }
+// [end dr_create_cluster]
