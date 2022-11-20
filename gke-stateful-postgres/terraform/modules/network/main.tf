@@ -1,3 +1,4 @@
+// [START network_setup]
 module "gcp-network" {
   source  = "terraform-google-modules/network/google"
   version = ">= 4.0.1, < 5.0.0"
@@ -55,3 +56,4 @@ output "primary_subnet_name" {
 output "secondary_subnet_name" {
   value = module.gcp-network.subnets_names[1]
 }
+// [END network_setup]
