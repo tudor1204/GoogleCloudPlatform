@@ -38,7 +38,6 @@ module "gke-db1" {
   enable_private_endpoint  = false
   enable_private_nodes     = true
   master_ipv4_cidr_block   = "172.16.0.0/28"
-  remove_default_node_pool = true
   network_policy           = true
   cluster_autoscaling = {
     "autoscaling_profile": "BALANCED",
@@ -101,8 +100,6 @@ module "gke-db1" {
       },
     ],
   }
-  monitoring_enable_managed_prometheus = true
-  gke_backup_agent_config = true
   gce_pd_csi_driver = true
 }
 // [END create_node_pools]
@@ -122,7 +119,6 @@ module "gke-db2" {
   enable_private_endpoint  = false
   enable_private_nodes     = true
   master_ipv4_cidr_block   = "172.16.0.16/28"
-  remove_default_node_pool = true
   network_policy           = true
   cluster_autoscaling = {
     "autoscaling_profile": "BALANCED",
