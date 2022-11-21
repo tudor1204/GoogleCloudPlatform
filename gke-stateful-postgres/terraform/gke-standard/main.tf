@@ -80,6 +80,9 @@ module "gke-db1" {
     pool-db = {
       "app.stateful/component" = "postgresql"
     }
+    pool-sys = {
+      "app.stateful/component" = "postgresql-pgpool"
+    }
   }
   node_pools_taints = {
     all = []
@@ -90,7 +93,17 @@ module "gke-db1" {
         effect = "NO_SCHEDULE"
       },
     ],
+    pool-sys = [
+      {
+        key    = "app.stateful/component"
+        value  = "postgresql-pgpool"
+        effect = "NO_SCHEDULE"
+      },
+    ],
   }
+  monitoring_enable_managed_prometheus = true
+  gke_backup_agent_config = true
+  gce_pd_csi_driver = true
 }
 // [END create_node_pools]
 // [START dr_create_cluster]
@@ -147,6 +160,9 @@ module "gke-db2" {
     pool-db = {
       "app.stateful/component" = "postgresql"
     }
+    pool-sys = {
+      "app.stateful/component" = "postgresql-pgpool"
+    }
   }
   node_pools_taints = {
     all = []
@@ -157,8 +173,16 @@ module "gke-db2" {
         effect = "NO_SCHEDULE"
       },
     ],
+    pool-sys = [
+      {
+        key    = "app.stateful/component"
+        value  = "postgresql-pgpool"
+        effect = "NO_SCHEDULE"
+      },
+    ],
   }
   monitoring_enable_managed_prometheus = true
   gke_backup_agent_config = true
+  gce_pd_csi_driver = true
 }
 // [end dr_create_cluster]
