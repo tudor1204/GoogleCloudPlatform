@@ -1,7 +1,7 @@
 ## Example is available at https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 
 global:
-  imageRegistry: "us-docker.pkg.dev/sada-reference-guides/main"
+  imageRegistry: "us-docker.pkg.dev/[PROJECT_ID]/main"
   storageClass: premium-rwo-retain-zonal-pg
 
   postgresql:
