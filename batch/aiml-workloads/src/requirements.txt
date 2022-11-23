@@ -15,7 +15,7 @@ numpy==1.23.5
     #   scipy
 packaging==21.3
     # via redis
-pandas==1.5.1
+pandas==1.5.2
     # via -r requirements.in
 pyparsing==3.0.9
     # via packaging
