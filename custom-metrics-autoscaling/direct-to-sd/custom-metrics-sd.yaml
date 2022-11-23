@@ -33,7 +33,7 @@ spec:
         run: custom-metric-sd
     spec:
       containers:
-      - command: ["./sd-dummy-exporter"]
+      - command: ["./direct-to-sd"]
         args:
         - --use-new-resource-model=true
         - --use-old-resource-model=false
