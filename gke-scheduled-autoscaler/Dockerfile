@@ -14,7 +14,7 @@
 # limitations under the License.
 
 FROM golang:1.14-alpine as builder
-WORKDIR /go/src/custom-metric-extporter
+WORKDIR /go/src/custom-metric-exporter
 COPY . .
 RUN go build -o /export .
 
