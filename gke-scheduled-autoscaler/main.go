@@ -50,7 +50,7 @@ func export(name string, value float64) {
 	if _, err = sd.Projects.TimeSeries.Create(project, request).Do(); err != nil {
 		panic(err)
 	}
-	log.Printf("Exportted custom metric '%v' = %v.", metric, value)
+	log.Printf("Exported custom metric '%v' = %v.", metric, value)
 }
 
 func buildTimeSeriesRequest(name string, value float64) (string, *monitoring.CreateTimeSeriesRequest) {
