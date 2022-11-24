@@ -36,7 +36,7 @@ spec:
       # sample container generating custom metrics
       - name: prometheus-dummy-exporter
         image: us-docker.pkg.dev/google-samples/containers/gke/prometheus-dummy-exporter:v0.2.0
-        command: ["./prometheus-to-sd"]
+        command: ["./prometheus-dummy-exporter"]
         args:
         - --metric-name=custom_prometheus
         - --metric-value=40
