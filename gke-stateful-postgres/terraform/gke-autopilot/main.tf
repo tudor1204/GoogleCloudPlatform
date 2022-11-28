@@ -1,5 +1,13 @@
 # google_client_config and kubernetes provider must be explicitly specified like the following.
 data "google_client_config" "default" {}
+// [START artifact_reg_setup]
+resource "google_artifact_registry_repository" "main" {
+  location      = "us"
+  repository_id = "main"
+  format        = "DOCKER"
+  project       = var.project_id
+}
+// [END artifact_reg_setup]
 
 module "network" {
   source     = "../modules/network"
@@ -19,13 +27,12 @@ module "gke-db1-autopilot" {
   ip_range_pods              = "ip-range-pods-db1"
   ip_range_services          = "ip-range-svc-db1"
   horizontal_pod_autoscaling = true
-  # release_channel                 = "REGULAR" # Default version is 1.22 in REGULAR so commented it out to specify V1.24 via var.kubernetes_version
+  release_channel                 = "RAPID" # Default version is 1.22 in REGULAR. GMP on Autopilot requires V1.25 via var.kubernetes_version
   enable_vertical_pod_autoscaling = true
   enable_private_endpoint         = false
   enable_private_nodes            = true
   master_ipv4_cidr_block          = "172.16.0.0/28"
   create_service_account          = false
-  monitoring_enable_managed_prometheus = true
 }
 
 module "gke-db2-autopilot" {
@@ -41,11 +48,10 @@ module "gke-db2-autopilot" {
   ip_range_pods              = "ip-range-pods-db2"
   ip_range_services          = "ip-range-svc-db2"
   horizontal_pod_autoscaling = true
-  # release_channel                 = "REGULAR" # Default version is 1.22 in REGULAR so commented it out to specify V1.24 via var.kubernetes_version
+  release_channel                 = "RAPID" # Default version is 1.22 in REGULAR. GMP on Autopilot requires V1.25 via var.kubernetes_version
   enable_vertical_pod_autoscaling = true
   enable_private_endpoint         = false
   enable_private_nodes            = true
   master_ipv4_cidr_block          = "172.16.0.16/28"
   create_service_account          = false
-  monitoring_enable_managed_prometheus = true
 }
