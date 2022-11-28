@@ -2,11 +2,13 @@
 
 # Launch Pod as DB Client, setup DB password as environment variable to avoid the prompt
 # Usage, run this script from the postgresql directory
-# scripts/launch-client.sh [pod-name]
+# scripts/launch-client.sh
+
+POD_CLIENT=pg-client
+NAMESPACE=postgresql
 
 launch_pod () {
   echo "Launching Pod $POD_CLIENT in the namespace $NAMESPACE ..."
-  export NAMESPACE=postgresql
   export POSTGRES_PASSWORD=$(kubectl get secret --namespace $NAMESPACE postgresql-postgresql-ha-postgresql -o jsonpath="{.data.postgresql-password}" | base64 -d)
   export REPMGR_PASSWORD=$(kubectl get secret --namespace $NAMESPACE postgresql-postgresql-ha-postgresql -o jsonpath="{.data.repmgr-password}" | base64 -d)
   export IMAGE="us-docker.pkg.dev/$PROJECT_ID/main/bitnami/postgresql-repmgr:14.5.0-debian-11-r9"
@@ -38,16 +40,9 @@ check_status () {
   echo "Pod: $POD_CLIENT is $POD_STATUS"
 }
 
-# Starts here
-if [[ "$1" == "" ]]; then
-  POD_CLIENT=postgresql-client1
-else
-  POD_CLIENT=$1
-fi
-
 echo ""
 if [[ "$PROJECT_ID" == "" ]]; then
-  echo "Variable Project_ID is missing"
+  echo "Variable 'PROJECT_ID' is unset"
 else 
   launch_pod
   check_status
