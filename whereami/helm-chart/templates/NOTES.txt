@@ -1,0 +1,17 @@
+{{- if contains "LoadBalancer" .Values.service.type }}
+  1. Get the application URL by running these commands:
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "whereami.fullname" . }}'
+  export ENDPOINT=$(kubectl get svc whereami -n {{ .Release.Namespace }} | grep -v EXTERNAL-IP | awk '{ print $4}')
+  2. Call the endpoint to get the response:
+  {{- if contains "True" .Values.config.grpc.enabled }}
+    grpcurl -plaintext $ENDPOINT:{{ .Values.service.port }} whereami.Whereami.GetPayload | jq .
+  {{- else }}
+    curl $ENDPOINT:{{ .Values.service.port }} -s | jq .
+  {{- end }}
+{{- end }}
+
+
+ENDPOINT=$(kubectl get svc whereami-frontend | grep -v EXTERNAL-IP | awk '{ print $4}')
+ENDPOINT=$(kubectl get svc whereami-echo-headers | grep -v EXTERNAL-IP | awk '{ print $4}')
+ENDPOINT=$(kubectl get svc whereami-grpc-frontend | grep -v EXTERNAL-IP | awk '{ print $4}')
