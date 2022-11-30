@@ -1,3 +1,17 @@
+#Copyright 2022 Google LLC
+
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+
+#    http://www.apache.org/licenses/LICENSE-2.0
+
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
+
 # google_client_config and kubernetes provider must be explicitly specified like the following.
 data "google_client_config" "default" {}
 
@@ -5,7 +19,7 @@ module "network" {
   source     = "../modules/network"
   project_id = var.project_id
 }
-
+# [START gke_autopilot_private_regional_primary_cluster]
 module "gke-us-central1-autopilot" {
   source                          = "../modules/beta-autopilot-private-cluster"
   project_id                      = var.project_id
@@ -25,7 +39,8 @@ module "gke-us-central1-autopilot" {
   master_ipv4_cidr_block          = "172.16.0.0/28"
   create_service_account          = false
 }
-
+# [END gke_autopilot_private_regional_primary_cluster]
+# [START gke_autopilot_private_regional_backup_cluster]
 module "gke-us-west1-autopilot" {
   source                          = "../modules/beta-autopilot-private-cluster"
   project_id                      = var.project_id
@@ -45,3 +60,4 @@ module "gke-us-west1-autopilot" {
   master_ipv4_cidr_block          = "172.16.0.16/28"
   create_service_account          = false
 }
+# [START gke_autopilot_private_regional_backup_cluster]
