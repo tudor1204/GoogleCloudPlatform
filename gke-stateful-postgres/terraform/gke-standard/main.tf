@@ -1,6 +1,20 @@
+#Copyright 2022 Google LLC
+
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+
+#    http://www.apache.org/licenses/LICENSE-2.0
+
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
 # google_client_config and kubernetes provider must be explicitly specified like the following.
+
 data "google_client_config" "default" {}
-// [START artifact_reg_setup]
+# [START artifactregistry_docker_repo]
 resource "google_artifact_registry_repository" "main" {
   location      = "us"
   repository_id = "main"
@@ -17,13 +31,13 @@ resource "google_artifact_registry_repository_iam_binding" "binding" {
     "serviceAccount:${module.gke-db1.service_account}",
   ]
 }
-// [END artifact_reg_setup]
+# [END artifactregistry_docker_repo]
 
 module "network" {
   source     = "../modules/network"
   project_id = var.project_id
 }
-// [START create_gke_cluster]
+# [START gke_standard_private_regional_primary_cluster]
 module "gke-db1" {
   source                   = "../modules/beta-private-cluster"
   project_id               = var.project_id
@@ -50,8 +64,7 @@ module "gke-db1" {
   }
   monitoring_enable_managed_prometheus = true
   gke_backup_agent_config = true
-// [END create_gke_cluster]
-// [START create_node_pools]
+
   node_pools = [
     {
       name            = "pool-sys"
@@ -102,8 +115,8 @@ module "gke-db1" {
   }
   gce_pd_csi_driver = true
 }
-// [END create_node_pools]
-// [START dr_create_cluster]
+# [END gke_standard_private_regional_primary_cluster]
+# [START gke_standard_private_regional_backup_cluster]
 module "gke-db2" {
   source                   = "../modules/beta-private-cluster"
   project_id               = var.project_id
@@ -181,4 +194,4 @@ module "gke-db2" {
   gke_backup_agent_config = true
   gce_pd_csi_driver = true
 }
-// [end dr_create_cluster]
+# [end gke_standard_private_regional_backup_cluster]
