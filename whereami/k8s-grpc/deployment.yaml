@@ -38,7 +38,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
       containers:
-      - name: whereami-grpc
+      - name: whereami
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:

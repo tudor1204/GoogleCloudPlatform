@@ -38,7 +38,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
       containers:
-      - name: {{ include "whereami.fullname" . }}
+      - name: whereami
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
