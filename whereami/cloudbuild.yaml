@@ -26,6 +26,14 @@ steps:
     - 'us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.13'
     - '.'
   dir: 'whereami'
+- name: ubuntu
+  script: |
+    apt update
+    apt install curl -y
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+    cd helm-chart
+    helm package .
+    helm push whereami-1.2.13.tgz oci://us-docker.pkg.dev/google-samples/charts
 
 images:
   - 'gcr.io/google-samples/whereami:v1.2.13'
