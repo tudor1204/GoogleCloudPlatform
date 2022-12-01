@@ -4,7 +4,7 @@
            You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "whereami.fullname" . }}'
   export ENDPOINT=$(kubectl get svc whereami -n {{ .Release.Namespace }} | grep -v EXTERNAL-IP | awk '{ print $4}')
   2. Call the endpoint to get the response:
-  {{- if contains "True" .Values.config.grpc.enabled }}
+  {{- if .Values.config.grpc.enabled }}
     grpcurl -plaintext $ENDPOINT:{{ .Values.service.port }} whereami.Whereami.GetPayload | jq .
   {{- else }}
     curl $ENDPOINT:{{ .Values.service.port }} -s | jq .

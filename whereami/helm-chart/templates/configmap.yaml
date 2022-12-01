@@ -21,9 +21,9 @@ metadata:
   name: {{ include "whereami.fullname" . }}
   namespace: {{.Release.Namespace}}
 data:
-  BACKEND_ENABLED: {{ .Values.config.backend.enabled | title | quote }}
+  BACKEND_ENABLED: {{ if .Values.config.backend.enabled }}"True"{{ else }}"False"{{ end }}
   BACKEND_SERVICE: {{ .Values.config.backend.service }}
   METADATA: {{ .Values.config.metadata }}
-  ECHO_HEADERS: {{ .Values.config.echoHeaders.enabled | title | quote }}
-  GRPC_ENABLED: {{ .Values.config.grpc.enabled | title | quote }}
+  ECHO_HEADERS: {{ if .Values.config.echoHeaders.enabled }}"True"{{ else }}"False"{{ end }}
+  GRPC_ENABLED: {{ if .Values.config.grpc.enabled }}"True"{{ else }}"False"{{ end }}
   TRACE_SAMPLING_RATIO: {{ .Values.config.traceSamplingRatio | quote }}
