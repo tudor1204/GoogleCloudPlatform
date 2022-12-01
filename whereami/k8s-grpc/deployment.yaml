@@ -18,6 +18,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: whereami-grpc
+  labels:
+    app: whereami-grpc
 spec:
   replicas: 3
   selector:
