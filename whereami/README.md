@@ -504,7 +504,7 @@ Recently, [cURL](https://curl.se/) was added to `/bin` of the container image fo
 
 If you'd like to deploy `whereami` via its Helm chart, you could leverage the following instructions.
 
-Deploy the default setup of `whereami`:
+Deploy the default setup of `whereami` (HTTP frontend):
 ```sh
 helm install whereami oci://us-docker.pkg.dev/google-samples/charts/whereami \
     --version 1.2.13
@@ -515,24 +515,27 @@ Deploy `whereami` as HTTP backend by running the previous `helm install` command
 --set suffix=-backend,config.metadata=backend,service.type=ClusterIP
 ```
 
-Deploy `whereami` as HTTP frontend by running the previous `helm install` command with the following parameters:
+Deploy `whereami` as HTTP frontend with backend by running the previous `helm install` command with the following parameters:
 ```sh
-
+--set suffix=-frontend,config.metadata=frontend,config.backend.enabled=true
 ```
-And then run the previous `helm install` command with `-f values.yaml` parameter.
 
 Deploy `whereami` as echo headers by running the previous `helm install` command with the following parameters:
 ```sh
---set config.metadata=echo_headers_enabled,config.echoHeaders.enabled=True
+--set suffix=-echo-headers,config.metadata=echo_headers_enabled,config.echoHeaders.enabled=true
 ```
-
 
 Deploy `whereami` as gRPC frontend by running the previous `helm install` command with the following parameters:
 ```sh
-
+--set nameOverride=whereami-grpc,config.metadata=grpc-frontend,config.backend.service=whereami-grpc-backend,config.grpc.enabled=true,service.port=9090,service.name=grpc,service.targetPort=9090
 ```
 
 Deploy `whereami` as gRPC backend by running the previous `helm install` command with the following parameters:
 ```sh
+--set suffix=-backend,nameOverride=whereami-grpc,config.metadata=grpc-backend,config.backend.service=whereami-grpc-backend,config.grpc.enabled=true,service.port=9090,service.name=grpc,service.targetPort=9090,service.type=ClusterIP
+```
 
+Deploy `whereami` as gRPC backend with backend by running the previous `helm install` command with the following parameters:
+```sh
+--set suffix=-frontend,nameOverride=whereami-grpc,config.metadata=grpc-frontend,config.backend.enabled=true,config.backend.service=whereami-grpc-backend,config.grpc.enabled=true,service.port=9090,service.name=grpc,service.targetPort=9090
 ```
