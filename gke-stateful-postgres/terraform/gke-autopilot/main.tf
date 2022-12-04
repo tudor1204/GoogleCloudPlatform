@@ -48,7 +48,7 @@ module "gke-db1-autopilot" {
   master_ipv4_cidr_block          = "172.16.0.0/28"
   create_service_account          = false
 }
-# [START gke_autopilot_private_regional_primary_cluster]
+# [END gke_autopilot_private_regional_primary_cluster]
 # [START gke_autopilot_private_regional_backup_cluster]
 module "gke-db2-autopilot" {
   source                          = "../modules/beta-autopilot-private-cluster"
@@ -70,4 +70,4 @@ module "gke-db2-autopilot" {
   master_ipv4_cidr_block          = "172.16.0.16/28"
   create_service_account          = false
 }
-# [START gke_autopilot_private_regional_backup_cluster]
+# [END gke_autopilot_private_regional_backup_cluster]
