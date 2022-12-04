@@ -194,4 +194,4 @@ module "gke-db2" {
   gke_backup_agent_config = true
   gce_pd_csi_driver = true
 }
-# [end gke_standard_private_regional_backup_cluster]
+# [END gke_standard_private_regional_backup_cluster]
