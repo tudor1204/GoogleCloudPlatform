@@ -37,12 +37,11 @@ spec:
         podAffinity: {{- include "common.affinities.pods" (dict "type" (index .Values "postgresql-ha" "pgpool" "podAffinityPreset") "component" "pgpool" "context" $) | nindent 10 }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/instance: postgresql
-                    app.kubernetes.io/component: pgpool
-                topologyKey: topology.kubernetes.io/zone
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: postgresql
+                  app.kubernetes.io/component: pgpool
+              topologyKey: topology.kubernetes.io/zone
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" (index .Values "postgresql-ha" "pgpool" "nodeAffinityPreset" "type") "key" (index .Values "postgresql-ha" "pgpool" "nodeAffinityPreset" "key") "values" (index .Values "postgresql-ha" "pgpool" "nodeAffinityPreset" "values")) | nindent 10 }}
       {{- end }}
       {{- if (index .Values "postgresql-ha" "pgpool" "nodeSelector") }}
