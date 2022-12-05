@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: pgpool
@@ -36,7 +36,7 @@ spec:
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" (index .Values "postgresql-ha" "pgpool" "podAffinityPreset") "component" "pgpool" "context" $) | nindent 10 }}
         podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
+          requiredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
@@ -51,7 +51,7 @@ spec:
       {{- if (index .Values "postgresql-ha" "pgpool" "tolerations") }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" (index .Values "postgresql-ha" "pgpool" "tolerations") "context" $) | nindent 8 }}
       {{- end }}
-      priorityClassName: ballon-priority
+      priorityClassName: balloon-priority
       containers:
       - name: pgpool
         image: busybox:latest

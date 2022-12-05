@@ -48,7 +48,7 @@ postgresql-ha:
       effect: NoSchedule
     nodeSelector:
       app.stateful/component: "postgresql-pgpool"
-    priorityClassName: "ballon-popper-priority"
+    priorityClassName: "balloon-popper-priority"
     pdb:
       create: true
       minAvailable: 1
