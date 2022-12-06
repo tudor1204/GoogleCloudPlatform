@@ -24,6 +24,22 @@ spec:
                 values:
                 - prepare-three-zone-ha
             topologyKey: "topology.kubernetes.io/zone"
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: cloud.google.com/compute-class
+                operator: In
+                values:
+                - "Scale-Out"
+            weight: 1
+      nodeSelector:
+        app.stateful/component: postgresql
+      tolerations:
+      - effect: NoSchedule
+        key: app.stateful/component
+        operator: Equal
+        value: postgresql
       containers:
       - name: prepare-three-zone-ha
         image: busybox:latest
