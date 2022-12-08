@@ -1,0 +1,31 @@
+name: gke-stateful-postgres-ci
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/gke-stateful-postgres-ci.yml'
+      - 'gke-stateful-postgres/**'
+  pull_request:
+    paths:
+      - '.github/workflows/gke-stateful-postgres-ci.yml'
+      - 'gke-stateful-postgres/**'
+jobs:
+  job:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build network and autopilot cluster
+        run: |
+          terraform -chdir=terraform/gke-autopilot init
+          terraform validate
+      - name: Build network and standard cluster
+        run: |
+          terraform -chdir=terraform/gke-standard init
+          terraform validate
+      - name: Build monitoring
+        run: |
+          terraform -chdir=monitoring/alerting/terraforminit
+          terraform validate
+      
+      
