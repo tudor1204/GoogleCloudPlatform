@@ -27,7 +27,7 @@ jobs:
           terraform validate
       - name: Build monitoring
         run: |
-          cd monitoring/alerting
+          cd gke-stateful-postgres/monitoring/alerting
           terraform init
           terraform validate
       
