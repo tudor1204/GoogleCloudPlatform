@@ -13,25 +13,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_k8s_deployment_deployment_whereami]
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: whereami
-  name: whereami
+    app: {{ include "whereami.fullname" . }}
+  name: {{ include "whereami.fullname" . }}
+  namespace: {{.Release.Namespace}}
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: whereami
+      app: {{ include "whereami.fullname" . }}
   template:
     metadata:
       labels:
-        app: whereami
+        app: {{ include "whereami.fullname" . }}
         version: v1
     spec:
-      serviceAccountName: whereami
+      serviceAccountName: {{ include "whereami.fullname" . }}
       securityContext:
         fsGroup: 1000
         runAsGroup: 1000
@@ -46,10 +46,24 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.14
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
         ports:
+          {{- if .Values.config.grpc.enabled }}
+          - name: grpc
+            containerPort: 9090
+          {{- end }}
           - name: http
             containerPort: 8080
+        {{- if .Values.config.grpc.enabled }}
+        readinessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:9090"]
+          initialDelaySeconds: 5
+        livenessProbe:
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:9090"]
+          initialDelaySeconds: 10
+        {{- else }}
         livenessProbe:
           httpGet:
               path: /healthz
@@ -65,6 +79,7 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 5
           timeoutSeconds: 1
+        {{- end }}
         env:
           - name: NODE_NAME
             valueFrom:
@@ -85,32 +100,30 @@ spec:
           - name: BACKEND_ENABLED
             valueFrom:
               configMapKeyRef:
-                name: whereami
+                name: {{ include "whereami.fullname" . }}
                 key: BACKEND_ENABLED
           - name: BACKEND_SERVICE
             valueFrom:
               configMapKeyRef:
-                name: whereami
+                name: {{ include "whereami.fullname" . }}
                 key: BACKEND_SERVICE
           - name: METADATA
             valueFrom:
               configMapKeyRef:
-                name: whereami
+                name: {{ include "whereami.fullname" . }}
                 key: METADATA
           - name: ECHO_HEADERS
             valueFrom:
               configMapKeyRef:
-                name: whereami
+                name: {{ include "whereami.fullname" . }}
                 key: ECHO_HEADERS
           - name: GRPC_ENABLED
             valueFrom:
               configMapKeyRef:
-                name: whereami
+                name: {{ include "whereami.fullname" . }}
                 key: GRPC_ENABLED
           - name: TRACE_SAMPLING_RATIO
             valueFrom:
               configMapKeyRef:
-                name: whereami
+                name: {{ include "whereami.fullname" . }}
                 key: TRACE_SAMPLING_RATIO
-# [END gke_k8s_deployment_deployment_whereami]
----
