@@ -27,7 +27,7 @@ jobs:
           terraform validate
       - name: Build monitoring
         run: |
-          cd gke-standard/monitoring/alerting
+          cd monitoring/alerting
           terraform init
           terraform validate
       
