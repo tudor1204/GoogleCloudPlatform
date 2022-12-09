@@ -17,15 +17,18 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build network and autopilot cluster
         run: |
-          terraform -chdir=terraform/gke-autopilot init
+          cd gke-stateful-postgres/terraform/gke-autopilot
+          terraform init
           terraform validate
       - name: Build network and standard cluster
         run: |
-          terraform -chdir=terraform/gke-standard init
+          cd gke-stateful-postgres/terraform/gke-standard
+          terraform init
           terraform validate
       - name: Build monitoring
         run: |
-          terraform -chdir=monitoring/alerting/terraforminit
+          cd gke-standard/monitoring/alerting
+          terraform init
           terraform validate
       
       
