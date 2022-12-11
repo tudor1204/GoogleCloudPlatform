@@ -7,5 +7,5 @@
 
 # Directory-specific owners
 /windows-multi-arch/ @ibabou @liurupeng @mcshooter @pjh
-/gke-stateful/postgres/ @aburhan @pwschuurman
+/gke-stateful-postgres/ @aburhan @pwschuurman
 /whereami/ @theemadnes
