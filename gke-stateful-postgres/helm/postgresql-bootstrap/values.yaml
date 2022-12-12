@@ -1,0 +1,82 @@
+## Example is available at https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+
+global:
+  imageRegistry: "us-docker.pkg.dev/[PROJECT_ID]/main"
+  storageClass: premium-rwo-retain-zonal-pg
+
+  postgresql:
+    password: ""
+    database: ""
+
+postgresql-ha:
+  postgresql:
+    image:
+      repository: bitnami/postgresql-repmgr
+      tag: 14.5.0-debian-11-r6
+    replicaCount: 3
+    nodeAffinityPreset:
+      type: "soft"
+      key: "cloud.google.com/compute-class"
+      operator: In
+      values:
+        - Scale-Out
+    podAntiAffinityPreset: "hard"
+    topologySpreadConstraints:
+      - topologyKey: "topology.kubernetes.io/zone"
+        whenUnsatisfiable: DoNotSchedule
+        maxSkew: 1
+    tolerations:
+    - key: "app.stateful/component"
+      operator: "Equal"
+      value: "postgresql"
+      effect: NoSchedule
+    nodeSelector:
+      app.stateful/component: "postgresql"
+    pdb:
+      create: true
+      minAvailable: "" # keep this to mitigate the bug of helm chart: minAvailable and maxUnavailable cannot be both set
+      maxUnavailable: 1
+  pgpool:
+    image:
+      repository: bitnami/pgpool
+      tag: 4.3.3-debian-11-r1
+    replicaCount: 1
+    tolerations:
+    - key: "app.stateful/component"
+      operator: "Equal"
+      value: "postgresql-pgpool"
+      effect: NoSchedule
+    nodeSelector:
+      app.stateful/component: "postgresql-pgpool"
+    priorityClassName: "balloon-popper-priority"
+    pdb:
+      create: true
+      minAvailable: 1
+      maxUnavailable: 0 # keep this to mitigate the bug of helm chart: minAvailable and maxUnavailable cannot be both set
+
+  metrics: # Enable this for Standard GKE. Can't deploy Managed Prometheus to Autopilot GKE due to missing permission to create resource on namespace Kube-system
+    enabled: true
+    image:
+      repository: bitnami/postgres-exporter
+      tag: 0.11.1-debian-11-r0
+
+gkeBackup: # Enable this for Standard GKE, ignore during Autopilot test
+  enabled: true
+  protectedApplications:
+  - name: postgresql-ha
+    components:
+      - name: postgresql
+        resourceKind: StatefulSet
+        resourceNames: ["postgresql-postgresql-ha-postgresql"]
+        strategy:
+          type: BackupAllRestoreAll
+          backupAllRestoreAll: {}
+
+storageClass:
+  create: true
+  name: premium-rwo-retain-zonal-pg
+  parameters:
+    type: pd-ssd
+
+podMonitoring:
+  enabled: true
