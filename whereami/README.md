@@ -472,6 +472,24 @@ $ grpcurl -plaintext $ENDPOINT:9090 whereami.Whereami.GetPayload | jq .
 
 ### Notes
 
+#### Cloud Run
+
+When `whereami` containers are hosted on [Cloud Run](https://cloud.google.com/run), a serverless container platform on Google Cloud, the payload includes 2 additional fields not included when running on Kubernetes. `whereami` will include both the [container instance id and Google service account email address used by the Cloud Run revision](https://cloud.google.com/run/docs/container-contract#metadata-server):
+
+```bash
+$ curl https://whereami-4uotx33u2a-uc.a.run.app/
+{
+  "cloud_run_instance_id": "0071bb481567295e2eaa3092ab04038a51f7548492e17aa98788ca070921232c81b16bfbad2e14bc928527c8182bb211057c4f2988d01df42206a91b315260e0c9",
+  "cloud_run_service_account": "841101411908-compute@developer.gserviceaccount.com",
+  "host_header": "whereami-4uotx33u2a-uc.a.run.app",
+  "pod_name": "localhost",
+  "pod_name_emoji": "8⃣",
+  "project_id": "am-arg-01",
+  "timestamp": "2022-12-17T02:31:13",
+  "zone": "us-central1-1"
+}
+```
+
 #### Buildpacks
 
 If you'd like to build & publish via Google's [buildpacks](https://github.com/GoogleCloudPlatform/buildpacks), something like this should do the trick (leveraging the local `Procfile`) from this directory:

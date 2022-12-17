@@ -30,4 +30,6 @@ message WhereamiReply {
     string project_id = 10;
     string timestamp = 11;
     string zone = 12;
+    string cloud_run_instance_id = 13;
+    string cloud_run_service_account = 14;
 }
