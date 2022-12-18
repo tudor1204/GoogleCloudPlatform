@@ -116,7 +116,6 @@ class WhereamiPayload(object):
             # if we're running on Cloud Run, grab the container instance ID and Google service account
             try:
                 self.payload['cloud_run_instance_id'] = r.json()['instance']['id']
-                print(r.json()['instance'])
                 self.payload['cloud_run_service_account'] = r.json()['instance']['serviceAccounts']['default']['email']
             except:
                 logging.warning("Unable to capture Cloud Run metadata.")
