@@ -505,7 +505,29 @@ $ grpcurl whereami-4uotx33u2a-uc.a.run.app:443  whereami.Whereami/GetPayload
 }
 ```
 
-> Note: Currently, calling a backend service via gRPC when running on Cloud Run is not supported.
+When enabling backend in Cloud Run using gRPC:
+
+```bash
+$ grpcurl whereami-4uotx33u2a-uc.a.run.app:443  whereami.Whereami/GetPayload
+{
+  "backend_result": {
+    "pod_name": "localhost",
+    "pod_name_emoji": "👤",
+    "project_id": "am-arg-01",
+    "timestamp": "2022-12-18T04:47:30",
+    "zone": "us-central1-1",
+    "cloud_run_instance_id": "0071bb48159fcf1468daa0cc513fca56663215a83a1fcea06a25a3d9bfa2a5adc7b12b6cb2a39164b30b3cdc44698371581d5756fafc26fde93be505dfdd3a8787",
+    "cloud_run_service_account": "841101411908-compute@developer.gserviceaccount.com"
+  },
+  "pod_name": "localhost",
+  "pod_name_emoji": "👩🏾‍❤️‍👩🏻",
+  "project_id": "am-arg-01",
+  "timestamp": "2022-12-18T04:47:30",
+  "zone": "us-central1-1",
+  "cloud_run_instance_id": "0071bb4815da6cf73029c03a21cb16f3fac22031e3f33d3d1749ab2aa683ec2fb83e85151a10908296d54d518352b0b59bba90d39c83ad31d69997e10732e76c34",
+  "cloud_run_service_account": "841101411908-compute@developer.gserviceaccount.com"
+}
+```
 
 #### Buildpacks
 

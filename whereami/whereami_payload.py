@@ -88,8 +88,15 @@ class WhereamiPayload(object):
         def call_grpc_backend(backend_service):
 
             try:
-                channel = grpc.insecure_channel(backend_service +
-                                                ':9090')
+                # check for using `443` port to use `secure_channel`
+                # assumes port number is appended to backend_service name
+                if backend_service.split(':')[1] == '443':
+                    logging.info("Using gRPC secure channel.")
+                    channel = grpc.secure_channel(backend_service, grpc.ssl_channel_credentials()) # this works for Cloud Run only, AFAICT
+                else:
+                    logging.info("Using gRPC insecure channel.")
+                    channel = grpc.insecure_channel(backend_service)
+                
                 stub = whereami_pb2_grpc.WhereamiStub(channel)
                 backend_result = stub.GetPayload(
                     whereami_pb2.Empty())
