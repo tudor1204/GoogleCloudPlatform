@@ -490,6 +490,8 @@ $ curl https://whereami-4uotx33u2a-uc.a.run.app/
 }
 ```
 
+Currently, running `whereami` on Cloud Run does not work in gRPC mode.
+
 #### Buildpacks
 
 If you'd like to build & publish via Google's [buildpacks](https://github.com/GoogleCloudPlatform/buildpacks), something like this should do the trick (leveraging the local `Procfile`) from this directory:
