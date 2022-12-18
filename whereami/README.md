@@ -490,7 +490,20 @@ $ curl https://whereami-4uotx33u2a-uc.a.run.app/
 }
 ```
 
-Currently, running `whereami` on Cloud Run does not work in gRPC mode.
+When using gRPC for `whereami` on Cloud Run, HTTP/2 must be [enabled](https://cloud.google.com/run/docs/configuring/http2) for the Cloud Run revision.
+
+```bash
+$ grpcurl whereami-4uotx33u2a-uc.a.run.app:443  whereami.Whereami/GetPayload
+{
+  "pod_name": "localhost",
+  "pod_name_emoji": "👩🏻‍🔬",
+  "project_id": "am-arg-01",
+  "timestamp": "2022-12-18T01:55:56",
+  "zone": "us-central1-1",
+  "cloud_run_instance_id": "0071bb481503eabfa986564835af469bc819c7c1bbb5a262267f5dac714a989324abe2907490f31a0b7baa78e0ccf715b955ee306ae8e6469c83258a01a1c402c8",
+  "cloud_run_service_account": "841101411908-compute@developer.gserviceaccount.com"
+}
+```
 
 #### Buildpacks
 
