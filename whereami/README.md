@@ -10,7 +10,7 @@
 
 Tracing to `whereami` is instrumented via [OpenTelemetry](https://cloud.google.com/trace/docs/setup/python-ot) when in default Flask mode, and will export traces to Cloud Trace when run on GCP. The `TRACE_SAMPLING_RATIO` value in the ConfigMap can be used to configure sampling likelihood.
 
-Prometheus metrics are exposed from `whereami` at `x.x.x.x/metrics` in both Flask and gRPC modes.
+Prometheus metrics are exposed from `whereami` at `x.x.x.x/metrics` in both Flask and gRPC modes. In gRPC mode, the `metrics` endpoint is exposed on port `8000` via `HTTP`.
 
 > Note: when running the `whereami` pod(s) with [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) enabled, make sure that the associated GSA has a role attached to it with permissions to write to Cloud Trace, such as `roles/cloudtrace.agent`
 
@@ -400,7 +400,7 @@ By setting the feature flag `GRPC_ENABLED` in the `whereami` configmap (see [her
 
 If gRPC is enabled for a given pod, that `whereami` pod will not respond to HTTP requests, and any downstream service calls that the pod makes will also use gRPC only.
 
-> Note: because gRPC is used as the protocol, the `whereami-grpc` response will omit any `header` fields *and* listens on port `9090` instead of port `8080`. 
+> Note: because gRPC is used as the protocol, the `whereami-grpc` response will omit any `header` fields *and* listens on port `9090` instead of port `8080` by default, but can be configured via the `$PORT` environment variable.
 
 #### Step 1 - Deploy the whereami-grpc backend
 
@@ -504,6 +504,8 @@ $ grpcurl whereami-4uotx33u2a-uc.a.run.app:443  whereami.Whereami/GetPayload
   "cloud_run_service_account": "841101411908-compute@developer.gserviceaccount.com"
 }
 ```
+
+> Note: Currently, calling a backend service via gRPC when running on Cloud Run is not supported.
 
 #### Buildpacks
 
