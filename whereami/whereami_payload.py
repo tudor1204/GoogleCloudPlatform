@@ -14,6 +14,7 @@ import whereami_pb2_grpc
 
 METADATA_URL = 'http://metadata.google.internal/computeMetadata/v1/'
 METADATA_HEADERS = {'Metadata-Flavor': 'Google'}
+GRPC_SECURE_PORTS = ['443', '8443'] # when using gRPC, this list is checked when determining to use a secure or insecure channel
 
 # set up logging
 dictConfig({
@@ -88,11 +89,10 @@ class WhereamiPayload(object):
         def call_grpc_backend(backend_service):
 
             try:
-                # check for using `443` port to use `secure_channel`
                 # assumes port number is appended to backend_service name
-                if backend_service.split(':')[1] == '443':
+                if backend_service.split(':')[1] in GRPC_SECURE_PORTS:
                     logging.info("Using gRPC secure channel.")
-                    channel = grpc.secure_channel(backend_service, grpc.ssl_channel_credentials()) # this works for Cloud Run only, AFAICT
+                    channel = grpc.secure_channel(backend_service, grpc.ssl_channel_credentials())
                 else:
                     logging.info("Using gRPC insecure channel.")
                     channel = grpc.insecure_channel(backend_service)

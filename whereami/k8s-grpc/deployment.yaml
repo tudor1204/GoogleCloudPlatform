@@ -51,7 +51,7 @@ spec:
           - name: grpc
             containerPort: 9090
           - name: http
-            containerPort: 8080 # prom metrics
+            containerPort: 8000 # prom metrics
         readinessProbe:
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:9090"]
