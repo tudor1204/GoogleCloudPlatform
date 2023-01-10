@@ -1,4 +1,4 @@
-create database gke_test_zonal;
+CREATE DATABASE gke_test_zonal;
 \c gke_test_zonal;
 
 CREATE TABLE tb01 (
