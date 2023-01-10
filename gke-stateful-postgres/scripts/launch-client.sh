@@ -13,7 +13,7 @@ launch_pod () {
   export REPMGR_PASSWORD=$(kubectl get secret --namespace $NAMESPACE postgresql-postgresql-ha-postgresql -o jsonpath="{.data.repmgr-password}" | base64 -d)
   export IMAGE="us-docker.pkg.dev/$PROJECT_ID/main/bitnami/postgresql-repmgr:15.1.0-debian-11-r0"
 
-  kubectl run $POD_CLIENT --restart='Never' --namespace $NAMESPACE --image $IMAGE \
+  kubectl run $POD_CLIENT --restart='Always' --namespace $NAMESPACE --image $IMAGE \
   --env="PGPASSWORD=$POSTGRES_PASSWORD" \
   --env="HOST_PGPOOL=postgresql-postgresql-ha-pgpool" \
   -- sleep infinity
