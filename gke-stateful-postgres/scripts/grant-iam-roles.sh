@@ -7,3 +7,8 @@ for ROLE in "${SERVICE_ACCOUNT_ROLES_ARRAY[@]}"
       --member="serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com" \
       --role="roles/$ROLE"
   done
+echo Binding the K8 SA  to $SERVICE_ACCOUNT_NAME...
+gcloud iam service-accounts add-iam-policy-binding $SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+    --role roles/iam.workloadIdentityUser \
+    --member "serviceAccount:$PROJECT_ID.svc.id.goog[$NAMESPACE/postgres-sa]"
+

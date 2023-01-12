@@ -81,6 +81,11 @@ postgresql-ha:
       limits: 
         cpu: 250m
         memory: 256Mi
+  serviceAccount:
+    create: true
+    name: "postgres-sa"
+    annotations:
+      iam.gke.io/gcp-service-account: ""
 gkeBackup: # Enable this for Standard GKE, ignore during Autopilot test
   enabled: true
   protectedApplications:
