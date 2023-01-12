@@ -485,12 +485,8 @@ resource "google_container_node_pool" "pools" {
   }
 
   upgrade_settings {
-    stragegy = "BLUE_GREEN"
-    node_pool_soak_duration = "3.5s"
-    standard_rollout_policy {
-        batch_node_count = "1"
-        batch_soak_duration =  "3.5s"
-    }
+    max_surge       = lookup(each.value, "max_surge", 1)
+    max_unavailable = lookup(each.value, "max_unavailable", 0)
   }
 
   node_config {
