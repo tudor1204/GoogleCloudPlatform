@@ -120,12 +120,12 @@ class WhereamiPayload(object):
                 self.payload['cluster_name'] = r.json()['instance']['attributes']['cluster-name']
             except:
                 logging.warning("Unable to capture GKE cluster name.")
-            # if we're running on Cloud Run, grab the container instance ID and Google service account
+            # if we're running on GCE, grab the container instance ID and Google service account
             try:
                 self.payload['gce_instance_id'] = r.json()['instance']['id']
                 self.payload['gce_service_account'] = r.json()['instance']['serviceAccounts']['default']['email']
             except:
-                logging.warning("Unable to capture Cloud Run metadata.")
+                logging.warning("Unable to capture GCE instance metadata.")
         except:
             logging.warning("Unable to access GCE metadata endpoint.")
 
