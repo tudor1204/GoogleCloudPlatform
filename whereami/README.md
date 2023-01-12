@@ -19,7 +19,7 @@ Prometheus metrics are exposed from `whereami` at `x.x.x.x/metrics` in both Flas
 `whereami` is a single-container app, designed and packaged to run on Kubernetes. In its simplest form it can be deployed in a single line with only a few parameters.
 
 ```bash
-$ kubectl run --image=us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.15 --expose --port 8080 whereami
+$ kubectl run --image=us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.16 --expose --port 8080 whereami
 ```
 
 The `whereami`  pod listens on port `8080` and returns a very simple JSON response that indicates who is responding and where they live. This example assumes you're executing the `curl` command from a pod in the same K8s cluster & namespace (although the following examples show how to access from external clients):
@@ -104,7 +104,7 @@ spec:
       serviceAccountName: whereami
       containers:
       - name: whereami
-        image: us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.15
+        image: us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.16
         ports:
           - name: http
             containerPort: 8080 #The application is listening on port 8080
@@ -474,22 +474,6 @@ $ grpcurl -plaintext $ENDPOINT:9090 whereami.Whereami.GetPayload | jq .
 
 #### Cloud Run
 
-When `whereami` containers are hosted on [Cloud Run](https://cloud.google.com/run), a serverless container platform on Google Cloud, the payload includes 2 additional fields not included when running on Kubernetes. `whereami` will include both the [container instance id and Google service account email address used by the Cloud Run revision](https://cloud.google.com/run/docs/container-contract#metadata-server):
-
-```bash
-$ curl https://whereami-4uotx33u2a-uc.a.run.app/
-{
-  "cloud_run_instance_id": "0071bb481567295e2eaa3092ab04038a51f7548492e17aa98788ca070921232c81b16bfbad2e14bc928527c8182bb211057c4f2988d01df42206a91b315260e0c9",
-  "cloud_run_service_account": "841101411908-compute@developer.gserviceaccount.com",
-  "host_header": "whereami-4uotx33u2a-uc.a.run.app",
-  "pod_name": "localhost",
-  "pod_name_emoji": "8⃣",
-  "project_id": "am-arg-01",
-  "timestamp": "2022-12-17T02:31:13",
-  "zone": "us-central1-1"
-}
-```
-
 When using gRPC for `whereami` on Cloud Run, HTTP/2 must be [enabled](https://cloud.google.com/run/docs/configuring/http2) for the Cloud Run revision.
 
 ```bash
@@ -500,8 +484,8 @@ $ grpcurl whereami-4uotx33u2a-uc.a.run.app:443  whereami.Whereami/GetPayload
   "project_id": "am-arg-01",
   "timestamp": "2022-12-18T01:55:56",
   "zone": "us-central1-1",
-  "cloud_run_instance_id": "0071bb481503eabfa986564835af469bc819c7c1bbb5a262267f5dac714a989324abe2907490f31a0b7baa78e0ccf715b955ee306ae8e6469c83258a01a1c402c8",
-  "cloud_run_service_account": "841101411908-compute@developer.gserviceaccount.com"
+  "gce_instance_id": "0071bb481503eabfa986564835af469bc819c7c1bbb5a262267f5dac714a989324abe2907490f31a0b7baa78e0ccf715b955ee306ae8e6469c83258a01a1c402c8",
+  "gce_service_account": "841101411908-compute@developer.gserviceaccount.com"
 }
 ```
 
@@ -516,16 +500,16 @@ $ grpcurl whereami-4uotx33u2a-uc.a.run.app:443  whereami.Whereami/GetPayload
     "project_id": "am-arg-01",
     "timestamp": "2022-12-18T04:51:00",
     "zone": "us-central1-1",
-    "cloud_run_instance_id": "0071bb481538d20cdd71482479441202997c112a395a4308ee799f7151c31483ded5745b8ddc1cd577e56fbf1458c12dd15cfc55852f12c96ab5dae7590ba15cc4",
-    "cloud_run_service_account": "whereami-backend@am-arg-01.iam.gserviceaccount.com"
+    "gce_instance_id": "0071bb481538d20cdd71482479441202997c112a395a4308ee799f7151c31483ded5745b8ddc1cd577e56fbf1458c12dd15cfc55852f12c96ab5dae7590ba15cc4",
+    "gce_service_account": "whereami-backend@am-arg-01.iam.gserviceaccount.com"
   },
   "pod_name": "localhost",
   "pod_name_emoji": "👩🏾‍❤️‍👩🏻",
   "project_id": "am-arg-01",
   "timestamp": "2022-12-18T04:51:00",
   "zone": "us-central1-1",
-  "cloud_run_instance_id": "0071bb4815da6cf73029c03a21cb16f3fac22031e3f33d3d1749ab2aa683ec2fb83e85151a10908296d54d518352b0b59bba90d39c83ad31d69997e10732e76c34",
-  "cloud_run_service_account": "841101411908-compute@developer.gserviceaccount.com"
+  "gce_instance_id": "0071bb4815da6cf73029c03a21cb16f3fac22031e3f33d3d1749ab2aa683ec2fb83e85151a10908296d54d518352b0b59bba90d39c83ad31d69997e10732e76c34",
+  "gce_service_account": "841101411908-compute@developer.gserviceaccount.com"
 }
 ```
 
@@ -564,7 +548,7 @@ If you'd like to deploy `whereami` via its Helm chart, you could leverage the fo
 Deploy the default setup of `whereami` (HTTP frontend):
 ```sh
 helm install whereami oci://us-docker.pkg.dev/google-samples/charts/whereami \
-    --version 1.2.15
+    --version 1.2.16
 ```
 
 Deploy `whereami` as HTTP backend by running the previous `helm install` command with the following parameters:
