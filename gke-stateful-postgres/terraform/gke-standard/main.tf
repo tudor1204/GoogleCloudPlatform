@@ -54,7 +54,7 @@ module "gke-db1" {
   master_ipv4_cidr_block   = "172.16.0.0/28"
   network_policy           = true
   cluster_autoscaling = {
-    "autoscaling_profile": "BALANCED",
+    "autoscaling_profile": "OPTIMIZE_UTILIZATION",
     "enabled" : true,
     "gpu_resources" : [],
     "min_cpu_cores" : 36,
@@ -70,7 +70,7 @@ module "gke-db1" {
       name            = "pool-sys"
       autoscaling     = true
       min_count       = 1
-      max_count       = 2
+      max_count       = 3
       max_surge       = 1
       max_unavailable = 0
       machine_type    = "e2-standard-4"
@@ -134,10 +134,10 @@ module "gke-db2" {
   master_ipv4_cidr_block   = "172.16.0.16/28"
   network_policy           = true
   cluster_autoscaling = {
-    "autoscaling_profile": "BALANCED",
+    "autoscaling_profile": "OPTIMIZE_UTILIZATION",
     "enabled" : true,
     "gpu_resources" : [],
-    "min_cpu_cores" : 36,
+    "min_cpu_cores" : 10,
     "min_memory_gb" : 144,
     "max_cpu_cores" : 48,
     "max_memory_gb" : 192,
@@ -149,7 +149,7 @@ module "gke-db2" {
       name            = "pool-sys"
       autoscaling     = true
       min_count       = 1
-      max_count       = 2
+      max_count       = 3
       max_surge       = 1
       max_unavailable = 0
       machine_type    = "e2-standard-4"
