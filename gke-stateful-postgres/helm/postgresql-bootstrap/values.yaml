@@ -12,7 +12,7 @@ postgresql-ha:
   postgresql:
     image:
       repository: bitnami/postgresql-repmgr
-      tag: 14.6.0-debian-11-r6
+      tag: 15.1.0-debian-11-r0
     replicaCount: 3
     nodeAffinityPreset:
       type: "soft"
@@ -39,7 +39,7 @@ postgresql-ha:
   pgpool:
     image:
       repository: bitnami/pgpool
-      tag: 4.4.0-debian-11-r1
+      tag: 4.3.3-debian-11-r28
     replicaCount: 1
     tolerations:
     - key: "app.stateful/component"
@@ -58,7 +58,7 @@ postgresql-ha:
     enabled: true
     image:
       repository: bitnami/postgres-exporter
-      tag: 0.11.1-debian-11-r0
+      tag: 0.11.1-debian-11-r27
 
 gkeBackup: # Enable this for Standard GKE, ignore during Autopilot test
   enabled: true

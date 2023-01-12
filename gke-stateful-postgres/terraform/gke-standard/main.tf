@@ -142,6 +142,8 @@ module "gke-db2" {
     "max_cpu_cores" : 48,
     "max_memory_gb" : 192,
   }
+  monitoring_enable_managed_prometheus = true
+  gke_backup_agent_config = true
   node_pools = [
     {
       name            = "pool-sys"
@@ -190,8 +192,6 @@ module "gke-db2" {
       },
     ],
   }
-  monitoring_enable_managed_prometheus = true
-  gke_backup_agent_config = true
   gce_pd_csi_driver = true
 }
 # [END gke_standard_private_regional_backup_cluster]
