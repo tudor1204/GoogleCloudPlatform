@@ -125,10 +125,10 @@ class WhereamiPayload(object):
                 self.payload['gce_instance_id'] = r.json()['instance']['id']
             except:
                 logging.warning("Unable to capture GCE instance ID.")
-            '''try:
+            try:
                 self.payload['gce_service_account'] = r.json()['instance']['serviceAccounts']['default']['email']
             except:
-                logging.warning("Unable to capture GCE service account.")'''
+                logging.warning("Unable to capture GCE service account.")
         except:
             logging.warning("Unable to access GCE metadata endpoint.")
 
