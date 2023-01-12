@@ -32,6 +32,7 @@ postgresql-ha:
       effect: NoSchedule
     nodeSelector:
       app.stateful/component: "postgresql"
+      iam.gke.io/gke-metadata-server-enabled: "true"
     pdb:
       create: true
       minAvailable: "" # keep this to mitigate the bug of helm chart: minAvailable and maxUnavailable cannot be both set
@@ -55,6 +56,7 @@ postgresql-ha:
       effect: NoSchedule
     nodeSelector:
       app.stateful/component: "postgresql-pgpool"
+      iam.gke.io/gke-metadata-server-enabled: "true"
     priorityClassName: "balloon-popper-priority"
     pdb:
       create: true
@@ -86,7 +88,7 @@ gkeBackup: # Enable this for Standard GKE, ignore during Autopilot test
     components:
       - name: postgresql
         resourceKind: StatefulSet
-        resourceNames: ["postgresql-postgresql-ha-postgresql"]
+        resourceNames: ["postgresql-postgresql-ha-postgresql","postgresql-postgresql-ha-pgpool"]
         strategy:
           type: BackupAllRestoreAll
           backupAllRestoreAll: {}
