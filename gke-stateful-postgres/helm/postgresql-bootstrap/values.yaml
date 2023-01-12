@@ -90,7 +90,6 @@ gkeBackup: # Enable this for Standard GKE, ignore during Autopilot test
         strategy:
           type: BackupAllRestoreAll
           backupAllRestoreAll: {}
-
 storageClass:
   create: true
   name: premium-rwo-retain-zonal-pg
