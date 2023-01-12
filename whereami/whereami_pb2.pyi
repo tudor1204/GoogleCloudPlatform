@@ -26,7 +26,7 @@ class WhereamiReply(_message.Message):
     ZONE_FIELD_NUMBER: _ClassVar[int]
     backend_result: WhereamiReply
     cluster_name: str
-    gce_instance_id: int
+    gce_instance_id: str
     gce_service_account: str
     metadata: str
     node_name: str
@@ -38,4 +38,4 @@ class WhereamiReply(_message.Message):
     project_id: str
     timestamp: str
     zone: str
-    def __init__(self, backend_result: _Optional[_Union[WhereamiReply, _Mapping]] = ..., cluster_name: _Optional[str] = ..., metadata: _Optional[str] = ..., node_name: _Optional[str] = ..., pod_ip: _Optional[str] = ..., pod_name: _Optional[str] = ..., pod_name_emoji: _Optional[str] = ..., pod_namespace: _Optional[str] = ..., pod_service_account: _Optional[str] = ..., project_id: _Optional[str] = ..., timestamp: _Optional[str] = ..., zone: _Optional[str] = ..., gce_instance_id: _Optional[int] = ..., gce_service_account: _Optional[str] = ...) -> None: ...
+    def __init__(self, backend_result: _Optional[_Union[WhereamiReply, _Mapping]] = ..., cluster_name: _Optional[str] = ..., metadata: _Optional[str] = ..., node_name: _Optional[str] = ..., pod_ip: _Optional[str] = ..., pod_name: _Optional[str] = ..., pod_name_emoji: _Optional[str] = ..., pod_namespace: _Optional[str] = ..., pod_service_account: _Optional[str] = ..., project_id: _Optional[str] = ..., timestamp: _Optional[str] = ..., zone: _Optional[str] = ..., gce_instance_id: _Optional[str] = ..., gce_service_account: _Optional[str] = ...) -> None: ...

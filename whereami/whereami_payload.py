@@ -122,7 +122,7 @@ class WhereamiPayload(object):
                 logging.warning("Unable to capture GKE cluster name.")
             # if we're running on Google, grab the instance ID and default Google service account
             try:
-                self.payload['gce_instance_id'] = r.json()['instance']['id']
+                self.payload['gce_instance_id'] = str(r.json()['instance']['id']) # casting to str as value can be alphanumeric on Cloud Run
             except:
                 logging.warning("Unable to capture GCE instance ID.")
             try:
