@@ -79,7 +79,7 @@ module "gke-db1" {
     },
     {
       name            = "pool-db"
-      autoscaling     = false
+      autoscaling     = true
       max_surge       = 1
       max_unavailable = 0
       machine_type    = "e2-standard-8"
@@ -158,7 +158,7 @@ module "gke-db2" {
     },
     {
       name            = "pool-db"
-      autoscaling     = false
+      autoscaling     = true
       max_surge       = 1
       max_unavailable = 0
       machine_type    = "e2-standard-8"
