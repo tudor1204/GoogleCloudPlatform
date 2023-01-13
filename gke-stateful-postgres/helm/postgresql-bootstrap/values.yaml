@@ -39,11 +39,11 @@ postgresql-ha:
       maxUnavailable: 1
     resources:
       requests: 
-        cpu: 250m
-        memory: 256Mi
+        cpu: "500m"
+        memory: "0.5Gi"
       limits: 
-        cpu: 250m
-        memory: 256Mi       
+        cpu: "500m"
+        memory: "0.5Gi"        
   pgpool:
     image:
       repository: bitnami/pgpool
@@ -64,11 +64,11 @@ postgresql-ha:
       maxUnavailable: 0 # keep this to mitigate the bug of helm chart: minAvailable and maxUnavailable cannot be both set
     resources:
       requests: 
-        cpu: 250m
-        memory: 256Mi
+        cpu: "500m"
+        memory: "0.5Gi"
       limits: 
-        cpu: 250m
-        memory: 256Mi
+        cpu: "500m"
+        memory: "0.5Gi" 
   metrics:
     enabled: true
     image:
@@ -76,11 +76,11 @@ postgresql-ha:
       tag: 0.11.1-debian-11-r27
     resources:
       requests: 
-        cpu: 250m
-        memory: 256Mi
+        cpu: "500m"
+        memory: "0.5Gi"
       limits: 
-        cpu: 250m
-        memory: 256Mi
+        cpu: "500m"
+        memory: "0.5Gi" 
   serviceAccount:
     create: true
     name: "postgres-sa"
