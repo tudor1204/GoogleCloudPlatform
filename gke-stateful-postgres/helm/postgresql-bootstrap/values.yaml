@@ -93,7 +93,7 @@ gkeBackup: # Enable this for Standard GKE, ignore during Autopilot test
     components:
       - name: postgresql
         resourceKind: StatefulSet
-        resourceNames: ["postgresql-postgresql-ha-postgresql","postgresql-postgresql-ha-pgpool"]
+        resourceNames: ["postgresql-postgresql-ha-postgresql"]
         strategy:
           type: BackupAllRestoreAll
           backupAllRestoreAll: {}
