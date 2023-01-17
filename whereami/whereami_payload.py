@@ -44,13 +44,14 @@ class WhereamiPayload(object):
         self.payload = {}
         self.gce_metadata = {} # this will cache the results from calling GCE metadata
 
-        # grab info from GCE metadata
-        r = requests.get(METADATA_URL + '?recursive=true',
-                             headers=METADATA_HEADERS)
-        if r.ok:
-            logging.info("Successfully accessed GCE metadata endpoint.")
-            self.gce_metadata = r.json()
-        else:
+        try:
+            # grab info from GCE metadata
+            r = requests.get(METADATA_URL + '?recursive=true',
+                                headers=METADATA_HEADERS)
+            if r.ok:
+                logging.info("Successfully accessed GCE metadata endpoint.")
+                self.gce_metadata = r.json()
+        except:
             logging.warning("Unable to access GCE metadata endpoint.")
 
 
