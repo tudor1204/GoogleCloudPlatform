@@ -48,6 +48,8 @@ class WhereamiPayload(object):
         self.gce_metadata = {} # this will cache the results from calling GCE metadata
 
         # configure retries for GCE metadata GET
+        # we're doing this because, on GKE, metadata endpoint can take a few seconds to be available
+        # see https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#limitations
         session = requests.Session()
         adapter = HTTPAdapter(max_retries=Retry(total=3, backoff_factor=1, allowed_methods=['GET'])) #, status_forcelist=[429, 500, 502, 503, 504]))
         session.mount("http://", adapter)
