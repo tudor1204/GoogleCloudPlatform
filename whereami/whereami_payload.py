@@ -6,6 +6,9 @@ import emoji
 import logging
 from logging.config import dictConfig
 import requests
+from requests.adapters import HTTPAdapter
+import urllib3
+from urllib3 import Retry
 # gRPC stuff
 import grpc
 from six import b
@@ -42,6 +45,26 @@ class WhereamiPayload(object):
     def __init__(self):
 
         self.payload = {}
+        self.gce_metadata = {} # this will cache the results from calling GCE metadata
+
+        # configure retries for GCE metadata GET
+        # we're doing this because, on GKE, metadata endpoint can take a few seconds to be available
+        # see https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#limitations
+        session = requests.Session()
+        adapter = HTTPAdapter(max_retries=Retry(total=3, backoff_factor=1, allowed_methods=['GET'])) #, status_forcelist=[429, 500, 502, 503, 504]))
+        session.mount("http://", adapter)
+        session.mount("https://", adapter)
+
+        try:
+            # grab info from GCE metadata
+            r = session.get(METADATA_URL + '?recursive=true',
+                                headers=METADATA_HEADERS)
+            if r.ok:
+                logging.info("Successfully accessed GCE metadata endpoint.")
+                self.gce_metadata = r.json()
+        except:
+            logging.warning("Unable to access GCE metadata endpoint.")
+
 
     def build_payload(self, request_headers):
 
@@ -107,30 +130,30 @@ class WhereamiPayload(object):
 
             return backend_result
 
-        # grab info from GCE metadata
-        try:
-            r = requests.get(METADATA_URL + '?recursive=true',
-                             headers=METADATA_HEADERS)
+        # grab info from cached GCE metadata
+        if len(self.gce_metadata):
+            logging.info("Found cached GCE metadata.")
+
             # get project / zone info
-            self.payload['project_id'] = r.json()['project']['projectId']
-            self.payload['zone'] = r.json()['instance']['zone'].split('/')[-1]
+            self.payload['project_id'] = self.gce_metadata['project']['projectId']
+            self.payload['zone'] = self.gce_metadata['instance']['zone'].split('/')[-1]
 
             # if we're running in GKE, we can also get cluster name
             try:
-                self.payload['cluster_name'] = r.json()['instance']['attributes']['cluster-name']
+                self.payload['cluster_name'] = self.gce_metadata['instance']['attributes']['cluster-name']
             except:
                 logging.warning("Unable to capture GKE cluster name.")
             # if we're running on Google, grab the instance ID and default Google service account
             try:
-                self.payload['gce_instance_id'] = str(r.json()['instance']['id']) # casting to str as value can be alphanumeric on Cloud Run
+                self.payload['gce_instance_id'] = str(self.gce_metadata['instance']['id']) # casting to str as value can be alphanumeric on Cloud Run
             except:
                 logging.warning("Unable to capture GCE instance ID.")
             try:
-                self.payload['gce_service_account'] = r.json()['instance']['serviceAccounts']['default']['email']
+                self.payload['gce_service_account'] = self.gce_metadata['instance']['serviceAccounts']['default']['email']
             except:
                 logging.warning("Unable to capture GCE service account.")
-        except:
-            logging.warning("Unable to access GCE metadata endpoint.")
+        else:
+            logging.warning("GCE metadata unavailable.")
 
         # get node name via downward API
         if os.getenv('NODE_NAME'):
@@ -172,7 +195,7 @@ class WhereamiPayload(object):
         if os.getenv('METADATA'):
             self.payload['metadata'] = os.getenv('METADATA')
         else:
-            logging.warning("Unable to capture metadata.")
+            logging.warning("Unable to capture metadata environment variable.")
 
         # should we call a backend service?
         if os.getenv('BACKEND_ENABLED') == 'True':
