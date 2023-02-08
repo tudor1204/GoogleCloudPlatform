@@ -2,7 +2,7 @@ module hello-app
 
 go 1.19
 
-require github.com/go-redis/redis/v8 v8.11.5
+require github.com/go-redis/redis/v9 v9.0.2
 
 require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
