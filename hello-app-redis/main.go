@@ -22,7 +22,7 @@ import (
 	"net/http"
 	"os"
 	"sync"
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 )
 
 // Start of resource pool code.
