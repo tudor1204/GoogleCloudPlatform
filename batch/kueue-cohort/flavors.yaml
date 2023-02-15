@@ -13,6 +13,37 @@
 # limitations under the License.
 
 # [START gke_batch_kueue_cohort_flavors]
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: default # This ResourceFlavor will be used for the memory and CPU resource
+---
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: on-demand # This ResourceFlavor will be used for the CPU resource
+  labels:
+    spot: "false"
+---
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: spot # This ResourceFlavor will be used as added resource for the CPU resource
+spec:
+  nodeLabels:
+    instance-type: spot
+  nodeTaints:
+    - effect: NoSchedule
+      key: spot
+      value: "true"
+# [END gke_batch_kueue_cohort_flavors]
+
+
+
+
+
+# ORIGINAL BELOW - KEPT FOR DOUBLE-CHECKING SYNTAX - TO BE DELETED BEFORE MERGE
+
 apiVersion: kueue.x-k8s.io/v1alpha2
 kind: ResourceFlavor
 metadata:
@@ -31,4 +62,3 @@ metadata:
   name: spot # This ResourceFlavor will be used as added resource for the CPU resource
   labels:
     spot: "true"
-# [END gke_batch_kueue_cohort_flavors]

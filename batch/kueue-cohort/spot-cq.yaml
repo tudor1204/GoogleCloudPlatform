@@ -13,6 +13,32 @@
 # limitations under the License.
 
 # [START gke_batch_kueue_cohort_spot_cq]
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ClusterQueue
+metadata:
+  name: spot-cq
+spec:
+  cohort: all
+  namespaceSelector: {}
+  resourceGroups:
+  - resources: ["cpu", "memory"]
+    flavors:
+    - name: spot
+      resources:
+      - name: "cpu"
+        nominalQuota: 40
+    - name: default
+      resources:
+      - name: "memory"
+        nominalQuota: 144Gi
+# [END gke_batch_kueue_cohort_spot_cq]
+
+
+
+
+
+# ORIGINAL BELOW - KEPT FOR DOUBLE-CHECKING SYNTAX - TO BE DELETED BEFORE MERGE
+
 apiVersion: kueue.x-k8s.io/v1alpha2
 kind: ClusterQueue
 metadata:
@@ -31,4 +57,3 @@ spec:
     - name: default
       quota:
         min: 144Gi
-# [END gke_batch_kueue_cohort_spot_cq]
