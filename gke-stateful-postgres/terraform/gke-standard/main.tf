@@ -53,6 +53,7 @@ module "gke-db1" {
   enable_private_nodes     = true
   master_ipv4_cidr_block   = "172.16.0.0/28"
   network_policy           = true
+  grant_registry_access = true  
   cluster_autoscaling = {
     "autoscaling_profile": "OPTIMIZE_UTILIZATION",
     "enabled" : true,
