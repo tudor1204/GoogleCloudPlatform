@@ -23,7 +23,7 @@ spec:
   resourceGroups:
   - resources: ["cpu", "memory"]
     flavors:
-    - name: on-demand
+    - name: standard
       resources:
       - name: "cpu"
         nominalQuota: 10
@@ -31,7 +31,7 @@ spec:
       - name: "memory"
         nominalQuota: 10Gi
         borrowingLimit: 15Gi
-    - name: spot # The spot resource is not used for now
+    - name: spot # This ClusterQueue doesn't have nominalQuota for spot, but it can borrow from others
       resources:
       - name: "cpu"
         nominalQuota: 0
