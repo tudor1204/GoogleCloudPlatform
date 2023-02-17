@@ -17,7 +17,8 @@ apiVersion: kueue.x-k8s.io/v1beta1
 kind: ResourceFlavor
 metadata:
   name: on-demand # This ResourceFlavor will be used for the CPU resource
-  labels:
+spec:
+  nodeLabels:
     cloud.google.com/gke-provisioning: standard
 ---
 apiVersion: kueue.x-k8s.io/v1beta1
