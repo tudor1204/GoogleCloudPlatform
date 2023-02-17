@@ -27,8 +27,6 @@ spec:
       resources:
       - name: "cpu"
         nominalQuota: 40
-    - name: default
-      resources:
       - name: "memory"
         nominalQuota: 144Gi
 # [END gke_batch_kueue_cohort_spot_cq]
