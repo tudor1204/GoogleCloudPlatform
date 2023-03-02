@@ -23,14 +23,12 @@ gcloud auth configure-docker $REGION-docker.pkg.dev
 
 # build image 
 #gcloud builds submit metrics-exporter --pack image=gcr.io/$PROJECT_ID/metric-exporter-image
-#gcloud builds submit metrics-exporter --config=metrics-exporter/cloudbuild.yaml  --substitutions=_REGION=$REGION
 gcloud builds submit metrics-exporter --config=metrics-exporter/cloudbuild.yaml  --substitutions=_REGION=$REGION
 
 
 echo "Deploy the Cloud Run Job.."
 gcloud beta run jobs deploy metric-exporter \
-    --image=$REGION-docker.pkg.dev/$PROJECT_ID/main/metric-exporter \    
-    --image=gcr.io/$PROJECT_ID/metric-exporter-image \
+    --image=$REGION-docker.pkg.dev/$PROJECT_ID/main/metric-exporter \
     --set-env-vars=PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python \
     --set-env-vars=PROJECT_ID=$PROJECT_ID \
     --execute-now \

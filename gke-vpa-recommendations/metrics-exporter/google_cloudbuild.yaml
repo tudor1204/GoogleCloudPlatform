@@ -1,0 +1,12 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/google-samples/vpa-metrics-exporter:1.0'
+      - '-t'
+      - 'us-docker.pkg.dev/google-samples/containers/vpa-metrics-exporter:1.0'
+      - '.'
+    #dir: 'metrics-exporter'
+images:
+  - 'us-docker.pkg.dev/google-samples/containers/vpa-metrics-exporter:1.0'
