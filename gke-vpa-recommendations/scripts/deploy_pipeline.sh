@@ -23,7 +23,9 @@ gcloud auth configure-docker $REGION-docker.pkg.dev
 
 # build image 
 #gcloud builds submit metrics-exporter --pack image=gcr.io/$PROJECT_ID/metric-exporter-image
+#gcloud builds submit metrics-exporter --config=metrics-exporter/cloudbuild.yaml  --substitutions=_REGION=$REGION
 gcloud builds submit metrics-exporter --config=metrics-exporter/cloudbuild.yaml  --substitutions=_REGION=$REGION
+
 
 echo "Deploy the Cloud Run Job.."
 gcloud beta run jobs deploy metric-exporter \
@@ -41,11 +43,11 @@ echo "Enable the Cloud Scheduler api.."
 gcloud services enable cloudscheduler.googleapis.com
 
 echo "Deploy the Cloud Scheduler job with a schedule to trigger the Cloud Function once a day.."
-gcloud scheduler jobs create pubsub get_metric_mql \
---schedule "0 23 * * *" \
---topic metric_export \
---location ${REGION} \
---message-body "Exporting metric..."
+#gcloud scheduler jobs create pubsub get_metric_mql \
+#--schedule "0 23 * * *" \
+#--topic metric_export \
+#--location ${REGION} \
+#--message-body "Exporting metric..."
 
 gcloud scheduler jobs create http recomendation_job \
   --location $REGION \
