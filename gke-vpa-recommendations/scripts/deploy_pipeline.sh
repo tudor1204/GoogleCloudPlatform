@@ -47,7 +47,7 @@ echo "Deploy the Cloud Scheduler job with a schedule to trigger the Cloud Functi
 #--location ${REGION} \
 #--message-body "Exporting metric..."
 
-gcloud scheduler jobs create http recomendation_job \
+gcloud scheduler jobs create http metric-exporter \
   --location $REGION \
   --schedule="0 23 * * *" \
   --uri="https://$REGION-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/$PROJECT_ID/jobs/metric-exporter:run" \
@@ -55,6 +55,6 @@ gcloud scheduler jobs create http recomendation_job \
   --oauth-service-account-email $(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")-compute@developer.gserviceaccount.com
 
 
-gcloud scheduler jobs run get_metric_mql --location ${REGION}
+gcloud scheduler jobs run metric-exporter --location ${REGION}
 
 echo "Deployment complete"
