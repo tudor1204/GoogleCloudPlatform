@@ -1,7 +1,7 @@
 
 echo "Configuring region and zone"
-gcloud config set compute/region us-central1
-gcloud config set compute/zone us-central1-f
+gcloud config set compute/region $REGION
+gcloud config set compute/zone $ZONE
 
 echo "Create a new IAM service account"
 gcloud iam service-accounts create svc-metric-exporter \
@@ -9,7 +9,7 @@ gcloud iam service-accounts create svc-metric-exporter \
 
 echo "Creating a gke cluster"
 gcloud container clusters create online-boutique \
-    --project=${PROJECT_ID} --zone=us-central1-f \
+    --project=${PROJECT_ID} --zone=${ZONE} \
     --enable-shielded-nodes \
     --shielded-secure-boot \
     --shielded-integrity-monitoring \
@@ -53,8 +53,6 @@ gcloud iam service-accounts add-iam-policy-binding svc-metric-exporter@${PROJECT
 
 echo "deploy the onlineshop"
 kubectl apply -f k8s/online-shop.yaml
-
-kubectl create ns custom-metrics
 
 
 echo "SETUP COMPLETE"
