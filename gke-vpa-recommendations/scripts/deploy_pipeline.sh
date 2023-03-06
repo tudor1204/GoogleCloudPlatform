@@ -14,15 +14,7 @@ echo "Creating the Pub/Sub topic..."
 gcloud pubsub topics create metric_export
 
 
-#1. Run the following command to create a new Docker repository 
-gcloud artifacts repositories create main --repository-format=docker \
---location=$REGION --description="Metrics exporter repository"
-
-#2. Configure access to the repository
-gcloud auth configure-docker $REGION-docker.pkg.dev
-
-# build image 
-#gcloud builds submit metrics-exporter --pack image=gcr.io/$PROJECT_ID/metric-exporter-image
+echo "Build image and store the image in Artifact registry..."
 gcloud builds submit metrics-exporter --config=metrics-exporter/cloudbuild.yaml  --substitutions=_REGION=$REGION
 
 
@@ -32,6 +24,7 @@ gcloud beta run jobs deploy metric-exporter \
     --set-env-vars=PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python \
     --set-env-vars=PROJECT_ID=$PROJECT_ID \
     --execute-now \
+    --memory=1Gi \
     --max-retries=1 \
     --parallelism=0 \
     --service-account=mql-export-metrics@$PROJECT_ID.iam.gserviceaccount.com \
@@ -40,12 +33,6 @@ gcloud beta run jobs deploy metric-exporter \
 echo "Enable the Cloud Scheduler api.."
 gcloud services enable cloudscheduler.googleapis.com
 
-echo "Deploy the Cloud Scheduler job with a schedule to trigger the Cloud Function once a day.."
-#gcloud scheduler jobs create pubsub get_metric_mql \
-#--schedule "0 23 * * *" \
-#--topic metric_export \
-#--location ${REGION} \
-#--message-body "Exporting metric..."
 
 gcloud scheduler jobs create http metric-exporter \
   --location $REGION \
@@ -55,6 +42,6 @@ gcloud scheduler jobs create http metric-exporter \
   --oauth-service-account-email $(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")-compute@developer.gserviceaccount.com
 
 
-gcloud scheduler jobs run metric-exporter --location ${REGION}
+#gcloud scheduler jobs run metric-exporter --location ${REGION}
 
 echo "Deployment complete"

@@ -146,11 +146,11 @@ spec:
             value: "1"
           resources:
             requests:
-              cpu: 100m
-              memory: 64Mi
+              cpu: 10m
+              memory: 20Mi
             limits:
-              cpu: 200m
-              memory: 128Mi
+              cpu: 25m
+              memory: 40Mi
 ---
 apiVersion: v1
 kind: Service
@@ -218,11 +218,11 @@ spec:
           value: "1"
         resources:
           requests:
-            cpu: 100m
-            memory: 220Mi
+            cpu: 10m
+            memory: 22Mi
           limits:
-            cpu: 200m
-            memory: 450Mi
+            cpu: 20m
+            memory: 45Mi
 ---
 apiVersion: v1
 kind: Service
