@@ -7,5 +7,3 @@
 # Misc.
 .DS_Store
 .idea/
-/gke-stateful-kafka/
-gke-stateful-kafka/
