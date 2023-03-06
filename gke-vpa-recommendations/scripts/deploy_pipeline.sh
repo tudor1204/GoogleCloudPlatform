@@ -9,6 +9,7 @@ gcloud projects add-iam-policy-binding  $PROJECT_ID --member="serviceAccount:mql
 gcloud projects add-iam-policy-binding  $PROJECT_ID --member="serviceAccount:mql-export-metrics@$PROJECT_ID.iam.gserviceaccount.com" --role="roles/bigquery.dataEditor"
 gcloud projects add-iam-policy-binding  $PROJECT_ID --member="serviceAccount:mql-export-metrics@$PROJECT_ID.iam.gserviceaccount.com" --role="roles/bigquery.dataOwner"
 gcloud projects add-iam-policy-binding  $PROJECT_ID --member="serviceAccount:mql-export-metrics@$PROJECT_ID.iam.gserviceaccount.com" --role="roles/bigquery.jobUser"
+gcloud projects add-iam-policy-binding  $PROJECT_ID --member="serviceAccount:mql-export-metrics@$PROJECT_ID.iam.gserviceaccount.com" --role="roles/run.invoker"
 
 echo "Creating the Pub/Sub topic..."
 gcloud pubsub topics create metric_export
@@ -39,9 +40,6 @@ gcloud scheduler jobs create http metric-exporter \
   --schedule="0 23 * * *" \
   --uri="https://$REGION-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/$PROJECT_ID/jobs/metric-exporter:run" \
   --http-method POST \
-  --oauth-service-account-email $(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")-compute@developer.gserviceaccount.com
-
-
-#gcloud scheduler jobs run metric-exporter --location ${REGION}
+  --oauth-service-account-email "mql-export-metrics@$PROJECT_ID.iam.gserviceaccount.com"
 
 echo "Deployment complete"

@@ -52,8 +52,7 @@ gcloud iam service-accounts add-iam-policy-binding svc-metric-exporter@${PROJECT
 
 
 echo "deploy the onlineshop"
-#kubectl apply -f k8s/online-shop.yaml
-kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/microservices-demo/master/release/kubernetes-manifests.yaml
+kubectl apply -f k8s/online-shop.yaml
 
 echo "To simulate a more realistic environment, create an HPA for Online Boutique deployments"
 kubectl get deployments --field-selector='metadata.name==adservice' -o go-template-file=scripts/k8s/templates/cpu-hpa.gtpl | kubectl apply -f -
