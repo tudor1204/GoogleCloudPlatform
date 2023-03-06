@@ -33,7 +33,6 @@ import os
 
 # Fetch GKE metrics - cpu requested cores, cpu limit cores, memory requested bytes, memory limit bytes, count and all workloads with hpa
 def get_gke_metrics(metric_name, metric, window):
-    # [START get_gke_metrics]
     output = []
     client = monitoring_v3.MetricServiceClient()
     project_name = f"projects/{config.PROJECT_ID}"
@@ -100,9 +99,6 @@ def get_gke_metrics(metric_name, metric, window):
 
     return output
     
-
-    # [END gke_get_metrics]
-
 # Build VPA recommendations, memory: get max value over 30 days, cpu: get max and 95th percentile
 def get_vpa_recommenation_metrics(metric_name, metric, window):
 
@@ -161,8 +157,7 @@ def get_vpa_recommenation_metrics(metric_name, metric, window):
             row.points = (max(points_array))
             output.append(row.SerializeToString())
         
-    return output
-    # [END get_vpa_recommenation_metrics]   
+    return output 
  
 
 # Write rows to BigQuery    
