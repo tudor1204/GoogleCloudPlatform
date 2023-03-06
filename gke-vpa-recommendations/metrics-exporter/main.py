@@ -102,7 +102,6 @@ def get_gke_metrics(metric_name, metric, window):
 # Build VPA recommendations, memory: get max value over 30 days, cpu: get max and 95th percentile
 def get_vpa_recommenation_metrics(metric_name, metric, window):
 
-    # [START get_vpa_recommenation_metrics]
     from google.cloud import monitoring_v3
     client = monitoring_v3.MetricServiceClient()
     project_name = f"projects/{config.PROJECT_ID}"
