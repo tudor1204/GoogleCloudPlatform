@@ -46,8 +46,7 @@ module "gke-db1-autopilot" {
   enable_private_endpoint         = false
   enable_private_nodes            = true
   master_ipv4_cidr_block          = "172.16.0.0/28"
-  create_service_account          = true
-  service_account                 = "iam_sa@${var.project_id}.iam.gserviceaccount.com"
+  create_service_account          = false
 }
 # [END gke_autopilot_private_regional_primary_cluster]
 # [START gke_autopilot_private_regional_backup_cluster]
