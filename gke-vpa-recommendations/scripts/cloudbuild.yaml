@@ -1,5 +1,5 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', '${_REGION}-docker.pkg.dev/${PROJECT_ID}/main/metric-exporter', '.' ]
+    args: [ 'build', '-t', '${_REGION}-docker.pkg.dev/${PROJECT_ID}/main/hpa-metric-exporter', '.' ]
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/main/metric-exporter:latest'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/main/hpa-metric-exporter:latest'

@@ -69,7 +69,7 @@ spec:
           serviceAccount: metrics-exporter-sa
           containers:
           - name: metrics-exporter
-            image: gcr.io/PROJECT_ID/metrics-exporter
+            image: gcr.io/PROJECT_ID/hpa-metrics-exporter
           restartPolicy: OnFailure
       backoffLimit: 1
 
