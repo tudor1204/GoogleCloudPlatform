@@ -1,3 +1,4 @@
-# Monitoring your GKE clusters for cost-optimization using Cloud Monitoring
+# Right-size your GKE workloads at scale
 
-See step by step tutorial at [Monitoring your GKE clusters for cost-optimization using Cloud Monitoring](https://cloud.google.com/architecture/monitoring-gke-clusters-for-cost-optimization-using-cloud-monitoring)
+See step by step tutorial at [Right-size your GKE workloads at scale]
+(https://cloud.google.com/kubernetes-engine/docs/tutorials/right-size-workloads-at-scale)
