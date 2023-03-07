@@ -19,10 +19,6 @@ jobs:
         run: |
           cd gke-vpa-recommendations/metrics-exporter
           docker build --tag metric-exporter .
-  job:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
       - name: build hpa-metrics-exporter container
         run: |
           cd gke-vpa-recommendations/scripts
