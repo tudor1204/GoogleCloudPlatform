@@ -21,11 +21,11 @@ steps:
   args:
     - 'build'
     - '-t'
-    - 'us-docker.pkg.dev/google-samples/containers/gke/metric-exporter'
+    - 'us-docker.pkg.dev/google-samples/containers/gke/metrics-exporter'
     - '.'
-  dir: 'gke-vpa-recommendations/metric-exporter'
+  dir: 'gke-vpa-recommendations/metrics-exporter'
 
 # Push images.
 images:
-  - 'us-docker.pkg.dev/google-samples/containers/gke/metric-exporter'
+  - 'us-docker.pkg.dev/google-samples/containers/gke/metrics-exporter'
 
