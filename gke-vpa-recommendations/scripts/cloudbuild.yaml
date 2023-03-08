@@ -21,10 +21,10 @@ steps:
   args:
     - 'build'
     - '-t'
-    - 'us-docker.pkg.dev/google-samples/containers/gke/hpa-metric-exporter'
+    - 'us-docker.pkg.dev/google-samples/containers/gke/hpa-metrics-exporter'
     - '.'
   dir: 'gke-vpa-recommendations/scripts'
 
 # Push images.
 images:
-  - 'us-docker.pkg.dev/google-samples/containers/gke/hpa-metric-exporter'
+  - 'us-docker.pkg.dev/google-samples/containers/gke/hpa-metrics-exporter'
