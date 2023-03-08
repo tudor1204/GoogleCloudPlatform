@@ -222,8 +222,8 @@ resource "google_cloudbuild_trigger" "workload-metrics" {
 }
 
 resource "google_cloudbuild_trigger" "metrics-exporter" {
-    name = "kubernetes-engine-samples-metric-exporter"
-    filename = "gke-vpa-recommendations"
+    name = "kubernetes-engine-samples-metrics-exporter"
+    filename = "gke-vpa-recommendations/metrics-exporter/cloudbuild.yaml"
     included_files = ["gke-vpa-recommendations/metrics-exporter/**"]
     description = local.trigger_description
 
@@ -236,8 +236,8 @@ resource "google_cloudbuild_trigger" "metrics-exporter" {
     }
 }
 resource "google_cloudbuild_trigger" "hpa-metrics-exporter" {
-    name = "kubernetes-engine-samples-hpa-metric-exporter"
-    filename = "gke-vpa-recommendations"
+    name = "kubernetes-engine-samples-hpa-metrics-exporter"
+    filename = "gke-vpa-recommendations/scripts/cloudbuild.yaml"
     included_files = ["gke-vpa-recommendations/scripts/**"]
     description = local.trigger_description
 
