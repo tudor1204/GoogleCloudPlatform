@@ -37,3 +37,7 @@ All new code sample needs the following requirements:
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/security/wi-secrets/cloudbuild.yaml)]
 - A Terraform section for the above Cloud Build configs, if applicable.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/terraform/google-cloud-build-triggers.tf#L194-L207)]
+  - Note that in order for the Cloud Build configs to be applied to the
+    `google-samples` project, you need to run `terraform init && terraform apply`
+    while in that project (admin permissions required).
+  - The images will be of the form `us-docker.pkg.dev/google-samples/containers/gke/<image_name>:latest`
