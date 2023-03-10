@@ -13,11 +13,12 @@ fill out the appropriate CLA (individual, or corporate):
 
 Follow either of the two links above to access the appropriate CLA and
 instructions for how to sign and return it. Once we receive it, we'll be able to
-accept your pull requests.
+accept your pull requests. You can visit <https://cla.developers.google.com/> to
+confirm your current agreements or to sign a new one.
 
 ## Contributing a patch
 
-1. Submit an issue describing your proposed changes.
+1. [Submit an issue](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/issues/new) describing your proposed changes.
 1. The repo owner will respond to your issue promptly. Once accepted:
 1. Sign a Contributor License Agreement (see details above) if you haven't done so.
 1. Fork the repo, develop and test your code changes.
@@ -26,12 +27,26 @@ accept your pull requests.
 1. Ensure that your code has an appropriate set of unit tests which all pass.
 1. Submit a pull request.
 
+## Code reviews
+
+All submissions, including submissions by project members, require review. We
+use GitHub pull requests for this purpose. Consult
+[GitHub Help](https://help.github.com/articles/about-pull-requests/) for more
+information on using pull requests.
+
+## Community guidelines
+
+This project follows
+[Google's Open Source Community Guidelines](https://opensource.google/conduct/).
+
 ## Samples requirements
 
 All new code sample needs the following requirements:
 - A GitHub Action workflow that tests the sample code. At minimum, this should
   dry-run any container image or Terraform configs and pass without any errors.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/workflows/security-ci.yml)]
+  - Each container image should build successfully (e.g. `docker build...`)
+  - Each Terraform config should validate successfully (e.g. `terraform validate...`)
 - Cloud Build configs for all container images that pushes to the 
   `google-samples` artifact registry.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/security/wi-secrets/cloudbuild.yaml)]
