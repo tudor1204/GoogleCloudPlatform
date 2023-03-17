@@ -1,8 +1,5 @@
 # JAX 'Hello World' on GKE + A100-80GB
 
-
-> **🧪 Preview:** This repository contains assets in development. Should not be used in a production system.
-
 ## Goal
 
 This repository contains instructions to create a GKE cluster in Google Cloud 
