@@ -42,21 +42,19 @@ This project follows
 ## Samples requirements
 
 All new code sample needs the following requirements:
-- A README as concise as possible, with an external link pointing to the tutorial using
-  the sample, if applicable. There should be only one source of truth. (In other words, if an
-  external tutorial contains the instructions for this sample, those instructions should not
-  be duplicated in the repository.)
+- A short `README.md` file with an external link pointing to the tutorial using the sample, if 
+  applicable. Ideally, there should be only one source of truth for sample instructions.
 - A GitHub Action workflow that tests the sample code. At minimum, this should
   dry-run any container image or Terraform configs and pass without any errors.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/workflows/security-ci.yml)]
   - Each container image should build successfully (e.g. `docker build...`)
   - Each Terraform config should validate successfully (e.g. `terraform validate...`)
-- If applicable: Cloud Build configs for all container images that pushes to the 
-  `google-samples` artifact registry.
+- If the sample relies on canonical image artifacts, these can be hosted officially, which requires:
+  - Cloud Build configs for all container images that pushes to the `google-samples` artifact registry.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/security/wi-secrets/cloudbuild.yaml)]
-- If applicable: A Terraform section for the above Cloud Build configs.
+  - A Terraform section for the above Cloud Build configs.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/terraform/google-cloud-build-triggers.tf#L194-L207)]
-  - Note that in order for the Cloud Build configs to be applied to the
-    `google-samples` project, you need to run `terraform init && terraform apply`
-    while in that project (admin permissions required).
-  - The images will be of the form `us-docker.pkg.dev/google-samples/containers/gke/<image_name>:latest`
+    - Note that in order for the Cloud Build configs to be applied to the
+      `google-samples` project, you need to run `terraform init && terraform apply`
+      while in that project (admin permissions required).
+    - The images will be of the form `us-docker.pkg.dev/google-samples/containers/gke<image_name>:latest`
