@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Google LLC
+Copyright 2023 Google LLC
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -15,19 +15,17 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 
-	"contrib.go.opencensus.io/exporter/stackdriver"
-	trace "go.opencensus.io/trace"
-
-	"go.opencensus.io/plugin/ochttp"
-	"go.opencensus.io/plugin/ochttp/propagation/tracecontext"
-
-	"github.com/gorilla/mux"
+	cloudtrace "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 )
 
 var (
@@ -44,7 +42,7 @@ func callRemoteEndpoint() string {
 		log.Fatal("could not fetch remote endpoint")
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal("could not read response from Google")
 		log.Fatal(body)
@@ -57,42 +55,30 @@ func callRemoteEndpoint() string {
 
 // [START trace_mainhandler]
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	// get context from incoming request
-	ctx := r.Context()
-	// get span context from incoming request
-	HTTPFormat := &tracecontext.HTTPFormat{}
-	if spanContext, ok := HTTPFormat.SpanContextFromRequest(r); ok {
-		_, span := trace.StartSpanWithRemoteParent(ctx, "call remote endpoint", spanContext)
-		defer span.End()
-		returnCode := callRemoteEndpoint()
-		fmt.Fprintf(w, returnCode)
-	}
+	returnCode := callRemoteEndpoint()
+	fmt.Fprintf(w, returnCode)
 }
 
 // [END trace_mainhandler]
 // [START trace_main]
 func main() {
-	// set up Stackdriver exporter
-	exporter, err := stackdriver.NewExporter(stackdriver.Options{ProjectID: projectID, Location: location})
+	// set up trace context propagator
+	otel.SetTextMapPropagator(propagation.TraceContext{})
+
+	// set up Cloud Trace exporter
+	exporter, err := cloudtrace.New(cloudtrace.WithProjectID(projectID))
 	if err != nil {
 		log.Fatal(err)
 	}
-	trace.RegisterExporter(exporter)
-	trace.ApplyConfig(trace.Config{
-		DefaultSampler: trace.AlwaysSample(),
-	})
+	otel.SetTracerProvider(sdktrace.NewTracerProvider(
+		sdktrace.WithSampler(sdktrace.AlwaysSample()),
+		sdktrace.WithBatcher(exporter),
+	))
 
 	// handle incoming request
-	r := mux.NewRouter()
-	r.HandleFunc("/", mainHandler)
-	var handler http.Handler = r
-	// handler = &logHandler{log: log, next: handler}
+	http.Handle("/", otelhttp.WithRouteTag("/", http.HandlerFunc(mainHandler)))
 
-	handler = &ochttp.Handler{
-		Handler:     handler,
-		Propagation: &tracecontext.HTTPFormat{}}
-
-	log.Fatal(http.ListenAndServe(":8080", handler))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 // [END trace_main]
