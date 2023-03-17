@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Google LLC
+Copyright 2023 Google LLC
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -22,13 +22,11 @@ import (
 	"os"
 	"time"
 
-	"contrib.go.opencensus.io/exporter/stackdriver"
-	"go.opencensus.io/trace"
-
-	"go.opencensus.io/plugin/ochttp"
-	"go.opencensus.io/plugin/ochttp/propagation/tracecontext"
-
-	"github.com/gorilla/mux"
+	cloudtrace "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 )
 
 // [END trace_imports]
@@ -40,30 +38,10 @@ var (
 
 // [START trace_mainhandler]
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	// create root span
-	ctx, rootspan := trace.StartSpan(context.Background(), "incoming call")
-	defer rootspan.End()
-
-	// create child span for backend call
-	ctx, childspan := trace.StartSpan(ctx, "call to backend")
-	defer childspan.End()
-
-	// create request for backend call
-	req, err := http.NewRequest("GET", backendAddr, nil)
-	if err != nil {
-		log.Fatalf("%v", err)
-	}
-
-	childCtx, cancel := context.WithTimeout(ctx, 1000*time.Millisecond)
+	childCtx, cancel := context.WithTimeout(r.Context(), 1000*time.Millisecond)
 	defer cancel()
-	req = req.WithContext(childCtx)
 
-	// add span context to backend call and make request
-	format := &tracecontext.HTTPFormat{}
-	format.SpanContextToRequest(childspan.SpanContext(), req)
-	//format.SpanContextToRequest(rootspan.SpanContext(), req)
-	client := http.DefaultClient
-	res, err := client.Do(req)
+	res, err := otelhttp.Get(childCtx, backendAddr)
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
@@ -74,25 +52,23 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 // [END trace_mainhandler]
 // [START trace_mainfunction]
 func main() {
-	// set up Stackdriver exporter
-	exporter, err := stackdriver.NewExporter(stackdriver.Options{ProjectID: projectID, Location: location})
+	// set up trace context propagator
+	otel.SetTextMapPropagator(propagation.TraceContext{})
+
+	// set up Cloud Trace exporter
+	exporter, err := cloudtrace.New(cloudtrace.WithProjectID(projectID))
 	if err != nil {
 		log.Fatal(err)
 	}
-	trace.RegisterExporter(exporter)
-	trace.ApplyConfig(trace.Config{
-		DefaultSampler: trace.AlwaysSample(),
-	})
+	otel.SetTracerProvider(sdktrace.NewTracerProvider(
+		sdktrace.WithSampler(sdktrace.AlwaysSample()),
+		sdktrace.WithBatcher(exporter),
+	))
 
-	// handle root request
-	r := mux.NewRouter()
-	r.HandleFunc("/", mainHandler)
-	var handler http.Handler = r
-	handler = &ochttp.Handler{
-		Handler:     handler,
-		Propagation: &tracecontext.HTTPFormat{}}
+	// handle incoming request
+	http.Handle("/", otelhttp.WithRouteTag("/", http.HandlerFunc(mainHandler)))
 
-	log.Fatal(http.ListenAndServe(":8081", handler))
+	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
 // [END trace_mainfunction]
