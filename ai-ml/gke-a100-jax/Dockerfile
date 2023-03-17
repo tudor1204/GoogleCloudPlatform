@@ -1,5 +1,4 @@
-ARG FROM_IMAGE_NAME=nvcr.io/nvidia/tensorflow:22.11-tf2-py3
-FROM ${FROM_IMAGE_NAME}
+FROM nvcr.io/nvidia/tensorflow:22.11-tf2-py3
 
 # Install the latest jax
 RUN pip install --upgrade pip
