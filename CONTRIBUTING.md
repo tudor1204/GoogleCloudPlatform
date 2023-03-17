@@ -49,6 +49,7 @@ All new code sample needs the following requirements:
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/workflows/security-ci.yml)]
   - Each container image should build successfully (e.g. `docker build...`)
   - Each Terraform config should validate successfully (e.g. `terraform validate...`)
+  - If there are any other simple smoke tests that can be performed, they should also be added here.
 - If the sample relies on canonical image artifacts, these can be hosted officially, which requires:
   - Cloud Build configs for all container images that pushes to the `google-samples` artifact registry.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/security/wi-secrets/cloudbuild.yaml)]
