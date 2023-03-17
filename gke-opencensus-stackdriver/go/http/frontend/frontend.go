@@ -33,7 +33,6 @@ import (
 var (
 	projectID   = os.Getenv("PROJECT_ID")
 	backendAddr = os.Getenv("BACKEND")
-	location    = os.Getenv("LOCATION")
 )
 
 // [START trace_mainhandler]
