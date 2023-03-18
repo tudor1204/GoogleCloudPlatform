@@ -14,6 +14,7 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"log"
@@ -21,42 +22,43 @@ import (
 	"os"
 	"strconv"
 
-	cloudtrace "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 )
 
-var (
-	projectID = os.Getenv("PROJECT_ID")
-	destURL   = os.Getenv("DESTINATION_URL")
-	location  = os.Getenv("LOCATION")
-)
+var destURL   = os.Getenv("DESTINATION_URL")
 
 // [START trace_callremote]
 // make an outbound call
-func callRemoteEndpoint() string {
-	resp, err := http.Get(destURL)
+func callRemoteEndpoint(ctx context.Context) (string, error) {
+	resp, err := otelhttp.Get(ctx, destURL)
 	if err != nil {
-		log.Fatal("could not fetch remote endpoint")
+		return "", fmt.Errorf("could not fetch remote endpoint: %w", err)
 	}
 	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
+
+	_, err = io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal("could not read response from Google")
-		log.Fatal(body)
+		return "", fmt.Errorf("could not read response from Google: %w", err)
 	}
 
-	return strconv.Itoa(resp.StatusCode)
+	return strconv.Itoa(resp.StatusCode), nil
 }
 
 // [END trace_callremote]
 
 // [START trace_mainhandler]
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	returnCode := callRemoteEndpoint()
-	fmt.Fprintf(w, returnCode)
+	returnCode, err := callRemoteEndpoint(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Fprintln(w, returnCode)
 }
 
 // [END trace_mainhandler]
@@ -65,10 +67,10 @@ func main() {
 	// set up trace context propagator
 	otel.SetTextMapPropagator(propagation.TraceContext{})
 
-	// set up Cloud Trace exporter
-	exporter, err := cloudtrace.New(cloudtrace.WithProjectID(projectID))
+	// set up OTLP exporter
+	exporter, err := otlptracegrpc.New(context.Background(), otlptracegrpc.WithInsecure())
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Unable to construct trace exporter: %v", err)
 	}
 	otel.SetTracerProvider(sdktrace.NewTracerProvider(
 		sdktrace.WithSampler(sdktrace.AlwaysSample()),
@@ -76,7 +78,7 @@ func main() {
 	))
 
 	// handle incoming request
-	http.Handle("/", otelhttp.WithRouteTag("/", http.HandlerFunc(mainHandler)))
+	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(mainHandler), "root"))
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
