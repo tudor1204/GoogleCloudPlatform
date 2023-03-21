@@ -1,0 +1,16 @@
+apiVersion: skaffold/v4beta3
+kind: Config
+metadata:
+  name: distributed-tracing
+build:
+  googleCloudBuild: {}
+  artifacts:
+    - image: backend
+      ko:
+        main: ./backend
+        dependencies:
+          paths: ["backend/**", "common/**", "go.*"]
+manifests:
+  rawYaml:
+    - manifests/collector-config.yaml
+    - manifests/backend.yaml

@@ -1,0 +1,77 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http:#www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  clusterIP: None
+  selector:
+    app: backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      serviceAccountName: trace-demo
+      containers:
+      - name: backend
+        image: backend
+        env:
+          - name: OTEL_SERVICE_NAME
+            value: backend
+          - name: OTEL_PROPAGATORS
+            value: tracecontext,baggage
+          - name: OTEL_TRACES_SAMPLER
+            value: always
+          - name: OTEL_RESOURCE_ATTRIBUTES
+            value: k8s.container.name=backend
+      - name: collector
+        image: otel/opentelemetry-collector-contrib:0.73.0
+        volumeMounts:
+          - mountPath: /etc/otelcol-contrib
+            name: collector-config
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NAMESPACE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: OTEL_RESOURCE_ATTRIBUTES
+            value: k8s.pod.name=$(POD_NAME),k8s.namespace.name=$(NAMESPACE_NAME)
+      volumes:
+        - name: collector-config
+          configMap:
+            name: collector-config
