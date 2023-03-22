@@ -42,7 +42,7 @@ module "gke_kafka_central" {
   source                          = "../modules/beta-autopilot-private-cluster"
   project_id                      = var.project_id
   name                            = "gke-kafka-us-central1"
-  kubernetes_version              = "1.25" # Will be ignored if use "REGULAR" release_channel
+  kubernetes_version              = "1.25"
   region                          = "us-central1"
   regional                        = true
   zones                           = ["us-central1-a", "us-central1-b", "us-central1-c"]
@@ -51,7 +51,7 @@ module "gke_kafka_central" {
   ip_range_pods                   = "ip-range-pods-us-central1"
   ip_range_services               = "ip-range-svc-us-central1"
   horizontal_pod_autoscaling      = true
-  release_channel                 = "RAPID" # Default version is 1.22 in REGULAR. GMP on Autopilot requires V1.25 via var.kubernetes_version
+  release_channel                 = "REGULAR"
   enable_vertical_pod_autoscaling = true
   enable_private_endpoint         = false
   enable_private_nodes            = true
@@ -65,7 +65,7 @@ module "gke_kafka_west" {
   source                          = "../modules/beta-autopilot-private-cluster"
   project_id                      = var.project_id
   name                            = "gke-kafka-us-west1"
-  kubernetes_version              = "1.25" # Will be ignored if use "REGULAR" release_channel
+  kubernetes_version              = "1.25"
   region                          = "us-west1"
   regional                        = true
   zones                           = ["us-west1-a", "us-west1-b", "us-west1-c"]
@@ -74,7 +74,7 @@ module "gke_kafka_west" {
   ip_range_pods                   = "ip-range-pods-us-west1"
   ip_range_services               = "ip-range-svc-us-west1"
   horizontal_pod_autoscaling      = true
-  release_channel                 = "RAPID" # Default version is 1.22 in REGULAR. GMP on Autopilot requires V1.25 via var.kubernetes_version
+  release_channel                 = "REGULAR"
   enable_vertical_pod_autoscaling = true
   enable_private_endpoint         = false
   enable_private_nodes            = true
