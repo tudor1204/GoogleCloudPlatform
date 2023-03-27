@@ -33,5 +33,11 @@
   },
   "nuget":{
     "addLabels": ["lang: dotnet"]
-  }
+  },
+  "packageRules": [
+    {
+      "matchPackageNames": ["org.springframework.boot:spring-boot-starter-parent"],
+      "allowedVersions": "<3.0.0"
+    }
+  ]
 }
