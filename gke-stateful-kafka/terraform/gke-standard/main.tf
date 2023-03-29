@@ -62,8 +62,8 @@ module "kafka_us_central1" {
     "gpu_resources" : [],
     "min_cpu_cores" : 36,
     "min_memory_gb" : 144,
-    "max_cpu_cores" : 48,
-    "max_memory_gb" : 192,
+    "max_cpu_cores" : 70,
+    "max_memory_gb" : 250,
   }
   monitoring_enable_managed_prometheus = true
   gke_backup_agent_config = true
@@ -154,10 +154,10 @@ module "gke-us-west1" {
     "autoscaling_profile": "OPTIMIZE_UTILIZATION",
     "enabled" : true,
     "gpu_resources" : [],
-    "min_cpu_cores" : 10,
+    "min_cpu_cores" : 36,
     "min_memory_gb" : 144,
-    "max_cpu_cores" : 48,
-    "max_memory_gb" : 192,
+    "max_cpu_cores" : 70,
+    "max_memory_gb" : 250,
   }
     monitoring_enable_managed_prometheus = true
   gke_backup_agent_config = true
