@@ -1,4 +1,4 @@
-# Copyright 2022 Google LLC
+# Copyright 2023 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # [START gke_batch_kueue_intro_lq]
-apiVersion: kueue.x-k8s.io/v1alpha2
+apiVersion: kueue.x-k8s.io/v1beta1
 kind: LocalQueue
 metadata:
   namespace: team-a # LocalQueue under team-a namespace
@@ -21,7 +21,7 @@ metadata:
 spec:
   clusterQueue: cluster-queue # Point to the ClusterQueue
 ---
-apiVersion: kueue.x-k8s.io/v1alpha2
+apiVersion: kueue.x-k8s.io/v1beta1
 kind: LocalQueue
 metadata:
   namespace: team-b # LocalQueue under team-b namespace
@@ -29,3 +29,5 @@ metadata:
 spec:
   clusterQueue: cluster-queue # Point to the ClusterQueue
 # [END gke_batch_kueue_intro_lq]
+
+
