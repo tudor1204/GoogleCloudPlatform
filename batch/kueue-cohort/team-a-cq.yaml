@@ -21,7 +21,7 @@ spec:
   cohort: all # team-a-cq and team-b-cq share the same cohort
   namespaceSelector: {}
   resourceGroups:
-  - resources: ["cpu", "memory"]
+  - coveredResources: ["cpu", "memory"]
     flavors:
     - name: standard
       resources:
