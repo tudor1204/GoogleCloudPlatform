@@ -16,5 +16,9 @@
 while :
 do
   kubectl create -f ${1}
+  kubectl create -f ${1}
+  kubectl create -f ${1}
+  kubectl create -f ${1}
+  kubectl create -f ${1}
   sleep ${2:-10}
 done

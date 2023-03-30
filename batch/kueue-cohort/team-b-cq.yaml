@@ -23,7 +23,7 @@ spec:
   resourceGroups:
   - coveredResources: ["cpu", "memory"]
     flavors:
-    - name: standard
+    - name: on-demand
       resources:
       - name: "cpu"
         nominalQuota: 10

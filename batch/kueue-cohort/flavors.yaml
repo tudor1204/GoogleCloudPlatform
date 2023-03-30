@@ -16,7 +16,7 @@
 apiVersion: kueue.x-k8s.io/v1beta1
 kind: ResourceFlavor
 metadata:
-  name: standard # This ResourceFlavor will be used for the CPU resource
+  name: on-demand # This ResourceFlavor will be used for the CPU resource
 spec:
   nodeLabels:
     spot: "false" # This label was applied when the cluster was created
