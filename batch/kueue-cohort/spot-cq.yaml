@@ -19,7 +19,6 @@ metadata:
   name: spot-cq
 spec:
   cohort: all
-  namespaceSelector: {}
   resourceGroups:
   - coveredResources: ["cpu", "memory"]
     flavors:

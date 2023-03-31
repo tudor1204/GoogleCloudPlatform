@@ -19,7 +19,7 @@ metadata:
   name: on-demand # This ResourceFlavor will be used for the CPU resource
 spec:
   nodeLabels:
-    spot: "false" # This label was applied when the cluster was created
+    cloud.google.com/gke-provisioning: standard # This label was applied automatically by GKE
 ---
 apiVersion: kueue.x-k8s.io/v1beta1
 kind: ResourceFlavor
@@ -27,5 +27,5 @@ metadata:
   name: spot # This ResourceFlavor will be used as added resource for the CPU resource
 spec:
   nodeLabels:  
-    spot: "true" # This label was applied when the nodepool was created
+    cloud.google.com/gke-provisioning: spot # This label was applied automatically by GKE
 # [END gke_batch_kueue_cohort_flavors]

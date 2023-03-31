@@ -19,7 +19,9 @@ metadata:
   name: team-b-cq
 spec:
   cohort: all # team-a-cq and team-b-cq share the same cohort
-  namespaceSelector: {}
+  namespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: team-b #Only team-b can submit jobs direclty to this queue, but will be able to share it through the cohort
   resourceGroups:
   - coveredResources: ["cpu", "memory"]
     flavors:
