@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_batch_kueue_cohort_team_a_cq]
+# [START gke_batch_kueue_cohort_team_b_cq]
 apiVersion: kueue.x-k8s.io/v1beta1
 kind: ClusterQueue
 metadata:
-  name: team-a-cq
+  name: cq-team-b
 spec:
-  cohort: all # team-a-cq and team-b-cq share the same cohort
+  cohort: all-teams # team-a-cq and team-b-cq share the same cohort
   namespaceSelector:
     matchLabels:
-      kubernetes.io/metadata.name: team-a #Only team-a can submit jobs direclty to this queue, but will be able to share it through the cohort
+      kubernetes.io/metadata.name: team-b #Only team-b can submit jobs direclty to this queue, but will be able to share it through the cohort
   resourceGroups:
   - coveredResources: ["cpu", "memory"]
     flavors:
@@ -43,9 +43,9 @@ spec:
 apiVersion: kueue.x-k8s.io/v1beta1
 kind: LocalQueue
 metadata:
-  namespace: team-a # LocalQueue under team-a namespace
-  name: team-a-lq
+  namespace: team-b # LocalQueue under team-b namespace
+  name: lq-team-b
 spec:
-  clusterQueue: team-a-cq # Point to the ClusterQueue team-a-cq
-# [END gke_batch_kueue_cohort_team_a_cq]
+  clusterQueue: cq-team-b # Point to the ClusterQueue team-b-cq
+# [END gke_batch_kueue_cohort_team_b_cq]
 

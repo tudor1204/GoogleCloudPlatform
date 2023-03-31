@@ -18,7 +18,7 @@ kind: ClusterQueue
 metadata:
   name: spot-cq
 spec:
-  cohort: all
+  cohort: all-teams
   resourceGroups:
   - coveredResources: ["cpu", "memory"]
     flavors:
