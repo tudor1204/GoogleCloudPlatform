@@ -18,7 +18,7 @@ kind: ClusterQueue
 metadata:
   name: cq-team-a
 spec:
-  cohort: all-teams # team-a-cq and team-b-cq share the same cohort
+  cohort: all-teams # cq-team-a and cq-team-b share the same cohort
   namespaceSelector:
     matchLabels:
       kubernetes.io/metadata.name: team-a #Only team-a can submit jobs direclty to this queue, but will be able to share it through the cohort
