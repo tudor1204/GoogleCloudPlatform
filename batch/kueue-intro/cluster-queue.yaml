@@ -18,7 +18,7 @@ kind: ClusterQueue
 metadata:
   name: cluster-queue
 spec:
-  namespaceSelector: {}
+  namespaceSelector: {} # Available to all namespaces
   queueingStrategy: BestEffortFIFO # Default queueing strategy
   resourceGroups:
   - coveredResources: ["cpu", "memory", "nvidia.com/gpu", "ephemeral-storage"]
