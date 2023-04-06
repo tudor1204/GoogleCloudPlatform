@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-spanner-app
+  labels:
+    app: hello-spanner-app
+spec:
+  selector:
+    matchLabels:
+      app: hello-spanner-app
+  template:
+    metadata:
+      labels:
+        app: hello-spanner-app
+    spec:
+      containers:
+      - name: hello-spanner-app
+        image: <REGION>-docker.pkg.dev/<PROJECT_ID>/hello-repo/hello-spanner-app:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+      serviceAccountName: <KSA_NAME>
+      nodeSelector:
+        iam.gke.io/gke-metadata-server-enabled: "true"
