@@ -1,0 +1,21 @@
+name: hello-app-cloud-spanner.yml
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/hello-app-cloud-spanner.yml'
+      - 'databases/hello-app-cloud-spanner'
+  pull_request:
+    paths:
+      - '.github/workflows/hello-app-cloud-spanner.yml'
+      - 'databases/hello-app-cloud-spanner'
+jobs:
+  job:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: build hello-app-cloud-spanner container
+        run: |
+          cd databases/hello-app-cloud-spanner
+          docker build --tag hello-app-cloud-spanner .
