@@ -13,32 +13,24 @@
 # limitations under the License.
 
 # [START gke_batch_kueue_intro_cq]
-apiVersion: kueue.x-k8s.io/v1alpha2
+apiVersion: kueue.x-k8s.io/v1beta1
 kind: ClusterQueue
 metadata:
   name: cluster-queue
 spec:
-  namespaceSelector: {}
+  namespaceSelector: {} # Available to all namespaces
   queueingStrategy: BestEffortFIFO # Default queueing strategy
-  resources:
-  - name: "cpu"
+  resourceGroups:
+  - coveredResources: ["cpu", "memory", "nvidia.com/gpu", "ephemeral-storage"]
     flavors:
-    - name: default-flavor
-      quota:
-        min: 10
-  - name: "memory"
-    flavors:
-    - name: default-flavor
-      quota:
-        min: 10Gi
-  - name: "nvidia.com/gpu"
-    flavors:
-    - name: default-flavor
-      quota:
-        min: 10
-  - name: "ephemeral-storage"
-    flavors:
-    - name: default-flavor
-      quota:
-        min: 10Gi
+    - name: "default-flavor"
+      resources:
+      - name: "cpu"
+        nominalQuota: 10
+      - name: "memory"
+        nominalQuota: 10Gi
+      - name: "nvidia.com/gpu"
+        nominalQuota: 10
+      - name: "ephemeral-storage"
+        nominalQuota: 10Gi
 # [END gke_batch_kueue_intro_cq]

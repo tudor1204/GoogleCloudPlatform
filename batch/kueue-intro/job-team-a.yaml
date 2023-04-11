@@ -12,19 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_batch_kueue_intro_team_b_job]
+# [START gke_batch_kueue_intro_team_a_job]
 apiVersion: batch/v1
 kind: Job
 metadata:
-  namespace: team-b # Job under team-b namespace
-  generateName: sample-team-b-job-
+  namespace: team-a # Job under team-a namespace
+  generateName: sample-job-team-a-
   annotations:
-    kueue.x-k8s.io/queue-name: team-b-lq # Point to the LocalQueue
+    kueue.x-k8s.io/queue-name: lq-team-a # Point to the LocalQueue
 spec:
   ttlSecondsAfterFinished: 60 # Job will be deleted after 60 seconds
   parallelism: 3 # This Job will have 3 replicas running at the same time
   completions: 3 # This Job requires 3 completions
-  suspend: true # Set to true and allow Kueue to control the Job
+  suspend: true # Set to true to allow Kueue to control the Job when it starts
   template:
     spec:
       nodeSelector:
@@ -45,4 +45,4 @@ spec:
             ephemeral-storage: "512Mi"
             nvidia.com/gpu: "1"
       restartPolicy: Never
-# [END gke_batch_kueue_intro_team_b_job]
+# [END gke_batch_kueue_intro_team_a_job]
