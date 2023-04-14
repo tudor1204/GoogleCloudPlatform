@@ -13,19 +13,21 @@
 # limitations under the License.
 
 # [START gke_batch_kueue_intro_lq]
-apiVersion: kueue.x-k8s.io/v1alpha2
+apiVersion: kueue.x-k8s.io/v1beta1
 kind: LocalQueue
 metadata:
   namespace: team-a # LocalQueue under team-a namespace
-  name: team-a-lq
+  name: lq-team-a
 spec:
   clusterQueue: cluster-queue # Point to the ClusterQueue
 ---
-apiVersion: kueue.x-k8s.io/v1alpha2
+apiVersion: kueue.x-k8s.io/v1beta1
 kind: LocalQueue
 metadata:
   namespace: team-b # LocalQueue under team-b namespace
-  name: team-b-lq
+  name: lq-team-b
 spec:
   clusterQueue: cluster-queue # Point to the ClusterQueue
 # [END gke_batch_kueue_intro_lq]
+
+
