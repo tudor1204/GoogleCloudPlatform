@@ -1,4 +1,4 @@
-# Copyright 2022 Google LLC
+# Copyright 2023 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_batch_kueue_intro_flavors]
+# [START gke_batch_kueue_cohort_spot_cq]
 apiVersion: kueue.x-k8s.io/v1beta1
-kind: ResourceFlavor
+kind: ClusterQueue
 metadata:
-  name: default-flavor # This ResourceFlavor will be used for all the resources
-# [END gke_batch_kueue_intro_flavors]
+  name: spot-cq
+spec:
+  cohort: all-teams # Same cohort as cq-team-a and cq-team-b
+  resourceGroups:
+  - coveredResources: ["cpu", "memory"]
+    flavors:
+    - name: spot
+      resources:
+      - name: "cpu"
+        nominalQuota: 40
+      - name: "memory"
+        nominalQuota: 144Gi
+# [END gke_batch_kueue_cohort_spot_cq]
 

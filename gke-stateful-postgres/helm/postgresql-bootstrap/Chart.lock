@@ -1,6 +1,6 @@
 dependencies:
 - name: postgresql-ha
   repository: https://charts.bitnami.com/bitnami
-  version: 10.0.9
-digest: sha256:82b571235f88759bc3458315c0568847d7fefb70f0893855ef89426fd612ec9b
-generated: "2023-01-11T22:55:09.426991793Z"
+  version: 11.2.1
+digest: sha256:93dd6422e0c2f9f678fb529c300ac0e1d1c4f4f65df1c738a196a508e265cc5a
+generated: "2023-04-11T15:15:41.537401944Z"
