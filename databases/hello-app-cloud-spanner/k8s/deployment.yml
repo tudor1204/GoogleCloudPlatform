@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-spanner-app
+  name: hello-app-cloud-spanner
   labels:
-    app: hello-spanner-app
+    app: hello-app-cloud-spanner
 spec:
   selector:
     matchLabels:
-      app: hello-spanner-app
+      app: hello-app-cloud-spanner
   template:
     metadata:
       labels:
-        app: hello-spanner-app
+        app: hello-app-cloud-spanner
     spec:
       containers:
-      - name: hello-spanner-app
-        image: <REGION>-docker.pkg.dev/<PROJECT_ID>/hello-repo/hello-spanner-app:v1
+      - name: hello-app-cloud-spanner
+        image: us-docker.pkg.dev/google-samples/containers/gke/hello-app-cloud-spanner
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
