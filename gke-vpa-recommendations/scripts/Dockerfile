@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.20.3 as builder
-WORKDIR /app
-COPY * ./
+FROM golang:1.19.8 as builder
+WORKDIR /metrics-exporter
+COPY . .
+RUN pwd
+RUN echo $GOROOT
+RUN echo $GOPATH
+RUN ls
 RUN CGO_ENABLED=0 GOOS=linux go build -o /hpa-metrics-exporter
 
 FROM alpine as release
@@ -22,5 +26,5 @@ RUN apk add --update --no-cache curl && \
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
     mv kubectl /usr/bin/kubectl && \
     chmod +x /usr/bin/kubectl
-COPY --from=builder /hpa-metrics-exporter /hpa-metrics-exporter
+COPY --from=builder /metrics-exporter /metrics-exporter
 CMD ["/hpa-metrics-exporter"]
