@@ -15,10 +15,6 @@
 FROM golang:1.19.8 as builder
 WORKDIR /metrics-exporter
 COPY . .
-RUN pwd
-RUN echo $GOROOT
-RUN echo $GOPATH
-RUN ls
 RUN CGO_ENABLED=0 GOOS=linux go build -o /hpa-metrics-exporter
 
 FROM alpine as release
