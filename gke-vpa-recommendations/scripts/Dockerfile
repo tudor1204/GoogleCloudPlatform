@@ -12,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.15-alpine as builder
-WORKDIR /go/src/vpa-metrics-extporter
+FROM golang:1.19.8 as builder
+WORKDIR /metrics-exporter
 COPY . .
-RUN go build -o /export .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /hpa-metrics-exporter
 
 FROM alpine as release
 RUN apk add --update --no-cache curl && \
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
     mv kubectl /usr/bin/kubectl && \
     chmod +x /usr/bin/kubectl
-COPY --from=builder /export /export
-CMD [ "/export" ]
+COPY --from=builder /metrics-exporter /metrics-exporter
+CMD ["/hpa-metrics-exporter"]
