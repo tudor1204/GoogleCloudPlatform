@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=pytorch/torchserve:latest-cpu
+ARG BASE_IMAGE=pytorch/torchserve:0.7.1-cpu
 
 FROM alpine/git
 
