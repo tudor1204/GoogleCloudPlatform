@@ -16,7 +16,7 @@
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: bank-of-anthos
+  name: networking-managed-cert
 spec:
   domains:
     - DOMAIN_NAME
@@ -25,7 +25,7 @@ spec:
 apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig
 metadata:
-  name: bank-of-anthos
+  name: networking-fc
 spec:
   redirectToHttps:
     enabled: true
@@ -36,9 +36,9 @@ kind: Ingress
 metadata:
   name: frontend
   annotations:
-    networking.gke.io/managed-certificates: bank-of-anthos
-    networking.gke.io/v1beta1.FrontendConfig: bank-of-anthos
-    kubernetes.io/ingress.global-static-ip-name: bank-of-anthos
+    networking.gke.io/managed-certificates: networking-managed-cert
+    networking.gke.io/v1beta1.FrontendConfig: networking-fc
+    kubernetes.io/ingress.global-static-ip-name: networking-static-ip
     kubernetes.io/ingress.class: gce
   labels:
     app: frontend
@@ -48,4 +48,3 @@ spec:
       name: frontend
       port:
         number: 80
-
