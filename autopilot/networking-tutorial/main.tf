@@ -15,35 +15,35 @@
 terraform {
   required_version = "~> 1.3"
 }
-
+ 
 provider "google" {}
-
+ 
 variable "region" {
   type        = string
   description = "Region where the cluster will be created."
   default     = "us-central1"
 }
-
-variable "name" {
+ 
+variable "cluster_name" {
   type        = string
   description = "Name of the cluster"
   default     = "networking-cluster"
 }
-
+ 
 resource "google_container_cluster" "default" {
-  name             = var.name
+  name             = var.cluster_name
   description      = "Cluster for sample web application"
   location         = var.region
   enable_autopilot = true
-
+ 
   ip_allocation_policy {}
 }
-
+ 
 output "region" {
   value       = var.region
   description = "Compute region"
 }
-
+ 
 output "cluster_name" {
   value       = google_container_cluster.default.name
   description = "Cluster name"
