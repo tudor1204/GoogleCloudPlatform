@@ -1,6 +1,6 @@
 # Terraform & Cloud Build triggers
 
-This directory contains Terraform scripts necessary to deploy [Cloud Build](https://cloud.google.com/build/) triggers which automatically builds new sample images on changes.
+This directory contains Terraform scripts necessary to deploy [Cloud Build](https://cloud.google.com/build/) triggers which automatically build new sample images on changes.
 
 **Note**: This directory is for the repo maintainers and are not relevant to end-users.
 
