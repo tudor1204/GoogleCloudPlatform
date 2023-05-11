@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/compute/metadata v0.2.3
 	github.com/sirupsen/logrus v1.9.0
 	golang.org/x/oauth2 v0.7.0
-	google.golang.org/api v0.121.0
+	google.golang.org/api v0.122.0
 	k8s.io/api v0.27.1
 	k8s.io/apimachinery v0.27.1
 	k8s.io/autoscaler/vertical-pod-autoscaler v0.13.0
