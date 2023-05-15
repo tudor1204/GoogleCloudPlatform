@@ -42,6 +42,7 @@ This project follows
 ## Samples requirements
 
 All new code sample needs the following requirements:
+- An entry in the [CODEOWNERS file](/.github/CODEOWNERS), if applicable.
 - A short `README.md` file with an external link pointing to the tutorial using the sample, if 
   applicable. Ideally, there should be only one source of truth for sample instructions.
 - A GitHub Action workflow that tests the sample code. At minimum, this should
@@ -59,3 +60,5 @@ All new code sample needs the following requirements:
       `google-samples` project, you need to run `terraform init && terraform apply`
       while in that project (admin permissions required).
     - The images will be of the form `us-docker.pkg.dev/google-samples/containers/gke<image_name>:latest`
+
+Once the PR is merged, any changes that had been made to the Terraform scripts must be applied to the `google-samples` project. [[Instructions](/terraform/README.md)]

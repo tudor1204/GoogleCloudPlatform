@@ -249,3 +249,18 @@ resource "google_cloudbuild_trigger" "hpa-metrics-exporter" {
         }
     }
 }
+
+resource "google_cloudbuild_trigger" "hello-app-cloud-spanner" {
+    name = "kubernetes-engine-samples-hello-app-cloud-spanner"
+    filename = "databases/hello-app-cloud-spanner/cloudbuild.yaml"
+    included_files = ["databases/hello-app-cloud-spanner/**"]
+    description = local.trigger_description
+
+    github {
+        owner = "GoogleCloudPlatform"
+        name = "kubernetes-engine-samples"
+        push {
+            branch = "^main$"
+        }
+    }
+}
