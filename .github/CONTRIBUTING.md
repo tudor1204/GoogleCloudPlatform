@@ -54,7 +54,7 @@ All new code sample needs the following:
 - If the sample relies on canonical image artifacts, these can be hosted officially, which requires:
   - Cloud Build configs for all container images that pushes to the `google-samples` artifact registry.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/security/wi-secrets/cloudbuild.yaml)]
-  - A Terraform object for the above Cloud Build configs.
+  - A Terraform resource for the above Cloud Build configs.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/terraform/google-cloud-build-triggers.tf#L194-L207)]
     - Note that in order for the Cloud Build configs to be applied to the
       `google-samples` project, you need to run `terraform init && terraform apply`
