@@ -28,10 +28,10 @@ def main():
     def callback(message: pubsub_v1.subscriber.message.Message) -> None:
         """Process received message"""
         print(f"Received message: ID={message.message_id} Data={message.data}")
-        message.ack()
         print(f"[{datetime.datetime.now()}] Processing: {message.message_id}")
         time.sleep(3)
         print(f"[{datetime.datetime.now()}] Processed: {message.message_id}")
+        message.ack()
 
     streaming_pull_feature = subscriber.subscribe(
         subscription_path, callback=callback)
