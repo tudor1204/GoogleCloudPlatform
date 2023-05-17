@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.110.2
 	cloud.google.com/go/compute/metadata v0.2.3
 	github.com/sirupsen/logrus v1.9.0
-	golang.org/x/oauth2 v0.7.0
+	golang.org/x/oauth2 v0.8.0
 	google.golang.org/api v0.122.0
 	k8s.io/api v0.27.1
 	k8s.io/apimachinery v0.27.1
@@ -29,8 +29,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.7.0 // indirect
-	golang.org/x/net v0.9.0 // indirect
-	golang.org/x/sys v0.7.0 // indirect
+	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
