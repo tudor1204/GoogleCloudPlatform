@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: subscriber
-        image: us-docker.pkg.dev/google-samples/containers/gke/pubsub-sample:v1
+        image: us-docker.pkg.dev/google-samples/containers/gke/pubsub-sample:v2
 # [END container_pubsub_deployment]
 # [END gke_deployment_pubsub_deployment_pubsub]
 ---
