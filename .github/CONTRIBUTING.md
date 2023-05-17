@@ -61,5 +61,5 @@ All new code sample needs the following:
       while in that project (a repository admin will do this for you). [[docs](/terraform/README.md)]
     - The images will be of the form `us-docker.pkg.dev/google-samples/containers/gke<image_name>:latest`
 
-If a PR modifies any existing files in the `terraform/` directory, these changes must be applied to the `google-samples` project
-once the PR is merged in. A repository admin will do this for you. [[docs](/terraform/README.md)]
+If a pull request modifies any existing files in the `terraform/` directory, these changes must be applied to the `google-samples` project
+once the pull request is merged in. A repository admin will do this for you. [[docs](/terraform/README.md)]
