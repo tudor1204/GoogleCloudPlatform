@@ -8,7 +8,7 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	golang.org/x/oauth2 v0.8.0
 	google.golang.org/api v0.122.0
-	k8s.io/api v0.27.1
+	k8s.io/api v0.27.2
 	k8s.io/apimachinery v0.27.2
 	k8s.io/autoscaler/vertical-pod-autoscaler v0.13.0
 )
