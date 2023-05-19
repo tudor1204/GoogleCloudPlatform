@@ -41,24 +41,25 @@ This project follows
 
 ## Samples requirements
 
-All new code sample needs the following requirements:
+All new code sample needs the following:
 - An entry in the [CODEOWNERS file](/.github/CODEOWNERS), if applicable.
 - A short `README.md` file with an external link pointing to the tutorial using the sample, if 
-  applicable. Ideally, there should be only one source of truth for sample instructions.
+  applicable. There should only be one source of truth for sample instructions.
 - A GitHub Action workflow that tests the sample code. At minimum, this should
   dry-run any container image or Terraform configs and pass without any errors.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/workflows/security-ci.yml)]
-  - Each container image should build successfully (e.g. `docker build...`)
-  - Each Terraform config should validate successfully (e.g. `terraform validate...`)
+  - Each container image should build successfully (e.g. `docker build...`).
+  - Each Terraform config should validate successfully (e.g. `terraform validate...`).
   - If there are any other simple smoke tests that can be performed, they should also be added here.
 - If the sample relies on canonical image artifacts, these can be hosted officially, which requires:
   - Cloud Build configs for all container images that pushes to the `google-samples` artifact registry.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/security/wi-secrets/cloudbuild.yaml)]
-  - A Terraform section for the above Cloud Build configs.
+  - A Terraform resource for the above Cloud Build configs.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/terraform/google-cloud-build-triggers.tf#L194-L207)]
     - Note that in order for the Cloud Build configs to be applied to the
       `google-samples` project, you need to run `terraform init && terraform apply`
-      while in that project (admin permissions required).
+      while in that project (a repository admin will do this for you). [[docs](/terraform/README.md)]
     - The images will be of the form `us-docker.pkg.dev/google-samples/containers/gke<image_name>:latest`
 
-Once the PR is merged, any changes that had been made to the Terraform scripts must be applied to the `google-samples` project. [[Instructions](/terraform/README.md)]
+If a pull request modifies any existing files in the `terraform/` directory, these changes must be applied to the `google-samples` project
+once the pull request is merged in. A repository admin will do this for you. [[docs](/terraform/README.md)]

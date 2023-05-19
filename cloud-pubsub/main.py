@@ -8,37 +8,43 @@ prints to standard output.
 import datetime
 import time
 
-from google.cloud import pubsub
-
-PUBSUB_TOPIC = 'echo'
-PUBSUB_SUBSCRIPTION = 'echo-read'
 # [START gke_pubsub_pull]
 # [START container_pubsub_pull]
+from google import auth
+from google.cloud import pubsub_v1
+
+
 def main():
     """Continuously pull messages from subsciption"""
-    client = pubsub.Client()
-    subscription = client.topic(PUBSUB_TOPIC).subscription(PUBSUB_SUBSCRIPTION)
 
-    print('Pulling messages from Pub/Sub subscription...')
-    while True:
-        with pubsub.subscription.AutoAck(subscription, max_messages=10) as ack:
-            for _, message in list(ack.items()):
-                print("[{0}] Received message: ID={1} Data={2}".format(
-                    datetime.datetime.now(),
-                    message.message_id,
-                    message.data))
-                process(message)
+    # read default project ID
+    _, project_id = auth.default()
+    subscription_id = 'echo-read'
 
+    subscriber = pubsub_v1.SubscriberClient()
+    subscription_path = subscriber.subscription_path(
+        project_id, subscription_id)
 
-def process(message):
-    """Process received message"""
-    print("[{0}] Processing: {1}".format(datetime.datetime.now(),
-                                         message.message_id))
-    time.sleep(3)
-    print("[{0}] Processed: {1}".format(datetime.datetime.now(),
-                                        message.message_id))
+    def callback(message: pubsub_v1.subscriber.message.Message) -> None:
+        """Process received message"""
+        print(f"Received message: ID={message.message_id} Data={message.data}")
+        print(f"[{datetime.datetime.now()}] Processing: {message.message_id}")
+        time.sleep(3)
+        print(f"[{datetime.datetime.now()}] Processed: {message.message_id}")
+        message.ack()
+
+    streaming_pull_feature = subscriber.subscribe(
+        subscription_path, callback=callback)
+    print(f"Pulling messages from {subscription_path}...")
+
+    with subscriber:
+        try:
+            streaming_pull_feature.result()
+        except Exception as e:
+            print(e)
 # [END container_pubsub_pull]
 # [END gke_pubsub_pull]
+
 
 if __name__ == '__main__':
     main()
