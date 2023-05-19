@@ -26,7 +26,7 @@ resource "google_cloud_run_v2_job" "metric_exporter" {
       service_account = google_service_account.service_account.email
       timeout         = "3600s"
       containers {
-        image = "us-west2-docker.pkg.dev/platinum-snow-387216/quickstart-docker-repo/quickstart-image:tag1"
+        image = "us-docker.pkg.dev/${var.project_id}/docker-repo/recommendations-image:tag1"
         env {
           name  = "PROJECT_ID"
           value = var.project_id
