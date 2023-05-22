@@ -5,7 +5,7 @@ go 1.19
 require (
 	cloud.google.com/go v0.110.2
 	cloud.google.com/go/compute/metadata v0.2.3
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.1
 	golang.org/x/oauth2 v0.8.0
 	google.golang.org/api v0.122.0
 	k8s.io/api v0.27.2
