@@ -3,7 +3,7 @@ module direct-to-sd
 go 1.19
 
 require (
-	cloud.google.com/go/compute v1.19.2
+	cloud.google.com/go/compute v1.19.3
 	cloud.google.com/go/compute/metadata v0.2.3
 	golang.org/x/net v0.10.0
 	golang.org/x/oauth2 v0.8.0
