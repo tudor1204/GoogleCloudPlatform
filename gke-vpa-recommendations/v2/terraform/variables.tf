@@ -44,3 +44,8 @@ variable "resource_labels" {
   description = "Resource labels"
   default     = {}
 }
+
+variable "image"{
+    type = string
+    description = "container image"
+}

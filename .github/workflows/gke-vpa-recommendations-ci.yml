@@ -23,3 +23,9 @@ jobs:
         run: |
           cd gke-vpa-recommendations/scripts
           docker build --tag hpa-metrics-exporter .
+            - uses: actions/checkout@v3
+      - name: Validate TF
+        run: |
+          cd gke-vpa-recommendations/v2/terraform
+          terraform init
+          terraform validate
