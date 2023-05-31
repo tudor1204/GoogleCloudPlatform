@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # Copyright 2021 Google LLC
 #
@@ -14,7 +15,6 @@
 # limitations under the License.
 
 # [START gke_redis_follower_run]
-#!/bin/bash
 
 if [[ ${GET_HOSTS_FROM:-dns} == "env" ]]; then
   redis-server --replicaof ${REDIS_LEADER_SERVICE_HOST} 6379

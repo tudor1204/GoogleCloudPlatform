@@ -1,8 +1,12 @@
 nameSuffix: "-frontend"
 commonLabels:
   app: whereami-frontend
-bases:
+resources:
 - ../k8s
 patches:
-- cm-flag.yaml
-- service-type.yaml
+- path: cm-flag.yaml
+  target:
+    kind: ConfigMap
+- path: service-type.yaml
+  target:
+    kind: Service
