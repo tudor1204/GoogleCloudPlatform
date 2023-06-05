@@ -261,11 +261,15 @@ It overlays the base manifest with the following Kustomization file:
 nameSuffix: "-backend"
 commonLabels:
   app: whereami-backend
-bases:
+resources:
 - ../k8s
 patches:
-- cm-flag.yaml
-- service-type.yaml
+- path: cm-flag.yaml
+  target:
+    kind: ConfigMap
+- path: service-type.yaml
+  target:
+    kind: Service
 ```
 
 #### Step 2 - Deploy the whereami frontend

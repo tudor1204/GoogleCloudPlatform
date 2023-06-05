@@ -1,7 +1,9 @@
 nameSuffix: "-echo-headers"
 commonLabels:
   app: whereami-echo-headers
-bases:
+resources:
 - ../k8s
 patches:
-- cm-flag.yaml
+- path: cm-flag.yaml
+  target:
+    kind: ConfigMap
