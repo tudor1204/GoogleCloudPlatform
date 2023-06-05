@@ -26,8 +26,6 @@ SELECT
   MAX(CASE WHEN metric = 'cpu_limit_utilization_max_percentage'  THEN point_value ELSE 0 END) AS cpu_limit_utilization_max_percentage,
 
   # CPU RECOMMENDATION
-  MAX(CASE WHEN metric = 'cpu_request_vpa_recommendations_95_percentile_mcores'  THEN point_value ELSE 0 END) AS cpu_request_vpa_recommendations_95_percentile_mcores,
-  MAX(CASE WHEN metric = 'cpu_request_vpa_recommendations_mean'  THEN point_value ELSE 0 END) AS cpu_request_vpa_recommendations,
   (SAFE_DIVIDE(MAX(IF(metric = 'cpu_mcore_usage', point_value, 0)),MAX(IF(metric = 'replica_count', point_value, 0))) / 0.70) * (1 + 0.2) AS cpu_request_recommendations_per_replica,
 
   # MEMORY METRICS
@@ -37,9 +35,7 @@ SELECT
   MAX(CASE WHEN metric = 'memory_limit_utilization_max_percentage'  THEN point_value ELSE 0 END) AS memory_limit_utilization_max_percentage,
   MAX(CASE WHEN metric = 'memory_request_utilization_max_percentage'  THEN point_value ELSE 0 END) AS memory_request_utilization_max_percentage,
 
-
   # MEMORY RECOMMENDATION
-  MAX(CASE WHEN metric = 'memory_request_vpa_recommendations_max_mib'  THEN point_value ELSE 0 END) AS memory_request_vpa_recommendations_max_mib,
   MAX(IF(metric = 'memory_max_used_mib', point_value, 0)) *  (1 + 0.25) AS memory_request_recommendations_per_replica
 FROM
   data_deduped 

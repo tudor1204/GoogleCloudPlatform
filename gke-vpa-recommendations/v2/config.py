@@ -55,55 +55,6 @@ fetch k8s_container
 | group_by {GKE_GROUP_BY_COLUMNS }, [row_count: row_count()]
 """
 ,
-"memory_request_vpa_recommendations_max_mib":
-f"""
-fetch k8s_scale
-| metric
-    'kubernetes.io/autoscaler/container/memory/per_replica_recommended_request_bytes'
-| filter
-    {VPA_FILTER}
-| group_by {METRIC_PERIOD},
-    [value_per_replica_recommended_request_bytes_mean:
-       max(value.per_replica_recommended_request_bytes)]
-| every {METRIC_PERIOD}
-| group_by  {SCALE_GROUP_BY_COLUMNS} ,
-    [value_per_replica_recommended_request_bytes_max_max:
-       max(value_per_replica_recommended_request_bytes_mean)]
-| scale 'MiBy' 
-"""
-,
-"cpu_request_vpa_recommendations_95_percentile_mcores":
-f"""
-fetch k8s_scale
-| metric
-    'kubernetes.io/autoscaler/container/cpu/per_replica_recommended_request_cores'
-| filter
-    {VPA_FILTER}
-| group_by {METRIC_PERIOD},
-    [value_per_replica_recommended_request_cores_mean:
-       mean(value.per_replica_recommended_request_cores)]
-| every {METRIC_PERIOD}
-| group_by  {SCALE_GROUP_BY_COLUMNS} ,
-    [value_per_replica_recommended_request_cores_mean: percentile(value_per_replica_recommended_request_cores_mean, 95)]
-| mul 1000
-"""
-,
-"cpu_request_vpa_recommendations_mean":
-f"""
-fetch k8s_scale
-| metric
-    'kubernetes.io/autoscaler/container/cpu/per_replica_recommended_request_cores'
-| filter
-    {VPA_FILTER}
-| group_by {METRIC_PERIOD},
-    [value_per_replica_recommended_request_cores_mean:
-       mean(value.per_replica_recommended_request_cores)]
-| every {METRIC_PERIOD}
-| group_by  {SCALE_GROUP_BY_COLUMNS} ,
-    [value_per_replica_recommended_request_cores_mean: mean(value_per_replica_recommended_request_cores_mean)]
-| mul 1000
-"""
-,
 "memory_request_utilization_max_percentage":
 f"""
 fetch k8s_container

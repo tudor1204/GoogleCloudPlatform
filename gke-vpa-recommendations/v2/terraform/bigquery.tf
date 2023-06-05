@@ -74,11 +74,6 @@ resource "google_bigquery_table" "gke_metrics" {
       "mode": "REQUIRED"
     },
     {
-      "name": "state",
-      "type": "STRING",
-      "mode": "NULLABLE"
-    },
-    {
       "name": "point_value",
       "type": "FLOAT",
       "mode": "REQUIRED"
