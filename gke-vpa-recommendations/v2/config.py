@@ -30,34 +30,38 @@ log_level_mapping = {
 
 # Replace the values as needed
 PROJECT_ID = env.get('PROJECT_ID')
-BIGQUERY_DATASET = env.get('BIGQUERY_DATASET')
-BIGQUERY_TABLE = env.get('BIGQUERY_TABLE')
-BIGQUERY_LOCATION = env.get('BIGQUERY_LOCATION')
+BIGQUERY_DATASET = env.get('BIGQUERY_DATASET','data')
+BIGQUERY_TABLE = env.get('BIGQUERY_TABLE','gke_metrics')
+BIGQUERY_LOCATION = env.get('BIGQUERY_LOCATION','us-central1')
 TABLE_ID = f'{PROJECT_ID}.{BIGQUERY_DATASET}.{BIGQUERY_TABLE}'
 
 assert env.get('PROJECT_ID') != None, "PROJECT_ID is not set or empty. Please set a valid value"
-assert env.get('BIGQUERY_DATASET') != None, "BIGQUERY_DATASET is not set or empty. Please set a valid value"
-assert env.get('BIGQUERY_TABLE') != None, "BIGQUERY_TABLE is not set or empty. Please set a valid value"
-assert env.get('BIGQUERY_LOCATION') != None, "BIGQUERY_LOCATION is not set or empty. Please set a valid value"
-
-# Recommendation buffers. This buffer will add additional resources to the recommendations. Memory is defaulted to 10%
-CPU_RECOMMENDATION_BUFFER = float(env.get('CPU_RECOMMENDATION_BUFFER', '0.0'))  
-MEMORY_RECOMMENDATION_BUFFER = float(env.get('MEMORY_RECOMMENDATION_BUFFER', '0.10'))
 
 # IMPORTANT: to guarantee successfully retriving data, please use a time window greater than 5 minutes
-METRIC_PERIOD = env.get('METRIC_PERIOD', '2w')
-
-MQL_FILTER = "(resource.namespace_name !~ '(kube|istio|gatekeeper|gke|gmp|gke-gmp|kueue)-system')"
+METRIC_PERIOD = env.get('METRIC_PERIOD', '2w') 
+VPA_FILTER = "(resource.namespace_name !~ '(kube|istio|gatekeeper|gke|gmp|gke-gmp|kueue)-system')"
+MQL_FILTER = "(resource.namespace_name !~ '(kube|istio|gatekeeper|gke|gmp|gke-gmp|kueue)-system')" 
 GKE_GROUP_BY_COLUMNS = '[resource.project_id, resource.location, resource.cluster_name, resource.namespace_name, metadata.system_labels.top_level_controller_name, metadata.system_labels.top_level_controller_type, resource.container_name]'
 SCALE_GROUP_BY_COLUMNS = '[resource.project_id, resource.location, resource.cluster_name, resource.namespace_name, resource.controller_name, resource.controller_kind, metric.container_name]'
 
 MQL_QUERY = {
-"memory_request_max_recommendations_mib":
+"replica_count":
+f"""
+fetch k8s_container
+| metric 'kubernetes.io/container/cpu/core_usage_time'
+| filter {MQL_FILTER}
+| align rate(5m)
+| every 5m
+| group_by {GKE_GROUP_BY_COLUMNS }, [row_count: row_count()]
+"""
+,
+"memory_request_vpa_recommendations_max_mib":
 f"""
 fetch k8s_scale
 | metric
     'kubernetes.io/autoscaler/container/memory/per_replica_recommended_request_bytes'
-| filter {MQL_FILTER}
+| filter
+    {VPA_FILTER}
 | group_by {METRIC_PERIOD},
     [value_per_replica_recommended_request_bytes_mean:
        max(value.per_replica_recommended_request_bytes)]
@@ -68,12 +72,29 @@ fetch k8s_scale
 | scale 'MiBy' 
 """
 ,
-"cpu_request_recommendations_mean_mcores":
+"cpu_request_vpa_recommendations_95_percentile_mcores":
 f"""
 fetch k8s_scale
 | metric
     'kubernetes.io/autoscaler/container/cpu/per_replica_recommended_request_cores'
-| filter {MQL_FILTER}
+| filter
+    {VPA_FILTER}
+| group_by {METRIC_PERIOD},
+    [value_per_replica_recommended_request_cores_mean:
+       mean(value.per_replica_recommended_request_cores)]
+| every {METRIC_PERIOD}
+| group_by  {SCALE_GROUP_BY_COLUMNS} ,
+    [value_per_replica_recommended_request_cores_mean: percentile(value_per_replica_recommended_request_cores_mean, 95)]
+| mul 1000
+"""
+,
+"cpu_request_vpa_recommendations_mean":
+f"""
+fetch k8s_scale
+| metric
+    'kubernetes.io/autoscaler/container/cpu/per_replica_recommended_request_cores'
+| filter
+    {VPA_FILTER}
 | group_by {METRIC_PERIOD},
     [value_per_replica_recommended_request_cores_mean:
        mean(value.per_replica_recommended_request_cores)]
@@ -83,43 +104,13 @@ fetch k8s_scale
 | mul 1000
 """
 ,
-"cpu_request_recommendations_max_mcores":
-f"""
-fetch k8s_scale
-| metric
-    'kubernetes.io/autoscaler/container/cpu/per_replica_recommended_request_cores'
-| filter {MQL_FILTER}
-| group_by {METRIC_PERIOD},
-    [value_per_replica_recommended_request_cores_max:
-       max(value.per_replica_recommended_request_cores)]
-| every {METRIC_PERIOD}
-| group_by  {SCALE_GROUP_BY_COLUMNS} ,
-    [value_per_replica_recommended_request_cores_max_max: max(value_per_replica_recommended_request_cores_max)]
-| mul 1000
-"""
-,
-"memory_request_utilization_mean_percentage":
-f"""
-fetch k8s_container
-| metric 'kubernetes.io/container/memory/request_utilization'
-| filter
-    {MQL_FILTER}
-     && metric.memory_type == 'non-evictable'
-| group_by {METRIC_PERIOD}, [value_request_utilization_mean: mean(value.request_utilization)]
-| every {METRIC_PERIOD}
-| group_by
-    {GKE_GROUP_BY_COLUMNS },
-    [value_request_utilization_mean: mean(value_request_utilization_mean)]
-| scale '%'
-"""
-,
 "memory_request_utilization_max_percentage":
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/memory/request_utilization'
 | filter
     {MQL_FILTER}
-     && metric.memory_type == 'non-evictable'
+     && metric.memory_type == 'non-evictable' &&  metadata.system_labels.state == 'ACTIVE'
 | group_by {METRIC_PERIOD}, [value_request_utilization_max: max(value.request_utilization)]
 | every {METRIC_PERIOD}
 | group_by
@@ -134,7 +125,7 @@ fetch k8s_container
 | metric 'kubernetes.io/container/memory/limit_utilization'
 | filter
     {MQL_FILTER}
-     && metric.memory_type == 'non-evictable'
+     && metric.memory_type == 'non-evictable' && metadata.system_labels.state == 'ACTIVE'
 | group_by {METRIC_PERIOD}, [value_limit_utilization_max: max(value.limit_utilization)]
 | every {METRIC_PERIOD}
 | group_by
@@ -147,7 +138,7 @@ fetch k8s_container
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/cpu/request_utilization'
-| filter {MQL_FILTER}
+| filter {MQL_FILTER} && metadata.system_labels.state == 'ACTIVE'
 | group_by {METRIC_PERIOD}, [value_request_utilization_mean: mean(value.request_utilization)]
 | every {METRIC_PERIOD}
 | group_by
@@ -157,25 +148,11 @@ fetch k8s_container
 | scale '%'
 """
 ,
-"cpu_request_utilization_max_percentage":
-f"""
-fetch k8s_container
-| metric 'kubernetes.io/container/cpu/request_utilization'
-| filter {MQL_FILTER}
-| group_by {METRIC_PERIOD}, [value_request_utilization_max: max(value.request_utilization)]
-| every {METRIC_PERIOD}
-| group_by
-    {GKE_GROUP_BY_COLUMNS },
-    [value_request_utilization_max_aggregate:
-       max(value_request_utilization_max)]
-| scale '%'
-"""
-,
 "cpu_limit_utilization_max_percentage":
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/cpu/limit_utilization'
-| filter {MQL_FILTER}
+| filter {MQL_FILTER} &&  metadata.system_labels.state == 'ACTIVE'
 | group_by {METRIC_PERIOD}, [value_limit_utilization_max: max(value.limit_utilization)]
 | every {METRIC_PERIOD}
 | group_by
@@ -189,11 +166,10 @@ fetch k8s_container
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/memory/used_bytes'
-| filter {MQL_FILTER}
-  | filter metric.memory_type == 'non-evictable'
+| filter {MQL_FILTER} &&   metric.memory_type == 'non-evictable'
   | group_by {METRIC_PERIOD}, [value_used_bytes_max: max(value.used_bytes)]
   | every {METRIC_PERIOD}
-  | group_by {GKE_GROUP_BY_COLUMNS }, [value_used_bytes_max_max: max(value_used_bytes_max)]
+  | group_by {GKE_GROUP_BY_COLUMNS }, [value_used_bytes_max_max: aggregate(value_used_bytes_max)]
   | scale 'MiBy' 
 """
 ,
@@ -201,7 +177,7 @@ fetch k8s_container
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/memory/request_bytes'
-| filter {MQL_FILTER}
+| filter {MQL_FILTER} &&  metadata.system_labels.state == 'ACTIVE'
   | group_by 5m, [value_request_bytes_mean: mean(value.request_bytes)]
   | every 5m
   | group_by
@@ -214,7 +190,7 @@ fetch k8s_container
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/memory/limit_bytes'
-| filter {MQL_FILTER}
+| filter {MQL_FILTER} &&  metadata.system_labels.state == 'ACTIVE'
   | group_by 5m, [value_limit_bytes_mean: mean(value.limit_bytes)]
   | every 5m
   | group_by
@@ -223,24 +199,25 @@ fetch k8s_container
 | scale 'MiBy'
 """
 ,
+
 "cpu_mcore_usage":
 f"""
 fetch k8s_container
-| filter {MQL_FILTER}
+| filter {MQL_FILTER} &&  metadata.system_labels.state == 'ACTIVE'
 | metric 'kubernetes.io/container/cpu/core_usage_time'
 | align rate(5m)
 | every 5m
 | group_by
-    {GKE_GROUP_BY_COLUMNS }, [value_core_usage_time_aggregate: aggregate(value.core_usage_time)]
+    {GKE_GROUP_BY_COLUMNS }, [value_core_usage_aggregate: aggregate(value.core_usage_time)]
 | window {METRIC_PERIOD}
-| mul 1000
+| scale 'ms/s'
 """
 ,
 "cpu_requested_mcores":
 f"""
 fetch k8s_container
 | filter
-    {MQL_FILTER}
+    {MQL_FILTER} && metadata.system_labels.state == 'ACTIVE'
 | metric 'kubernetes.io/container/cpu/request_cores'
     | group_by 5m, [value_request_cores_mean: mean(value.request_cores)]
     | every 5m
@@ -254,7 +231,7 @@ fetch k8s_container
 f"""
 fetch k8s_container
 | filter
-    {MQL_FILTER}
+    {MQL_FILTER} &&  metadata.system_labels.state == 'ACTIVE'
 | metric 'kubernetes.io/container/cpu/limit_cores'
     | group_by 5m, [value_limit_cores_mean: mean(value.limit_cores)]
     | every 5m

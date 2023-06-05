@@ -74,6 +74,11 @@ resource "google_bigquery_table" "gke_metrics" {
       "mode": "REQUIRED"
     },
     {
+      "name": "state",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
       "name": "point_value",
       "type": "FLOAT",
       "mode": "REQUIRED"
@@ -89,7 +94,7 @@ EOF
  
 }
 
-resource "google_bigquery_table" "recommendation_view" {
+resource "google_bigquery_table" "workload_recommendation_view" {
   dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = local.bigquery_recommendations_view
   deletion_protection=false
@@ -98,5 +103,15 @@ resource "google_bigquery_table" "recommendation_view" {
     use_legacy_sql = false
   }
   depends_on = [google_bigquery_table.gke_metrics]
+}
+resource "google_bigquery_table" "workloads_at_risk_view" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = local.bigquery_recommendations_view
+  deletion_protection=false
+  view {
+    query = templatefile("../workloads_at_risk_query.sql", { project_id = var.project_id, table_dataset = local.bigquery_dataset, table_id = local.bigquery_table })
+    use_legacy_sql = false
+  }
+  depends_on = [google_bigquery_table.workload_recommendation_view]
 }
 

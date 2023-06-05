@@ -18,7 +18,7 @@ import requests
 import subprocess
 from google.cloud import bigquery
 import sys
-import math
+
 
 token = None
 
@@ -82,8 +82,8 @@ def extract_rows_from_results(metric, results):
     """ 
     rows = []
     metric_value_type = results["timeSeriesDescriptor"]["pointDescriptors"][0]["valueType"]
- 
-    for data in results["timeSeriesData"]:    
+    for data in results["timeSeriesData"]:
+                
         label_values = data["labelValues"]   
         label = [label_value["stringValue"] for label_value in label_values]
         point_data = data["pointData"][0]
@@ -94,13 +94,7 @@ def extract_rows_from_results(metric, results):
             value = point_data_values["doubleValue"]
         else:
             value = point_data_values["int64Value"]
-        
-        # Add the recommendation buffer
-        if "memory_request_max_recommendations_mib" in metric:
-            value += (value * config.MEMORY_RECOMMENDATION_BUFFER)
-        if "cpu_request_recommendations" in metric:
-            value += value * config.CPU_RECOMMENDATION_BUFFER          
-        
+    
         row = {
             "metric": metric,
             "project_id": label[0],
@@ -110,10 +104,10 @@ def extract_rows_from_results(metric, results):
             "controller_name": label[4],
             "controller_type": label[5],
             "container_name": label[6],
-            "point_value": math.ceil(value),
+            "point_value": value,
             "metric_timestamp": starttime 
         }
-        rows.append(row)        
+        rows.append(row)
     return rows           
 
 def write_to_bigquery(rows_to_insert):
@@ -128,8 +122,9 @@ def write_to_bigquery(rows_to_insert):
 
      
 def save_to_bq(token):    
-    for metric, query in config.MQL_QUERY .items():        
+    for metric, query in config.MQL_QUERY .items():       
         pageToken = ""
+        logging.info(f'Retrieving {metric}...')
         while (True):
             result = get_mql_result(token, query, pageToken)
             if result.get("timeSeriesDescriptor"):
