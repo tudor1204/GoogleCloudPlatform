@@ -6,8 +6,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   wget && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* && \
-  wget -O /bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v0.4.18/grpc_health_probe-linux-amd64 && \ 
-  chmod +x /bin/grpc_health_probe && \
   wget -O /bin/curl https://github.com/moparisthebest/static-curl/releases/download/v8.0.1/curl-amd64 && \ 
   chmod +x /bin/curl
 COPY ./requirements.txt /app/requirements.txt
