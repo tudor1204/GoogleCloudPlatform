@@ -14,8 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE=python:3.10-alpine
-FROM ${BASE_IMAGE}
+FROM python:3.10-alpine
 
 ARG PORT=8050
 ENV PORT=${PORT}
