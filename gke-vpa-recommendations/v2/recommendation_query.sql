@@ -26,7 +26,12 @@ SELECT
   MAX(CASE WHEN metric = 'cpu_limit_utilization_max_percentage'  THEN point_value ELSE 0 END) AS cpu_limit_utilization_max_percentage,
 
   # CPU RECOMMENDATION
-  (SAFE_DIVIDE(MAX(IF(metric = 'cpu_mcore_usage', point_value, 0)),MAX(IF(metric = 'replica_count', point_value, 0))) / 0.70) * (1 + 0.2) AS cpu_request_recommendations_per_replica,
+  (SAFE_DIVIDE(MAX(IF(metric = 'cpu_mcore_usage', point_value, 0)),MAX(IF(metric = 'replica_count', point_value, 0))) / 0.70) * (1 + 0.2) AS cpu_request_recommendations,
+  ((SAFE_DIVIDE(MAX(IF(metric = 'cpu_mcore_usage', point_value, 0)),MAX(IF(metric = 'replica_count', point_value, 0))) / 0.70) * (1 + 0.2)) * (
+    SAFE_DIVIDE(MAX(CASE WHEN metric = 'cpu_limit_mcores'  THEN point_value ELSE 1 END),MAX(CASE WHEN metric = 'cpu_requested_mcores'  THEN point_value ELSE 1 END))
+  )
+  
+  AS cpu_limit_recommendations,
 
   # MEMORY METRICS
   MAX(CASE WHEN metric = 'memory_max_used_mib'  THEN point_value ELSE 0 END) AS memory_max_used_mib,
@@ -36,7 +41,8 @@ SELECT
   MAX(CASE WHEN metric = 'memory_request_utilization_max_percentage'  THEN point_value ELSE 0 END) AS memory_request_utilization_max_percentage,
 
   # MEMORY RECOMMENDATION
-  MAX(IF(metric = 'memory_max_used_mib', point_value, 0)) *  (1 + 0.25) AS memory_request_recommendations_per_replica
+  MAX(IF(metric = 'memory_max_used_mib', point_value, 0)) *  (1 + 0.25) AS memory_request_recommendations
+  MAX(IF(metric = 'memory_max_used_mib', point_value, 0)) *  (1 + 0.25) AS memory_limit_recommendations
 FROM
   data_deduped 
 GROUP BY 1,2,3,4,5
