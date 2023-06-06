@@ -23,8 +23,7 @@ locals {
   run_cpu = "1"
   resource_labels = merge(var.resource_labels, {
     deployed_by = "cloudbuild"
-    repo        = "click-to-deploy-solutions"
-    solution    = "gke-vpa-recommendations"
+    solution    = "goog-ab-gke-workload-recs"
     terraform   = "true"
   })
 }

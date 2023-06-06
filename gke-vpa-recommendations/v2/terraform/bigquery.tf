@@ -97,6 +97,7 @@ resource "google_bigquery_table" "workload_recommendation_view" {
     query = templatefile("../recommendation_query.sql", { project_id = var.project_id, table_dataset = local.bigquery_dataset, table_id = local.bigquery_table })
     use_legacy_sql = false
   }
+  labels = local.resource_labels
   depends_on = [google_bigquery_table.gke_metrics]
 }
 resource "google_bigquery_table" "workloads_at_risk_view" {
@@ -107,6 +108,7 @@ resource "google_bigquery_table" "workloads_at_risk_view" {
     query = templatefile("../workloads_at_risk_query.sql", { project_id = var.project_id, table_dataset = local.bigquery_dataset, table_id = local.bigquery_table })
     use_legacy_sql = false
   }
+  labels = local.resource_labels  
   depends_on = [google_bigquery_table.workload_recommendation_view]
 }
 
