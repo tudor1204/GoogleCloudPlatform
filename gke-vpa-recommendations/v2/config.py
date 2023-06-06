@@ -55,7 +55,7 @@ fetch k8s_container
 | group_by {GKE_GROUP_BY_COLUMNS }, [row_count: row_count()]
 """
 ,
-"memory_request_utilization_max_percentage":
+"memory_request_utilization_max":
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/memory/request_utilization'
@@ -70,7 +70,7 @@ fetch k8s_container
 | scale '%'
 """
 ,
-"memory_limit_utilization_max_percentage":
+"memory_limit_utilization_max":
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/memory/limit_utilization'
@@ -85,7 +85,7 @@ fetch k8s_container
 | scale '%'
 """
 ,
-"cpu_request_utilization_mean_percentage":
+"cpu_request_utilization_mean":
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/cpu/request_utilization'
@@ -99,7 +99,7 @@ fetch k8s_container
 | scale '%'
 """
 ,
-"cpu_limit_utilization_max_percentage":
+"cpu_limit_utilization_max":
 f"""
 fetch k8s_container
 | metric 'kubernetes.io/container/cpu/limit_utilization'

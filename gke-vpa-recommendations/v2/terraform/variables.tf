@@ -16,6 +16,7 @@ locals {
   bigquery_dataset = "data"
   bigquery_table = "gke_metrics"
   bigquery_recommendations_view = "container_recommendations"
+  bigquery_workloads_at_risk_view = "workloads_at_risk"
   application_name  = "vpa-recommendations-to-bq-3"
   schedule          = "0 23 * * *"
   schedule_timezone = "America/New_York"
