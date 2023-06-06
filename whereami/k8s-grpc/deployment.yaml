@@ -46,19 +46,19 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.19
+        image: us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.20
         ports:
           - name: grpc
             containerPort: 9090
           - name: http
             containerPort: 8000 # prom metrics
         readinessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:9090"]
+          grpc:
+            port: 9090
           initialDelaySeconds: 5
         livenessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:9090"]
+          grpc:
+            port: 9090
           initialDelaySeconds: 10
         env:
           - name: NODE_NAME
