@@ -33,13 +33,13 @@ def main():
         print(f"[{datetime.datetime.now()}] Processed: {message.message_id}")
         message.ack()
 
-    streaming_pull_feature = subscriber.subscribe(
+    streaming_pull_future = subscriber.subscribe(
         subscription_path, callback=callback)
     print(f"Pulling messages from {subscription_path}...")
 
     with subscriber:
         try:
-            streaming_pull_feature.result()
+            streaming_pull_future.result()
         except Exception as e:
             print(e)
 # [END container_pubsub_pull]
