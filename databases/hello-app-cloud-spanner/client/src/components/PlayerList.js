@@ -20,20 +20,20 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import { deleteSinger } from "../services/singers";
+import { deletePlayer } from "../services/players";
 
-export default function SingerList({setError, singers, setSingers}) {
+export default function PlayerList({setError, players, setPlayers}) {
     const handleSubmit = async (uuid) => {
         try {
-            await deleteSinger(uuid);
-            setSingers(singers.filter(singer => singer.SingerUuid !== uuid));
+            await deletePlayer(uuid);
+            setPlayers(players.filter(player => player.PlayerUuid !== uuid));
         } catch (error) {
             setError(error.response.data.error);
         }
     };
 
     return <TableContainer component={Paper}>
-        <Table aria-label="singers table">
+        <Table aria-label="players table">
             <TableHead>
                 <TableRow>
                     <TableCell>Uuid</TableCell>
@@ -44,14 +44,14 @@ export default function SingerList({setError, singers, setSingers}) {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {singers.map(singer =>
-                    <TableRow key={singer.SingerUuid}>
-                        <TableCell>{singer.SingerUuid}</TableCell>
-                        <TableCell>{singer.FirstName}</TableCell>
-                        <TableCell>{singer.LastName}</TableCell>
-                        <TableCell>{singer.BirthDate}</TableCell>
+                {players.map(player =>
+                    <TableRow key={player.PlayerUuid}>
+                        <TableCell>{player.PlayerUuid}</TableCell>
+                        <TableCell>{player.FirstName}</TableCell>
+                        <TableCell>{player.LastName}</TableCell>
+                        <TableCell>{player.BirthDate}</TableCell>
                         <TableCell>
-                            <Button variant="contained" color="error" onClick={() => handleSubmit(singer.SingerUuid)}>Delete</Button>
+                            <Button variant="contained" color="error" onClick={() => handleSubmit(player.PlayerUuid)}>Delete</Button>
                         </TableCell>
                     </TableRow>
                 )}

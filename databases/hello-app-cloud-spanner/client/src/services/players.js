@@ -12,14 +12,14 @@ limitations under the License.
 */
 import axios from "axios";
 
-export async function getSingers() {
-    return axios.get("/api/v1/singers");
+export async function getPlayers() {
+    return axios.get("/api/v1/players");
 }
 
-export async function createSinger(singer) {
-    return axios.post("/api/v1/singers", singer);
+export async function createPlayer(player) {
+    return axios.post("/api/v1/players", player);
 }
 
-export async function deleteSinger(uuid) {
-    return axios.delete(`/api/v1/singers/${uuid}`);
+export async function deletePlayer(uuid) {
+    return axios.delete(`/api/v1/players/${uuid}`);
 }

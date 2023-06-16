@@ -18,9 +18,9 @@ import { DatePicker } from "@mui/x-date-pickers";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 
-import { createSinger } from "../services/singers";
+import { createPlayer } from "../services/players";
 
-export default function CreateSinger({setError, singers, setSingers}) {
+export default function CreatePlayer({setError, players, setPlayers}) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [birthDate, setBirthDate] = useState('');
@@ -28,7 +28,7 @@ export default function CreateSinger({setError, singers, setSingers}) {
     const handleSubmit = async function(event) {
         event.preventDefault();
         try {
-            const response = await createSinger({
+            const response = await createPlayer({
                 firstName, lastName,
                 birthDate: dayjs(new Date(birthDate)).format("YYYY-MM-DD")
             });
@@ -36,7 +36,7 @@ export default function CreateSinger({setError, singers, setSingers}) {
             setFirstName('');
             setLastName('');
             setBirthDate('');
-            setSingers([...singers, response.data]);
+            setPlayers([...players, response.data]);
         } catch (error) {
             setError(error.response.data.error);
         }
@@ -55,7 +55,7 @@ export default function CreateSinger({setError, singers, setSingers}) {
             </Grid>
             <Grid item xs={1}></Grid>
             <Grid container item xs={2} direction="row" justifyContent="flex-end">
-                <Button variant="contained" type="submit">Create Singer</Button>
+                <Button variant="contained" type="submit">Create Player</Button>
             </Grid>
         </Grid>
     </form>;
