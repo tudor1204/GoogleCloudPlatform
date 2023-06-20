@@ -24,7 +24,7 @@ steps:
     - 'gcr.io/google-samples/whereami:v1.2.20'
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.20'
-    - '.'
+    - '-t'
     - 'europe-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.20'
     - '.'
   dir: 'whereami'
