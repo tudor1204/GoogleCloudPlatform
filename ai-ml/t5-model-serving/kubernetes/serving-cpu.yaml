@@ -41,7 +41,7 @@ spec:
         runAsGroup: 1000
       containers:
         - name: inference
-          image: gcr.io/PROJECT_ID/models/t5-small:1.0-cpu
+          image: us-central1-docker.pkg.dev/PROJECT_ID/models/t5-small:1.0-cpu
           imagePullPolicy: IfNotPresent
           args: ["torchserve", "--start", "--foreground"]
           resources:
