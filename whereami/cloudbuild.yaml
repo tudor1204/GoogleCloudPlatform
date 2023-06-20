@@ -25,6 +25,8 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.20'
     - '.'
+    - 'europe-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.20'
+    - '.'
   dir: 'whereami'
 - name: ubuntu
   script: |
@@ -38,3 +40,4 @@ steps:
 images:
   - 'gcr.io/google-samples/whereami:v1.2.20'
   - 'us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.20'
+  - 'europe-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.20'
