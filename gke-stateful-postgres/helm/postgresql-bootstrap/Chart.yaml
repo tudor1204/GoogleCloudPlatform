@@ -7,4 +7,4 @@ appVersion: "15.1.0"
 dependencies:
 - name: postgresql-ha
   repository: https://charts.bitnami.com/bitnami
-  version: 11.7.4
+  version: 11.7.5
