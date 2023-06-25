@@ -97,8 +97,10 @@ if [ "${LEVEL}" = "pod" ]; then
             -o json | \
             jq '[.items[] | {kind: .kind, namespace: .metadata.namespace, name: .metadata.name, podQoS: .status.qosClass, containers: [ .spec.containers[] | {name: .name, cpuRequest: .resources.requests.cpu, cpuLimit: .resources.limits.cpu, memRequest: .resources.requests.memory, memLimit: .resources.limits.memory}]}]')
 else
-    if [ "${LEVEL}" = "" ] || [ "${LEVEL}" = "controller" ]; then
+    if [ "${LEVEL}" = "" ]; then
         LEVEL="controller"
+    elif [ "${LEVEL}" = "controller" ]; then
+        true
     else
        echo "Invalid option: '${LEVEL}' is not valid. Must be 'pod' or 'controller'."
        exit 1
