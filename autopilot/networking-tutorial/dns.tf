@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ap_networking_tutorial_create_dns]
+
 terraform {
   required_version = "~> 1.3"
 }
@@ -66,3 +68,4 @@ output "domain" {
   value = trim(google_dns_record_set.a.name, ".")
 }
 
+# [END gke_ap_networking_tutorial_create_dns]

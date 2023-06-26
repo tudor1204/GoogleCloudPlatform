@@ -3,14 +3,14 @@
 
 # These owners will be the default owners for everything in
 # the repo. Unless a later match takes precedence.
-*                   @GoogleCloudPlatform/anthos-dpe
+*                   @GoogleCloudPlatform/anthos-dpe @yoshi-approver
 
 # Directory-specific owners
-/windows-multi-arch/ @ibabou @liurupeng @mcshooter @pjh
-/gke-stateful-postgres/ @aburhan @pwschuurman
-/gke-stateful-kafka/ @aburhan @pwschuurman
-/gke-vpa-recommendations/ @aburhan
-/whereami/ @theemadnes
-/ai-ml/ @rbarberop @alizaidis
-/batch/ @rbarberop @alizaidis
-/databases/hello-app-cloud-spanner @thiagotnunes
+/windows-multi-arch/ @ibabou @liurupeng @mcshooter @pjh @yoshi-approver
+/gke-stateful-postgres/ @aburhan @pwschuurman @yoshi-approver
+/gke-stateful-kafka/ @aburhan @pwschuurman @yoshi-approver
+/gke-vpa-recommendations/ @aburhan @yoshi-approver
+/whereami/ @theemadnes @yoshi-approver
+/ai-ml/ @rbarberop @alizaidis @yoshi-approver
+/batch/ @rbarberop @alizaidis @yoshi-approver
+/databases/hello-app-cloud-spanner @thiagotnunes @yoshi-approver
