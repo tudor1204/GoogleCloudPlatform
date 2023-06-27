@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from datetime import date
+from datetime import datetime, date
 import time
 import os
 import config
@@ -21,13 +21,20 @@ from google.api_core.exceptions import GoogleAPICallError
 
 import logging
 
-run_date = date.today()
+run_date = datetime.now()
 logging.basicConfig(level=config.log_level_mapping.get(config.LOGGING_LEVEL.upper(), logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
     
 def get_gke_metrics(metric_name, query):
-    output = []
+    """
+    Retrieves Google Kubernetes Engine (GKE) metrics.
 
+    Parameters:
+    metric_name (str): The name of the metric to retrieve.
+    query: Query configuration for the metric.
 
+    Returns:
+    list: List of metrics.
+    """
     client = monitoring_v3.MetricServiceClient()
     project_name = f"projects/{config.PROJECT_ID}"
     now = time.time()
@@ -48,62 +55,64 @@ def get_gke_metrics(metric_name, query):
             "group_by_fields": query.columns,
         }
     )
-    
+    rows = []
     try:
         results = client.list_time_series(
-            request={
+        request={
                 "name": project_name,
-                "filter": f'metric.type = "{query.metric}" AND NOT resource.label.namespace_name = "kube-system" AND NOT resource.label.namespace_name = "istio-system" AND NOT resource.label.namespace_name = "gatekeeper-system" AND NOT resource.label.namespace_name = "gke-system" AND NOT resource.label.namespace_name = "gmp-system" AND NOT resource.label.namespace_name = "gke-gmp-system" AND NOT resource.label.namespace_name = "gke-managed-filestorecsi" AND NOT resource.label.namespace_name = "gke-mcs"',
+                "filter": f'metric.type = "{query.metric}" AND {config.namespace_filter}',
                 "interval": interval,
                 "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.FULL,
                 "aggregation": aggregation
             }
         )
         logging.info("Building Row")
-        rows = []
-        for result in results:
-            print(request)  
+        
+        for result in results: 
+            row = {}
             label = result.resource.labels
             metadata = result.metadata.system_labels.fields
-            metricdata = result.metric.labels
-            metric_type = result.value_type
-     
+            metric_label = result.metric.labels
+        
             if "hpa" in metric_name:
-                controller_name = metricdata['targetref_name']
-                controller_type = metricdata['targetref_kind']
-            elif "vpa" in metric_name:
-                controller_name = metadata['controller_name'].string_value
-                controller_type = metadata['controller_kind'].string_value
+                controller_name = metric_label['targetref_name']
+                controller_type = metric_label['targetref_kind']
+                container_name = metric_label['container_name']
+            elif "vpa" in metric_name:               
+                controller_name = label['controller_name']
+                controller_type = label['controller_kind']
+                container_name = metric_label['container_name'] 
             else:
                 controller_name = metadata['top_level_controller_name'].string_value
                 controller_type = metadata['top_level_controller_type'].string_value
-
+                container_name = label['container_name']
             row = {
-                "run_date": run_date.strftime('%Y-%m-%d'),
-                "metric_name": metric_name,
-                "project_id": label['project_id'],
-                "location": label['location'],
-                "cluster_name": label['cluster_name'],
-                "namespace_name": label['namespace_name'], 
-                "controller_name": controller_name,
-                "controller_type": controller_type,
-                "container_name": label['container_name']
-            } 
+                    "run_date": run_date.strftime('%Y-%m-%d %H:%M:%S'),
+                    "metric_name": metric_name,
+                    "project_id": label['project_id'],
+                    "location": label['location'],
+                    "cluster_name": label['cluster_name'],
+                    "namespace_name": label['namespace_name'], 
+                    "controller_name": controller_name,
+                    "controller_type": controller_type,
+                    "container_name": container_name
+                }
             points = []         
             for point in result.points:
                 test = {
-                    "metric_timestamp": point.interval.start_time.strftime('%Y-%m-%d %H:%M:%S.%f'),
-                    "metric_value": point.value.double_value or float(point.value.int64_value)
-                }     
+                        "metric_timestamp": point.interval.start_time.strftime('%Y-%m-%d %H:%M:%S.%f'),
+                        "metric_value": point.value.double_value or float(point.value.int64_value)
+                    }     
                 points.append(test)
             row["points_array"] = points
-            output.append(row)
-        
-    except:
-        print(results)
-        logging.info(f"No {metric_name} workloads found")
+            rows.append(row)
+    except GoogleAPICallError as error:
+        logging.info(f'Google API call error: {error}')
+    except Exception as error:
+        logging.info(f'Unexpected error: {error}')
+    return rows
 
-    return output
+    
 
 def write_to_bigquery(rows_to_insert):
     client = bigquery.Client()
@@ -123,10 +132,8 @@ def run_pipeline():
         if rows_to_insert:
             write_to_bigquery(rows_to_insert)
         else:
-            logging.info("No metrics present in the request")
-    logging.info("Run Completed")
-   
-         
+            logging.info(f'{metric} unavailable. Skip')
+    logging.info("Run Completed")   
 
 if __name__ == "__main__":
     if 'PROJECT_ID' not in os.environ or not os.environ['PROJECT_ID']:

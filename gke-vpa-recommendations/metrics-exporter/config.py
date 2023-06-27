@@ -54,30 +54,22 @@ if not PROJECT_ID:
     raise ValueError("The PROJECT_ID environment variable is not set.")
 
 BIGQUERY_DATASET = "metric_export"
-BIGQUERY_TABLE = "metrics"
+BIGQUERY_TABLE = "mql_metrics"
 TABLE_ID = f'{PROJECT_ID}.{BIGQUERY_DATASET}.{BIGQUERY_TABLE}'
 
 RECOMMENDATION_WINDOW_SECONDS = 2592000
 LATEST_WINDOW_SECONDS = 300
 METRIC_WINDOW = 259200
-METRIC_DISTANCE = 300
+METRIC_DISTANCE = 600
 
 gke_group_by_fields = [ 'resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."controller_name"','resource.label."namespace_name"','resource.label."container_name"','metadata.system_labels."top_level_controller_name"','metadata.system_labels."top_level_controller_type"']
-hpa_group_by_fields = ['resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."namespace_name"','resource.label."container_name"','metric.label."targetref_kind"','metric.label."targetref_name"']
-scale_group_by_fields = ['resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."namespace_name"','metric.label."container_name"','resource.label."controller_kind"','resource.label."controller_name"']   
+hpa_group_by_fields = ['resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."namespace_name"','metric.label."container_name"','metric.label."targetref_kind"','metric.label."targetref_name"']
+scale_group_by_fields = ['resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."namespace_name"','metric.label."container_name"','resource.label."controller_kind"','resource.label."controller_name"'] 
 
+excluded_namespaces = ["kube-system", "istio-system", "gatekeeper-system", "gke-system", "gmp-system", "gke-gmp-system", "gke-managed-filestorecsi", "gke-mcs"]
+
+namespace_filter = ' AND '.join(f'NOT resource.label.namespace_name = "{namespace}"' for namespace in excluded_namespaces)
 MQL_QUERY = {
-     "vpa_memory_recommendation": MetricConfig(      
-                    metric="kubernetes.io/autoscaler/container/memory/per_replica_recommended_request_bytes",
-                    window=RECOMMENDATION_WINDOW_SECONDS,
-                    seconds_between_points = 86400,
-                    per_series_aligner=monitoring_v3.types.Aggregation.Aligner.ALIGN_MEAN,
-                    cross_series_reducer=monitoring_v3.types.Aggregation.Reducer.REDUCE_MEAN,
-                    data_type="double_value",
-                    columns = scale_group_by_fields
-                ) 
-}
-_MQL_QUERY = {
     "cpu_usage": MetricConfig(      
                     metric="kubernetes.io/container/cpu/core_usage_time",
                     window=METRIC_WINDOW,
@@ -151,8 +143,8 @@ _MQL_QUERY = {
                     columns = gke_group_by_fields
                 ),
     "hpa_cpu": MetricConfig(      
-                    metric="kubernetes.io/container/memory/request_utilization",
-                    window=METRIC_WINDOW,
+                    metric="custom.googleapis.com/podautoscaler/hpa/cpu/target_utilization",
+                    window=LATEST_WINDOW_SECONDS,
                     seconds_between_points = METRIC_DISTANCE,
                     per_series_aligner=monitoring_v3.types.Aggregation.Aligner.ALIGN_MEAN,
                     cross_series_reducer=monitoring_v3.types.Aggregation.Reducer.REDUCE_MEAN,
@@ -160,8 +152,8 @@ _MQL_QUERY = {
                     columns = hpa_group_by_fields
                 ),
     "hpa_memory": MetricConfig(      
-                    metric="kubernetes.io/container/memory/request_utilization",
-                    window=METRIC_WINDOW,
+                    metric="custom.googleapis.com/podautoscaler/hpa/memory/target_utilization",
+                    window=LATEST_WINDOW_SECONDS,
                     seconds_between_points = METRIC_DISTANCE,
                     per_series_aligner=monitoring_v3.types.Aggregation.Aligner.ALIGN_MEAN,
                     cross_series_reducer=monitoring_v3.types.Aggregation.Reducer.REDUCE_MEAN,
@@ -185,7 +177,16 @@ _MQL_QUERY = {
                     cross_series_reducer=monitoring_v3.types.Aggregation.Reducer.REDUCE_PERCENTILE_95,
                     data_type="double_value",
                     columns = scale_group_by_fields
-                )            
+                ),
+    "vpa_cpu_recommendation_max": MetricConfig(      
+                    metric="kubernetes.io/autoscaler/container/cpu/per_replica_recommended_request_cores",
+                    window=RECOMMENDATION_WINDOW_SECONDS,
+                    seconds_between_points = 86400,
+                    per_series_aligner=monitoring_v3.types.Aggregation.Aligner.ALIGN_MAX,
+                    cross_series_reducer=monitoring_v3.types.Aggregation.Reducer.REDUCE_MAX,
+                    data_type="double_value",
+                    columns = scale_group_by_fields
+                )               
 }
 
 
