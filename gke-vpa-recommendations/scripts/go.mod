@@ -10,7 +10,7 @@ require (
 	google.golang.org/api v0.128.0
 	k8s.io/api v0.27.3
 	k8s.io/apimachinery v0.27.3
-	k8s.io/autoscaler/vertical-pod-autoscaler v0.13.0
+	k8s.io/autoscaler/vertical-pod-autoscaler v0.14.0
 )
 
 require (
