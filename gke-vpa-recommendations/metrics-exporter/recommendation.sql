@@ -19,7 +19,7 @@ WITH
     *,
     ROW_NUMBER() OVER (PARTITION BY run_date, metric_name, project_id, location, cluster_name, namespace_name, controller_name, container_name ORDER BY run_date DESC) AS rn
   FROM
-    `${project_id}.${table_dataset}.${table_id}` ),
+    `$PROJECT_ID.gke_metric_dataset.gke_metrics` ),
 flattened AS (SELECT
   DATE(TIMESTAMP_TRUNC(TIMESTAMP(run_date), DAY)) AS run_date,
   location,
