@@ -1,0 +1,75 @@
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  replicas: 3
+  image:
+    application: confluentinc/cp-server:7.4.0
+    init: confluentinc/confluent-init-container:2.6.0
+  dataVolumeCapacity: 100Gi
+  storageClass:
+    name: premium-rwo
+  podTemplate:
+    tolerations:
+    - key: "app.stateful/component"
+      operator: "Equal"
+      value: "kafka-broker"
+      effect: NoSchedule
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: "app.stateful/component"
+              operator: In
+              values:
+              - "kafka-broker"
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app: my-cluster
+                clusterId: kafka
+                platform.confluent.io/type: kafka
+            topologyKey: "kubernetes.io/hostname"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: Zookeeper
+metadata:
+  name: zookeeper
+spec:
+  replicas: 3
+  image:
+    application: confluentinc/cp-zookeeper:7.4.0
+    init: confluentinc/confluent-init-container:2.6.0
+  dataVolumeCapacity: 90Gi
+  logVolumeCapacity: 10Gi
+  storageClass:
+    name: premium-rwo
+  podTemplate:
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: "app.stateful/component"
+              operator: In
+              values:
+              - "zookeeper"
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1 
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app: zookeeper
+                clusterId: kafka
+                platform.confluent.io/type: zookeeper
+            topologyKey: "kubernetes.io/hostname"
+
