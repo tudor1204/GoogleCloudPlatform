@@ -20,8 +20,8 @@ spec:
       - transaction.state.log.min.isr=2
       - default.replication.factor=3
       - min.insync.replicas=2
+      - auto.create.topics.enable=true
   listeners:
-    internal:
     custom:
     - name: tls 
       port: 9093
