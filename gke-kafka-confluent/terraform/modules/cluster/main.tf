@@ -34,7 +34,7 @@ module "kafka_cluster" {
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"
-    component = "strimzi-operator"
+    component = "confluent-operator"
   }
 
   monitoring_enable_managed_prometheus = true

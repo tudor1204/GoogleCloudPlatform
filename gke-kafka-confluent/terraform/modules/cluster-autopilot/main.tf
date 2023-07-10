@@ -31,7 +31,7 @@ module "kafka_cluster" {
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"
-    component = "strimzi-operator"
+    component = "confluent-operator"
   }
 }
 # [END gke_standard_private_regional_cluster]
