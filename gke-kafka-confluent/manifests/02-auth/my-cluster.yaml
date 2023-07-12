@@ -23,8 +23,12 @@ spec:
       - auto.create.topics.enable=true
   listeners:
     custom:
-    - name: tls 
-      port: 9093
+    - name: sasl
+      port: 9094
+      authentication:
+        type: plain
+        jaasConfig:
+          secretRef: my-user-credentials
       tls:
         enabled: true
   podTemplate:
