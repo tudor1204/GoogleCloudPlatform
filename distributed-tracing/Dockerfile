@@ -9,13 +9,13 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: backend-configmap
-  namespace: default
-  selfLink: /api/v1/namespaces/default/configmaps/backend-config
-data:
-  PROJECT_ID: "$PROJECT_ID"
-  LOCATION: "us-west1"
-  DESTINATION_URL: "https://www.google.com"
+FROM golang:1.19.2 as builder
+WORKDIR /crud
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /http-app
+
+FROM gcr.io/distroless/base-debian11
+WORKDIR /
+COPY --from=builder /http-app /http-app
+USER nonroot:nonroot
+CMD ["/http-app"]

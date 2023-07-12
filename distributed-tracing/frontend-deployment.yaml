@@ -25,9 +25,13 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: gcr.io/$PROJECT_ID/frontend:latest
+        image: us-central1-docker.pkg.dev/$PROJECT_ID/distributed-tracing-docker-repo/http-app:latest
         ports:
         - containerPort: 8081
-        envFrom:
-          - configMapRef:
-              name: frontend-configmap
+        env:
+        - name: DESTINATION_URL
+          value: "http://$BACKEND_IP:8080"
+        - name: PORT
+          value: "8081"
+        - name: OTEL_SERVICE_NAME
+          value: "frontend-application"

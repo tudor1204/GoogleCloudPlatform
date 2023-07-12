@@ -25,9 +25,13 @@ spec:
     spec:
       containers:
       - name: backend
-        image: gcr.io/$PROJECT_ID/backend:latest
+        image: us-central1-docker.pkg.dev/$PROJECT_ID/distributed-tracing-docker-repo/http-app:latest
         ports:
         - containerPort: 8080
-        envFrom:
-          - configMapRef:
-              name: backend-configmap
+        env:
+        - name: DESTINATION_URL
+          value: "https://www.google.com"
+        - name: PORT
+          value: "8080"
+        - name: OTEL_SERVICE_NAME
+          value: "backend-application"
