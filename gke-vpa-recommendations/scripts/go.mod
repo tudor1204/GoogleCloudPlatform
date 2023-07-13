@@ -3,7 +3,7 @@ module metrics-exporter
 go 1.19
 
 require (
-	cloud.google.com/go v0.110.4
+	cloud.google.com/go v0.110.5
 	cloud.google.com/go/compute/metadata v0.2.3
 	github.com/sirupsen/logrus v1.9.3
 	golang.org/x/oauth2 v0.10.0
