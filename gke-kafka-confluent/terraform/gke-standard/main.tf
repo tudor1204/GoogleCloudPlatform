@@ -33,7 +33,7 @@ module "kafka_cluster" {
 
   node_pools = [
     {
-      name            = "pool-kafka"
+      name            = "pool-zookeeper"
       disk_size_gb    = 20
       disk_type       = "pd-standard"
       autoscaling     = true
@@ -45,9 +45,9 @@ module "kafka_cluster" {
       auto_repair     = true
     },
     {
-      name            = "pool-zookeeper"
+      name            = "pool-kafka"
       disk_size_gb    = 20
-      disk_type       = "pd-standard"
+      disk_type       = "pd-ssd"
       autoscaling     = true
       min_count       = 1
       max_count       = 2
