@@ -1,0 +1,13 @@
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: my-cluster
+spec:
+  selector:
+    matchLabels:
+      app: my-cluster
+      clusterId: kafka
+  endpoints:
+  - port: 7778
+    interval: 30s
+    path: /
