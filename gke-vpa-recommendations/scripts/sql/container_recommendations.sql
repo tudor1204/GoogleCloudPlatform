@@ -19,7 +19,7 @@ WITH
     *,
     ROW_NUMBER() OVER (PARTITION BY run_date, metric_name, project_id, location, cluster_name, namespace_name, controller_name, container_name ORDER BY run_date DESC) AS rn
   FROM
-    `$PROJECT_ID.gke_metric_dataset.gke_metrics` ),
+    `${project_id}.${table_dataset}.${table_id}` ),
 flattened AS (SELECT
   DATE(TIMESTAMP_TRUNC(TIMESTAMP(run_date), DAY)) AS run_date,
   location,
@@ -129,6 +129,7 @@ SELECT
 END), CEIL(cpu_mcore_usage))
   AS cpu_limit_recommendation,
   CEIL(GREATEST(memory_requested_recommendation, memory_mib_usage_max)) AS memory_requested_recommendation,
-  CEIL(GREATEST(memory_requested_recommendation, memory_mib_usage_max)) AS memory_limit_recommendation
+  CEIL(GREATEST(memory_requested_recommendation, memory_mib_usage_max)) AS memory_limit_recommendation,
+  ((cpu_requested_mcores-cpu_requested_recommendation) + ((memory_requested_mib - memory_requested_recommendation)/13.4)) AS priority
 FROM
   recommendation_staging ORDER BY run_date
