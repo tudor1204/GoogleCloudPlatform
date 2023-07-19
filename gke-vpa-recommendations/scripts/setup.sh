@@ -1,7 +1,3 @@
-echo "Configuring region and zone"
-gcloud config set compute/region $REGION
-gcloud config set compute/zone $ZONE
-
 echo "Create a new IAM service account"
 gcloud iam service-accounts create svc-metric-exporter \
     --project=${PROJECT_ID}
