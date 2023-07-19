@@ -31,7 +31,7 @@ resource "google_bigquery_table" "gke_metrics" {
 
   labels = local.resource_labels
 
-  schema = file("../scripts/sql/bq_schema.json")
+  schema = file("../scripts/sql/bigquery_schema.json")
  
 }
 
