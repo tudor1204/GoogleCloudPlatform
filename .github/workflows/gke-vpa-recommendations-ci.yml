@@ -17,6 +17,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Validate terraform
         run: |
-          cd gke-vpa-recommendations/metrics-exporter/terraform
+          cd gke-vpa-recommendations/terraform
           terraform init
           terraform validate
