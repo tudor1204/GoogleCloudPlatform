@@ -110,6 +110,7 @@ SELECT
     cluster_name,
     controller_name,
     controller_type,
+    namespace_name,
     container_name,
     cpu_mcore_usage,
     memory_mib_usage_max,
