@@ -25,7 +25,7 @@ scipy==1.11.1
     # via scikit-learn
 six==1.16.0
     # via python-dateutil
-threadpoolctl==3.1.0
+threadpoolctl==3.2.0
     # via scikit-learn
 tzdata==2023.3
     # via pandas
