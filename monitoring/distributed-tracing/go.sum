@@ -14,9 +14,13 @@ github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.13.1
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.13.1/go.mod h1:Xx0VKh7GJ4si3rmElbh19Mejxz68ibWg/J30ZOMrqzU=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.16.1 h1:dkIyFw11w878MSG5kegjr9Oept42iCjNvhO2BVRrr60=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.16.1/go.mod h1:iyJ7cfLP5PVMo/55aIBBndyeFcMDXKUfbfZxaMM5GeU=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.17.0 h1:DwGeS/9k9xdpnvVQuJF+L9bYNFvBCmCWlDA8d8opoZY=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.17.0/go.mod h1:SUVNJAkkyRKeM3L46/NhFGIz+Kx1zetN09qUs1XbMx8=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/cloudmock v0.40.1 h1:Mkm1EDj1blE1U31XI4GOwhMrTK0czB2HouHKxzr2ORo=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.40.1 h1:FFGWjWC0sCZgJziVe/yP39XjlQlf+MIEYXoRPJq8YX0=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.40.1/go.mod h1:lz6DEePTxmjvYMtusOoS3qDAErC0STi/wmvqJucKY28=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.41.0 h1:MWQ81b2TkSLbDpLINiKdZdoht1VMEHCKr4BSZpb/KQ8=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.41.0/go.mod h1:lz6DEePTxmjvYMtusOoS3qDAErC0STi/wmvqJucKY28=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
@@ -62,6 +66,7 @@ github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
 github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/uuid v1.1.2/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/googleapis/enterprise-certificate-proxy v0.2.1 h1:RY7tHKZcRlk788d5WSo/e83gOyyy742E8GSs771ySpg=
 github.com/googleapis/enterprise-certificate-proxy v0.2.1/go.mod h1:AwSRAtLfXpU5Nm3pW+v7rGDHp09LsPtGY9MduiEsR9k=
 github.com/googleapis/gax-go/v2 v2.7.0 h1:IcsPKeInNvYi7eqSaDjiZqDDKu5rsmunY0Y1YupQSSQ=
