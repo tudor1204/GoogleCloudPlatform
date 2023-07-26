@@ -12,23 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-locals {
-  bigquery_dataset = "gke_metric_dataset"
-  bigquery_table = "gke_metrics"
-  bigquery_recommendations_view = "container_recommendations"
-  bigquery_workloads_at_risk_view = "workloads_at_risk"
-  application_name  = "workload-recommendations"
-  schedule          = "0 23 * * *"
-  schedule_timezone = "America/New_York"
-  run_memory = "1Gi"
-  run_cpu = "1"
-  resource_labels = merge(var.resource_labels, {
-    deployed_by = "cloudbuild"
-    solution    = "goog-ab-gke-workload-recs"
-    terraform   = "true"
-  })
-}
-
+# Project variables
 variable "project_id" {
   description = "GCP Project ID"
 }
@@ -45,7 +29,89 @@ variable "resource_labels" {
   default     = {}
 }
 
-variable "image"{
-    type = string
-    description = "container image"
+# Cloud scheduler variables
+variable "schedule_name"{
+    default = "recommendation-schedule"
+}
+
+variable "schedule_description"{
+default = "Cloud Run Job schedule to trigger workload recommendations job"
+}
+
+variable "schedule" {
+  description = "The schedule on which the Cloud Scheduler job should run"
+  default     = "0 23 * * *"
+}
+
+variable "schedule_timezone" {
+  description = "The timezone for the Cloud Scheduler job"
+  default     = "America/New_York"
+}
+
+# Cloud run job variables
+variable "image" {
+  description = "The Docker image to deploy to Cloud Run Job"
+}
+
+variable "job_name" {
+  description = "The name of the Cloud Scheduler job"
+  default     = "workload-recommendations"
+}
+
+variable "job_run_memory" {
+  description = "The amount of memory to allocate to the Cloud Run service"
+  default     = "1Gi"
+}
+
+variable "job_run_cpu" {
+  description = "The amount of CPU to allocate to the Cloud Run service"
+  default     = "1"
+}
+
+variable "RECOMMENDATION_WINDOW_SECONDS" {
+  description = "The timeframe for VPA recommendations. Defaults to 1209600 seconds, or 14 days. "
+  default     = 1209600
+}
+
+variable "RECOMMENDATION_DISTANCE" {
+  description = "The interval at which data points are returned. The default is 1 day (86400 seconds)"
+  default     = 86400
+}
+
+variable "LATEST_WINDOW_SECONDS" {
+  description = "The timeframe for obtaining the most recent requested and limit resource values. Defaults to 600 seconds, or 10 minutes"
+  default     = 600
+}
+
+variable "METRIC_WINDOW" {
+  description = "Establishes the timeframe for GKE usage and utilization metrics. Defaults to 259200 seconds, or 3 days"
+  default     = 259200
+}
+
+variable "METRIC_DISTANCE" {
+  description = "The interval at which data points are returned. Defaults to 600 seconds, or 10 minutes."
+  default     = 600
+}
+
+# BigQuery variables
+variable "BIGQUERY_DATASET" {
+  description = "The name of the BigQuery dataset"
+  default     = "gke_metric_dataset"
+}
+
+variable "BIGQUERY_TABLE" {
+  description = "The name of the BigQuery table"
+  default     = "gke_metrics"
+}
+
+variable "bigquery_recommendations_view" {
+  description = "The name of the BigQuery container recommendation view"
+  default     = "container_recommendations"
+}
+locals {
+  resource_labels = merge(var.resource_labels, {
+    deployed_by = "cloudbuild"
+    solution    = "goog-ab-gke-workload-recs"
+    terraform   = "true"
+  })
 }

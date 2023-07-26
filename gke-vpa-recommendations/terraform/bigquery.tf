@@ -13,15 +13,15 @@
 # limitations under the License.
 
 resource "google_bigquery_dataset" "dataset" {
-  dataset_id  = local.bigquery_dataset
+  dataset_id  = var.BIGQUERY_DATASET
   description = "GKE container recommendations dataset"
   location    = var.region
-  labels      = local.resource_labels
+  labels      = var.resource_labels
 }
 
 resource "google_bigquery_table" "gke_metrics" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
-  table_id            = local.bigquery_table
+  table_id            = var.BIGQUERY_TABLE
   description         = "GKE system and scale metrics"
   deletion_protection = false
   
@@ -37,10 +37,10 @@ resource "google_bigquery_table" "gke_metrics" {
 
 resource "google_bigquery_table" "workload_recommendation_view" {
   dataset_id = google_bigquery_dataset.dataset.dataset_id
-  table_id   = local.bigquery_recommendations_view
+  table_id   = var.bigquery_recommendations_view
   deletion_protection=false
   view {
-    query = templatefile("../scripts/sql/container_recommendations.sql", { project_id = var.project_id, table_dataset = local.bigquery_dataset, table_id = local.bigquery_table })
+    query = templatefile("../scripts/sql/container_recommendations.sql", { project_id = var.project_id, table_dataset = var.BIGQUERY_DATASET, table_id = var.BIGQUERY_TABLE })
     use_legacy_sql = false
   }
   labels = local.resource_labels

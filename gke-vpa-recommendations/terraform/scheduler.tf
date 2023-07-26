@@ -14,23 +14,25 @@
 
 
 resource "google_cloud_scheduler_job" "job" {
-  name             = "recommendation-schedule"
-  description      = "Export GKE VPA metrics job"
-  schedule         = local.schedule
-  time_zone        = local.schedule_timezone
-  attempt_deadline = "320s"
+  name             = var.schedule_name
+  description      = var.schedule_description
+  schedule         = var.schedule
+  time_zone        = var.schedule_timezone
   region           = var.region
+  attempt_deadline = "320s"
+  
   retry_config {
     retry_count = 1
   }
 
   http_target {
     http_method = "POST"
-    uri         = "https://${var.region}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${var.project_id}/jobs/${local.application_name}:run"
+    uri         = "https://${var.region}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${var.project_id}/jobs/${var.job_name}:run"
     body        = base64encode("")
 
     oauth_token {
       service_account_email = google_service_account.service_account.email
+      
     }
   }
 }

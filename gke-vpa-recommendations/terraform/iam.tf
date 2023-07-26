@@ -15,8 +15,8 @@
 data "google_project" "project" {}
 
 resource "google_service_account" "service_account" {
-  account_id   = local.application_name
-  display_name = "Service Account for instances of ${local.application_name}"
+  account_id   = var.job_name
+  display_name = "Service Account for instances of ${var.job_name}"
 }
 
 resource "google_project_iam_member" "monitoring_viewer" {
@@ -46,5 +46,11 @@ resource "google_project_iam_member" "bigquery_job_user" {
 resource "google_project_iam_member" "run_sa" {
   project = var.project_id
   role    = "roles/run.invoker"
+  member  = "serviceAccount:${google_service_account.service_account.email}"
+}
+
+resource "google_project_iam_member" "scheduler" {
+  project = var.project_id
+  role    = "roles/cloudscheduler.admin"
   member  = "serviceAccount:${google_service_account.service_account.email}"
 }

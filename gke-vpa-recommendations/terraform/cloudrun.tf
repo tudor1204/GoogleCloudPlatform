@@ -14,9 +14,8 @@
 
 
 resource "google_cloud_run_v2_job" "metric_exporter" {
-  name         = local.application_name
+  name         = var.job_name
   location     = var.region
-  launch_stage = "BETA"
   
   template {
     task_count  = 1
@@ -36,38 +35,38 @@ resource "google_cloud_run_v2_job" "metric_exporter" {
             value = "INFO"
         }
         env {
-            name = "SERVICE_ACCOUNT"
-            value = "default"
-        }
-        env {
             name = "BIGQUERY_DATASET"
-            value = local.bigquery_dataset
+            value = var.BIGQUERY_DATASET
         }
         env {
             name = "BIGQUERY_TABLE"
-            value = local.bigquery_table
+            value = var.BIGQUERY_TABLE
         }
         env {
-            name = "BIGQUERY_LOCATION"
-            value = var.region
+            name = "RECOMMENDATION_WINDOW_SECONDS"
+            value = var.RECOMMENDATION_WINDOW_SECONDS
         }
         env {
-            name = "CPU_RECOMMENDATION_BUFFER"
-            value = 0.0
+            name = "RECOMMENDATION_DISTANCE"
+            value = var.RECOMMENDATION_DISTANCE
         }
         env {
-            name = "MEMORY_RECOMMENDATION_BUFFER"
-            value = 0.10
+            name = "METRIC_WINDOW"
+            value = var.METRIC_WINDOW
         }
         env {
-            name = "METRIC_PERIOD"
-            value = "2w"
+            name = "METRIC_DISTANCE"
+            value = var.METRIC_DISTANCE
         }
-
+        env {
+            name = "LATEST_WINDOW_SECONDS"
+            value = var.LATEST_WINDOW_SECONDS
+        }
+        
         resources {
           limits = {
-            memory = local.run_memory
-            cpu = local.run_cpu
+            memory = var.job_run_memory
+            cpu = var.job_run_cpu
           }
         }
       }

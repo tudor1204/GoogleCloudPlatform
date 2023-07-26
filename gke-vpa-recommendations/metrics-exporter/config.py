@@ -13,7 +13,6 @@
 # limitations under the License.
 import os
 from google.cloud import monitoring_v3
-from os import environ as env
 import logging
 
 class MetricConfig:
@@ -40,7 +39,7 @@ class MetricConfig:
         self.columns = columns
 
 # Get the desired logging level from the environment variable
-LOGGING_LEVEL = env.get('LOGGING_LEVEL', 'INFO')
+LOGGING_LEVEL = os.getenv('LOGGING_LEVEL', 'INFO')
 log_level_mapping = {
     'DEBUG': logging.DEBUG,
     'INFO': logging.INFO,
@@ -53,14 +52,15 @@ PROJECT_ID = os.getenv("PROJECT_ID", "")
 if not PROJECT_ID:
     raise ValueError("The PROJECT_ID environment variable is not set.")
 
-BIGQUERY_DATASET = "gke_metric_dataset"
-BIGQUERY_TABLE = "gke_metrics"
+BIGQUERY_DATASET = os.getenv("BIGQUERY_DATASET", "gke_metric_dataset")
+BIGQUERY_TABLE = os.getenv("BIGQUERY_TABLE", "gke_metrics")
 TABLE_ID = f'{PROJECT_ID}.{BIGQUERY_DATASET}.{BIGQUERY_TABLE}'
 
-RECOMMENDATION_WINDOW_SECONDS = int(os.getenv("LATEST_WINDOW_SECONDS", '2592000'))
+RECOMMENDATION_WINDOW_SECONDS = int(os.getenv("RECOMMENDATION_WINDOW_SECONDS", '2592000'))
 LATEST_WINDOW_SECONDS = int(os.getenv("LATEST_WINDOW_SECONDS", '300'))
 METRIC_WINDOW = int(os.getenv("METRIC_WINDOW", '259200'))
 METRIC_DISTANCE = int(os.getenv("METRIC_DISTANCE", '600'))
+RECOMMENDATION_DISTANCE = int(os.getenv("RECOMMENDATION_DISTANCE", "86400"))
 
 gke_group_by_fields = [ 'resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."controller_name"','resource.label."namespace_name"','resource.label."container_name"','metadata.system_labels."top_level_controller_name"','metadata.system_labels."top_level_controller_type"']
 hpa_group_by_fields = ['resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."namespace_name"','metric.label."container_name"','metric.label."targetref_kind"','metric.label."targetref_name"']
@@ -163,7 +163,7 @@ MQL_QUERY = {
     "vpa_memory_recommendation": MetricConfig(      
                     metric="kubernetes.io/autoscaler/container/memory/per_replica_recommended_request_bytes",
                     window=RECOMMENDATION_WINDOW_SECONDS,
-                    seconds_between_points = 86400,
+                    seconds_between_points = RECOMMENDATION_DISTANCE,
                     per_series_aligner=monitoring_v3.types.Aggregation.Aligner.ALIGN_MAX,
                     cross_series_reducer=monitoring_v3.types.Aggregation.Reducer.REDUCE_MAX,
                     data_type="double_value",
@@ -172,7 +172,7 @@ MQL_QUERY = {
     "vpa_cpu_recommendation": MetricConfig(      
                     metric="kubernetes.io/autoscaler/container/cpu/per_replica_recommended_request_cores",
                     window=RECOMMENDATION_WINDOW_SECONDS,
-                    seconds_between_points = 86400,
+                    seconds_between_points = RECOMMENDATION_DISTANCE,
                     per_series_aligner=monitoring_v3.types.Aggregation.Aligner.ALIGN_MEAN,
                     cross_series_reducer=monitoring_v3.types.Aggregation.Reducer.REDUCE_PERCENTILE_95,
                     data_type="double_value",
@@ -181,7 +181,7 @@ MQL_QUERY = {
     "vpa_cpu_recommendation_max": MetricConfig(      
                     metric="kubernetes.io/autoscaler/container/cpu/per_replica_recommended_request_cores",
                     window=RECOMMENDATION_WINDOW_SECONDS,
-                    seconds_between_points = 86400,
+                    seconds_between_points = RECOMMENDATION_DISTANCE,
                     per_series_aligner=monitoring_v3.types.Aggregation.Aligner.ALIGN_MAX,
                     cross_series_reducer=monitoring_v3.types.Aggregation.Reducer.REDUCE_MAX,
                     data_type="double_value",
