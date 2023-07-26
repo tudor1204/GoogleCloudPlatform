@@ -1,0 +1,19 @@
+{
+  "CN": "my-cluster",
+  "hosts": [
+    "my-cluster",
+    "my-cluster.kafka.svc.cluster.local",
+    "*.kafka.svc.cluster.local"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "ST": "CA",
+      "L": "Confluent"
+    }
+  ]
+}
