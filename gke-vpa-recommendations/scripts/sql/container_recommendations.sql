@@ -91,15 +91,15 @@ GROUP BY 1,2,3,4,5,6,7,8
 SELECT
 *,
   CEIL(CASE
-        WHEN controller_type = 'Deployment' THEN (IF((cpu_requested_mcores = cpu_limit_mcores ), (cpu_vpa_rec + SAFE_DIVIDE(30, cpu_vpa_rec)), (cpu_vpa_rec_95th + SAFE_DIVIDE(30, cpu_vpa_rec_95th))))
+        WHEN controller_type = 'Deployment' THEN (IF((cpu_requested_mcores = cpu_limit_mcores ), (cpu_vpa_rec + SAFE_DIVIDE( cpu_vpa_rec, 30)), (cpu_vpa_rec_95th + SAFE_DIVIDE(cpu_vpa_rec_95th, 30 ))))
       ELSE
-      cpu_mcore_usage + SAFE_DIVIDE(30, cpu_mcore_usage)
+      cpu_mcore_usage + SAFE_DIVIDE(cpu_mcore_usage, 30)
     END
       ) AS cpu_requested_recommendation,
   CEIL(CASE
-        WHEN controller_type = 'Deployment' THEN (memory_vpa_rec + SAFE_DIVIDE( 20, memory_vpa_rec ))
+        WHEN controller_type = 'Deployment' THEN (memory_vpa_rec + SAFE_DIVIDE( memory_vpa_rec , 20 ))
       ELSE
-      memory_mib_usage_max + SAFE_DIVIDE( 20, memory_mib_usage_max )
+      memory_mib_usage_max + SAFE_DIVIDE(memory_mib_usage_max , 20 )
     END
       ) AS memory_requested_recommendation, 
 FROM staging )
