@@ -12,7 +12,7 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-# [START gke_standard_private_regional_cluster]
+# [START gke_streaming__kafka_strimzi_standard_private_regional_cluster]
 module "kafka_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
   project_id               = var.project_id
@@ -92,5 +92,5 @@ module "kafka_cluster" {
   }
   gce_pd_csi_driver = true
 }
-# [END gke_standard_private_regional_cluster]
+# [END gke_streaming__kafka_strimzi_standard_private_regional_cluster]
 

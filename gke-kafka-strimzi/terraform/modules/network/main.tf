@@ -12,7 +12,7 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-# [START vpc_multi_region_network]
+# [START vpc_streaming__kafka_strimzi_multi_region_network]
 module "gcp-network" {
   source  = "terraform-google-modules/network/google"
   version = "< 8.0.0"
@@ -51,9 +51,9 @@ output "network_name" {
 output "subnet_name" {
   value = module.gcp-network.subnets_names[0]
 }
-# [END vpc_multi_region_network]
+# [END vpc_streaming__kafka_strimzi_multi_region_network]
 
-# [START cloudnat_simple_create]
+# [START cloudnat_streaming__kafka_strimzi_simple_create]
 module "cloud_router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 5.0"
@@ -65,4 +65,4 @@ module "cloud_router" {
     name = "${var.cluster_prefix}-nat"
   }]
 }
-# [END cloudnat_simple_create]
+# [END cloudnat_streaming__kafka_strimzi_simple_create]
