@@ -12,7 +12,7 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-// [START vpc_multi_region_network]
+# [START vpc_multi_region_network]
 module "gcp-network" {
   source  = "terraform-google-modules/network/google"
   version = "< 8.0.0"
@@ -24,14 +24,14 @@ module "gcp-network" {
     {
       subnet_name           = "${var.cluster_prefix}-source-private-subnet"
       subnet_ip             = "10.10.0.0/24"
-      subnet_region         = "us-central1"
+      subnet_region         = var.source_region
       subnet_private_access = true
       subnet_flow_logs      = "true"
     },
     {
       subnet_name           = "${var.cluster_prefix}-target-private-subnet"
       subnet_ip             = "10.11.0.0/24"
-      subnet_region         = "us-east1"
+      subnet_region         = var.target_region
       subnet_private_access = true
       subnet_flow_logs      = "true"
     }
@@ -90,7 +90,7 @@ output "target_subnet_name" {
   value = module.gcp-network.subnets_names[1]
 }
 
-// [END vpc_multi_region_network]
+# [END vpc_multi_region_network]
 
 # [START cloudnat_simple_create]
 module "source_cloud_router" {
@@ -99,7 +99,7 @@ module "source_cloud_router" {
   project = var.project_id 
   name    = "${var.cluster_prefix}-source-nat-router"
   network = module.gcp-network.network_name
-  region  = "us-central1"
+  region  = var.source_region
   nats = [{
     name = "${var.cluster_prefix}-source-nat"
   }]
@@ -111,7 +111,7 @@ module "target_cloud_router" {
   project = var.project_id 
   name    = "${var.cluster_prefix}-target-nat-router"
   network = module.gcp-network.network_name
-  region  = "us-east1"
+  region  = var.target_region
   nats = [{
     name = "${var.cluster_prefix}-target-nat"
   }]
