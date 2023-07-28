@@ -12,9 +12,9 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-# [START gke_standard_private_regional_cluster]
+# [START gke_streaming_kafka_confluent_autopilot_private_regional_cluster]
 module "kafka_cluster" {
-  source                   = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
+  source                   = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
   regional                 = true
@@ -27,24 +27,12 @@ module "kafka_cluster" {
   enable_private_endpoint  = false
   enable_private_nodes     = true
   master_ipv4_cidr_block   = "172.16.0.0/28"
-  network_policy           = true
-  logging_enabled_components = ["SYSTEM_COMPONENTS","WORKLOADS"]
-  monitoring_enabled_components = ["SYSTEM_COMPONENTS"]
   enable_cost_allocation = true
-  remove_default_node_pool = true
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"
     component = "confluent-operator"
   }
-
-  monitoring_enable_managed_prometheus = true
-  gke_backup_agent_config = true
- 
-  node_pools        = var.node_pools
-  node_pools_labels = var.node_pools_labels
-  node_pools_taints = var.node_pools_taints
-  gce_pd_csi_driver = true
 }
-# [END gke_standard_private_regional_cluster]
+# [END gke_streaming_kafka_confluent_autopilot_private_regional_cluster]
 
