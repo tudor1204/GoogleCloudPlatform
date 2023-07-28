@@ -12,7 +12,7 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-# [START gke_streaming__kafka_strimzi_standard_private_regional_cluster]
+# [START gke_streaming_kafka_strimzi_autopilot_private_regional_cluster]
 module "kafka_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
   project_id               = var.project_id
@@ -34,5 +34,5 @@ module "kafka_cluster" {
     component = "strimzi-operator"
   }
 }
-# [END gke_streaming__kafka_strimzi_standard_private_regional_cluster]
+# [END gke_streaming_kafka_strimzi_autopilot_private_regional_cluster]
 

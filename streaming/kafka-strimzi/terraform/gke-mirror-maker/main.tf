@@ -23,7 +23,7 @@ module "network" {
   target_region  = var.target_region
 }
 
-# [START gke_streaming__kafka_strimzi_standard_private_regional_cluster]
+# [START gke_streaming_kafka_strimzi_standard_private_regional_cluster]
 module "source_kafka_cluster" {
   source                   = "../modules/cluster-mirror"
   project_id               = var.project_id
@@ -53,5 +53,5 @@ output "kubectl_connection_command_target" {
   value       = "gcloud container clusters get-credentials ${var.cluster_prefix}-target-cluster --region ${var.target_region}"
   description = "Connection command for target cluster"
 }
-# [END gke_streaming__kafka_strimzi_standard_private_regional_cluster]
+# [END gke_streaming_kafka_strimzi_standard_private_regional_cluster]
 
