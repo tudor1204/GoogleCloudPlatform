@@ -72,7 +72,7 @@ module "firewall_rules" {
     source_ranges           = ["10.48.0.0/20","10.54.0.0/20"]
     allow = [{
       protocol = "tcp"
-      ports    = ["9093"]
+      ports    = ["9094"]
     }]
     deny = []
   }]
