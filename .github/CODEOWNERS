@@ -14,4 +14,4 @@
 /ai-ml/ @rbarberop @alizaidis @yoshi-approver @GoogleCloudPlatform/anthos-dpe
 /batch/ @rbarberop @alizaidis @yoshi-approver @GoogleCloudPlatform/anthos-dpe
 /databases/hello-app-cloud-spanner @thiagotnunes @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/striming/kafka-strimzi/ @aburhan
+/security/language-vulns @thompsonmax @yoshi-approver @GoogleCloudPlatform/anthos-dpe
