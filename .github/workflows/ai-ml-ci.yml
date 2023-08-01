@@ -11,7 +11,7 @@ on:
       - '.github/workflows/ai-ml-ci.yml'
       - 'ai-ml/**'
 jobs:
-  job:
+  gke-a100-jax:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -19,3 +19,15 @@ jobs:
         run: |
           cd ai-ml/gke-a100-jax
           docker build --tag tensorflow .
+  t5-model-serving:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: build client-app container for t5-model-serving tutorial
+        run: |
+          cd ai-ml/t5-model-serving/client-app
+          docker build --tag t5-model-serving:client-app .
+      - name: build model container for t5-model-serving tutorial
+        run: |
+          cd ai-ml/t5-model-serving/model
+          docker build --tag t5-model-serving:serving .

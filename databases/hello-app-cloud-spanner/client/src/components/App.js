@@ -19,26 +19,26 @@ import Grid from '@mui/material/Grid';
 import Typography from "@mui/material/Typography";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { getSingers } from "../services/singers";
+import { getPlayers } from "../services/players";
 
-import SingerList from "./SingerList";
-import CreateSinger from "./CreateSinger";
+import PlayerList from "./PlayerList";
+import CreatePlayer from "./CreatePlayer";
 
 export default function App() {
     const [error, setError] = useState('');
-    const [singers, setSingers] = useState([]);
+    const [players, setPlayers] = useState([]);
 
     useEffect(() => {
-        const fetchSingers = async () => {
+        const fetchPlayers = async () => {
             try {
-                const response = await getSingers();
-                setSingers(response.data);
+                const response = await getPlayers();
+                setPlayers(response.data);
                 setError('');
             } catch(error) {
-                setError('Error fetching singers from database');
+                setError('Error fetching players from database');
             }
         };
-        fetchSingers();
+        fetchPlayers();
     }, []);
 
     return <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -46,7 +46,7 @@ export default function App() {
             <CssBaseline />
             <Grid container rowSpacing={2}>
                 <Grid container direction="row" justifyContent="center" item xs={12}>
-                    <Typography variant="h3">Singers Registry</Typography>
+                    <Typography variant="h3">Players Registry</Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Divider />
@@ -59,13 +59,13 @@ export default function App() {
                     </Grid>
                 }
                 <Grid item xs={12}>
-                    <CreateSinger setError={setError} singers={singers} setSingers={setSingers} />
+                    <CreatePlayer setError={setError} players={players} setPlayers={setPlayers} />
                 </Grid>
                 <Grid item xs={12}>
                     <Divider />
                 </Grid>
                 <Grid item xs={12}>
-                    <SingerList setError={setError} singers={singers} setSingers={setSingers} />
+                    <PlayerList setError={setError} players={players} setPlayers={setPlayers} />
                 </Grid>
             </Grid>
         </Container>

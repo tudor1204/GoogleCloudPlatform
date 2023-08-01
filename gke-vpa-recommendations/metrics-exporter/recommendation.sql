@@ -1,5 +1,5 @@
 /*
-# Copyright 2022 Google Inc.
+# Copyright 2023 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,205 +13,122 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 */
-INSERT 
-INTO
-  `PROJECT_ID.metric_export.vpa_container_recommendations`
-    (
-recommendation_timestamp,			
-location,
-project_id,
-cluster_name,
-controller_name,							
-controller_type,						
-namespace_name,			
-container_count,
-cpu_limit_cores,
-cpu_requested_cores,	
-memory_limit_bytes,					
-memory_requested_bytes,			
-memory_request_max_recommendations,								
-mem_qos,
-cpu_qos,
-memory_limit_recommendations,
-cpu_request_recommendations,
-cpu_limit_recommendations,
-cpu_delta,
-mem_delta,
-priority,	
-mem_provision_status,
-mem_provision_risk,
-cpu_provision_status,
-cpu_provision_risk,
-latest
-)
-###############################
-# Gather all HPA workloads
-##############################
 WITH
-  hpa_workloads AS (
+  data_deduped AS (
   SELECT
-    location,
+    *,
+    ROW_NUMBER() OVER (PARTITION BY run_date, metric_name, project_id, location, cluster_name, namespace_name, controller_name, container_name ORDER BY run_date DESC) AS rn
+  FROM
+    `$PROJECT_ID.gke_metric_dataset.gke_metrics` ),
+flattened AS (SELECT
+  DATE(TIMESTAMP_TRUNC(TIMESTAMP(run_date), DAY)) AS run_date,
+  location,
+  project_id,
+  cluster_name,
+  controller_name,
+  controller_type,
+  namespace_name,
+  container_name,
+  metric_name,
+  points.metric_timestamp,
+  points.metric_value
+FROM
+  data_deduped,
+  UNNEST(points_array) AS points WHERE rn = 1
+),
+aggregate AS (
+  SELECT
+  run_date,
+  location,
+  project_id,
+  cluster_name,
+  controller_name,
+  controller_type,
+  namespace_name,
+  container_name,
+  metric_name,
+  CASE
+    WHEN metric_name = "cpu_usage" THEN PERCENTILE_CONT(metric_value, 0.95) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "cpu_requested_cores" THEN AVG(metric_value) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "cpu_limit_cores" THEN AVG(metric_value) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "cpu_request_utilization" THEN MAX(metric_value) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "vpa_cpu_recommendation" THEN PERCENTILE_CONT(metric_value, 0.95) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "vpa_cpu_recommendation_max" THEN PERCENTILE_CONT(metric_value, 0.95) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "memory_usage" THEN MAX(metric_value) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "memory_requested_bytes" THEN AVG(metric_value) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "memory_limit_bytes" THEN AVG(metric_value) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "memory_request_utilization" THEN MAX(metric_value) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+    WHEN metric_name = "vpa_memory_recommendation" THEN MAX(metric_value) OVER(PARTITION BY metric_name, project_id, location, cluster_name, controller_name, controller_type, namespace_name, container_name , run_date)
+  END as agg_value
+FROM flattened
+), staging AS (
+SELECT 
+  run_date,
+  location,
+  project_id,
+  cluster_name,
+  controller_name,
+  controller_type,
+  namespace_name,
+  container_name,
+  # CPU METRICS
+  MAX(CASE WHEN metric_name = 'cpu_usage'  THEN agg_value * 1000 ELSE 0 END) AS cpu_mcore_usage,
+  MAX(CASE WHEN metric_name = 'cpu_requested_cores'  THEN ROUND(agg_value * 1000,0) ELSE 0 END) AS cpu_requested_mcores,
+  MAX(CASE WHEN metric_name = 'cpu_limit_cores'  THEN ROUND(agg_value * 1000,0) ELSE 0 END) AS cpu_limit_mcores,
+  MAX(CASE WHEN metric_name = 'cpu_request_utilization' THEN agg_value ELSE 0 END) AS cpu_request_utilization,
+  MAX(CASE WHEN metric_name = 'vpa_cpu_recommendation'  THEN ROUND(agg_value * 1000,0) ELSE 0 END) AS cpu_vpa_rec_95th,
+  MAX(CASE WHEN metric_name = 'vpa_cpu_recommendation_max'  THEN ROUND(agg_value * 1000,0) ELSE 0 END) AS cpu_vpa_rec,
+  # MEMORY METRICS
+  MAX(CASE WHEN metric_name = 'memory_usage' THEN agg_value/1024/1024  ELSE 0 END) AS memory_mib_usage_max,
+  MAX(CASE WHEN metric_name = 'memory_requested_bytes' THEN ROUND(agg_value/1024/1024, 0) ELSE 0 END) AS memory_requested_mib,
+  MAX(CASE WHEN metric_name = 'memory_limit_bytes' THEN ROUND(agg_value/1024/1024,0)  ELSE 0 END)AS memory_limit_mib,
+  MAX(CASE WHEN metric_name = 'memory_request_utilization' THEN agg_value ELSE 0 END) AS memory_request_utilization,
+  MAX(CASE WHEN metric_name = 'vpa_memory_recommendation' THEN ROUND(agg_value/1024/1024, 0)  ELSE 0 END) AS memory_vpa_rec
+
+FROM aggregate
+GROUP BY 1,2,3,4,5,6,7,8
+), recommendation_staging AS (
+SELECT
+*,
+  CEIL(CASE
+        WHEN controller_type = 'Deployment' THEN (IF((cpu_requested_mcores = cpu_limit_mcores ), cpu_vpa_rec, cpu_vpa_rec_95th))
+      ELSE
+      SAFE_DIVIDE(cpu_mcore_usage, 0.70)
+    END
+      ) AS cpu_requested_recommendation,
+  CEIL(CASE
+        WHEN controller_type = 'Deployment' THEN (memory_vpa_rec)
+      ELSE
+      SAFE_DIVIDE( memory_mib_usage_max, 0.80)
+    END
+      ) AS memory_requested_recommendation, 
+FROM staging )
+SELECT
+    run_date,
     project_id,
+    location,
     cluster_name,
     controller_name,
     controller_type,
-    namespace_name,
-    1 AS flag
-  FROM
-    `PROJECT_ID.metric_export.mql_metrics`
-  WHERE
-    metric_name LIKE '%hpa%' ),
-###################################################
-# Filter out HPA workloads, convert rows to columns
-###################################################
-  workloads_without_hpa AS (
-  SELECT
-    *,
-    TIMESTAMP(TIMESTAMP_SECONDS(CAST(tstamp AS INT64))) AS recommendation_timestamp,
-  FROM (
-    SELECT
-      DISTINCT(metric_name),
-      c.location,
-      c.project_id,
-      c.cluster_name,
-      c.controller_name,
-      c.controller_type,
-      c.namespace_name, 
-      IF((c.points IS NULL), 0, c.points) AS points,
-      LAST_VALUE(c.tstamp) OVER (PARTITION BY c.controller_name, c.project_id, c.cluster_name, c.location ORDER BY c.tstamp DESC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS tstamp,
-    FROM
-      `PROJECT_ID.metric_export.mql_metrics` AS c
-    LEFT JOIN
-      hpa_workloads
-    ON
-      c.controller_name = hpa_workloads.controller_name
-      AND c.project_id = hpa_workloads.project_id
-      AND c.location = hpa_workloads.location
-      AND c.cluster_name = hpa_workloads.cluster_name
-    WHERE
-      hpa_workloads.flag IS NULL
-    ORDER BY
-      metric_name) PIVOT(AVG(points) FOR metric_name IN ( 'container_count',
-        'memory_requested_bytes',
-        'memory_limit_bytes',
-        'memory_request_recommendations',
-        'cpu_requested_cores',
-        'cpu_limit_cores',
-        'cpu_request_95th_percentile_recommendations',
-        'cpu_request_max_recommendations'))),
-###############################
-#  QoS
-##############################
-qos AS (
-  SELECT
-    * EXCEPT (tstamp),
-    CASE
-      WHEN (memory_requested_bytes = 0 AND memory_limit_bytes = 0) THEN 'BestEffort'
-      WHEN (memory_requested_bytes = memory_limit_bytes)
-    AND (memory_requested_bytes> 0) THEN 'Guaranteed'
-    ELSE
-    'Burstable'
-  END
-    AS mem_qos,
-    CASE
-      WHEN (cpu_requested_cores = 0 AND cpu_limit_cores = 0) THEN 'BestEffort'
-      WHEN (cpu_requested_cores = cpu_limit_cores)
-    AND (cpu_requested_cores > 0) THEN 'Guaranteed'
-    ELSE
-    'Burstable'
-  END
-    AS cpu_qos,
-  FROM
-    workloads_without_hpa
-  WHERE
-    memory_request_recommendations IS NOT NULL
-    AND (cpu_request_max_recommendations IS NOT NULL
-      OR cpu_request_95th_percentile_recommendations IS NOT NULL ) ),
-##############################################################
-# Use QoS to determine the CPU recommendations
-##############################################################
-recommendation AS (
-SELECT * EXCEPT (cpu_request_95th_percentile_recommendations, cpu_request_max_recommendations),
-memory_request_recommendations AS memory_limit_recommendation,
-IF(cpu_qos = "Guaranteed", cpu_request_max_recommendations,  cpu_request_95th_percentile_recommendations )  as cpu_request_recommendations,
-CASE
-  WHEN (cpu_limit_cores = 0  or cpu_requested_cores = 0 ) THEN cpu_request_max_recommendations
-  WHEN (cpu_qos = "Guaranteed" ) THEN cpu_request_max_recommendations
+    container_name,
+    cpu_mcore_usage,
+    memory_mib_usage_max,
+    cpu_requested_mcores,
+    cpu_limit_mcores,
+    cpu_request_utilization,
+    memory_requested_mib,
+    memory_limit_mib,
+    memory_request_utilization,
+    cpu_requested_recommendation,
+  GREATEST((CASE
+    WHEN cpu_limit_mcores = 0 AND cpu_requested_mcores = 0 THEN CEIL(cpu_requested_recommendation)
+    WHEN cpu_limit_mcores = 0 AND cpu_requested_mcores > 0 THEN CEIL(cpu_requested_recommendation)
+    WHEN cpu_limit_mcores > 0 AND cpu_requested_mcores = 0 THEN CEIL(cpu_requested_recommendation)
   ELSE
-    CAST(cpu_request_95th_percentile_recommendations * (cpu_limit_cores/cpu_requested_cores)  AS INT64)
-  END
-  AS cpu_limit_recommendation
-FROM qos
-),
-##############################################################
-# Build final recommendation query with prority and advisory
-##############################################################
-final_recommendation AS (
-  SELECT * ,
-( IF(cpu_requested_cores IS NULL, 0, cpu_requested_cores) - cpu_request_recommendations ) AS cpu_delta,
-( memory_requested_bytes - memory_request_recommendations ) AS mem_delta,
-CAST(container_count * ((cpu_requested_cores - cpu_request_recommendations) + (memory_requested_bytes - memory_request_recommendations)/13.4) AS INT64) AS priority,
-  CASE
-    WHEN (memory_requested_bytes > memory_request_recommendations) THEN "over"
-    WHEN (memory_requested_bytes < memory_request_recommendations) THEN "under"
-    WHEN (memory_requested_bytes = 0) THEN "not set"
-  ELSE
-  "ok"
-END
-  AS mem_provision_status,
-  CASE
-    WHEN (memory_requested_bytes  > memory_request_recommendations) THEN "cost"
-    WHEN (memory_requested_bytes  < memory_request_recommendations) THEN "reliability"
-    WHEN (memory_requested_bytes = 0) THEN "reliability"
-  ELSE
-  "ok"
-END
-  AS mem_provision_risk,
-  CASE
-    WHEN (cpu_requested_cores > cpu_request_recommendations) THEN "over"
-    WHEN (cpu_requested_cores < cpu_request_recommendations) THEN "under"
-    WHEN (cpu_requested_cores = 0 ) THEN "not set"
-  ELSE
-  "ok"
-END
-  AS cpu_provision_status,
-  CASE
-    WHEN (cpu_requested_cores > cpu_request_recommendations) THEN "cost"
-    WHEN (cpu_requested_cores < cpu_request_recommendations) THEN "performance"
-    WHEN (cpu_requested_cores = 0) THEN "reliability"
-  ELSE
-  "ok"
-END
-  AS cpu_provision_risk,
-TRUE as latest
-FROM recommendation
-)
-
-SELECT 
-recommendation_timestamp,			
-location,
-project_id,
-cluster_name,
-controller_name,							
-controller_type,						
-namespace_name,			
-CAST(container_count AS INT64),
-CAST(cpu_limit_cores AS INT64),
-CAST(cpu_requested_cores AS INT64),	
-CAST(memory_limit_bytes AS INT64),					
-CAST(memory_requested_bytes AS INT64),			
-CAST(memory_request_recommendations AS INT64) as memory_request_max_recommendations,								
-mem_qos,
-cpu_qos,
-CAST(memory_limit_recommendation AS INT64),
-CAST(cpu_request_recommendations AS INT64),
-CAST(cpu_limit_recommendation AS INT64),
-CAST(cpu_delta AS INT64),
-CAST(mem_delta AS INT64),
-CAST(priority AS INT64),	
-mem_provision_status,
-mem_provision_risk,
-cpu_provision_status,
-cpu_provision_risk,
-latest FROM final_recommendation WHERE priority IS NOT NULL
-ORDER BY priority DESC
+  CEIL(cpu_requested_recommendation * SAFE_DIVIDE(cpu_limit_mcores, cpu_requested_mcores))
+END), CEIL(cpu_mcore_usage))
+  AS cpu_limit_recommendation,
+  CEIL(GREATEST(memory_requested_recommendation, memory_mib_usage_max)) AS memory_requested_recommendation,
+  CEIL(GREATEST(memory_requested_recommendation, memory_mib_usage_max)) AS memory_limit_recommendation
+FROM
+  recommendation_staging ORDER BY run_date

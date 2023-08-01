@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ap_networking_tutorial_create_cluster]
+
 terraform {
   required_version = "~> 1.3"
 }
@@ -48,3 +50,5 @@ output "cluster_name" {
   value       = google_container_cluster.default.name
   description = "Cluster name"
 }
+
+# [END gke_ap_networking_tutorial_create_cluster]

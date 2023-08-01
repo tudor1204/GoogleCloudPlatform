@@ -206,6 +206,21 @@ resource "google_cloudbuild_trigger" "wi-secret-store" {
     }
 }
 
+resource "google_cloudbuild_trigger" "maven-vulns" {
+    name = "kubernetes-engine-samples-maven-vulns"
+    filename = "security/language-vulns/maven/cloudbuild.yaml"
+    included_files = ["security/language-vulns/maven/**"]
+    description = local.trigger_description
+
+    github {
+        owner = "GoogleCloudPlatform"
+        name = "kubernetes-engine-samples"
+        push {
+            branch = "^main$"
+        }
+    }
+}
+
 resource "google_cloudbuild_trigger" "workload-metrics" {
     name = "kubernetes-engine-samples-workload-metrics"
     filename = "workload-metrics/cloudbuild.yaml"
