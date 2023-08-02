@@ -14,10 +14,10 @@ spec:
     resources:
       requests:
         cpu: 500m
-        memory: 2Gi
+        memory: 1Gi
       requests:
         cpu: 1000m
-        memory: 2Gi
+        memory: 1Gi
   dependencies:
     kafka:
       bootstrapEndpoint: my-target-cluster.kafka.svc.confluent-target.local:9094
