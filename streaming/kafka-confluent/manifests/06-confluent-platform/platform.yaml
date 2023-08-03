@@ -44,6 +44,11 @@ spec:
   storageClass:
     name: premium-rwo
   podTemplate:
+    tolerations:
+    - key: "app.stateful/component"
+      operator: "Equal"
+      value: "kafka-broker"
+      effect: NoSchedule
     resources:
       requests:
         cpu: 500m
@@ -101,6 +106,7 @@ spec:
       limits:
         cpu: 1000m
         memory: 1Gi
+  dependencies:
     schemaRegistry:
       url: https://schemaregistry.kafka.svc.cluster.local:8081
       tls:
