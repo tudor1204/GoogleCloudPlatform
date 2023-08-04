@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
-apiVersion: platform.confluent.io/v1beta1
+apiVersion: platform.confluent.io/v0beta1
 kind: Kafka
 metadata:
   name: my-cluster
@@ -25,7 +25,7 @@ spec:
     init: confluentinc/confluent-init-container:2.6.0
   dataVolumeCapacity: 100Gi
   storageClass:
-    name: premium-rwo
+    name: regional-pd
   configOverrides:
     server:
       - offsets.topic.replication.factor=3
@@ -36,15 +36,10 @@ spec:
       - auto.create.topics.enable=true
   listeners:
     custom:
-    - name: tls
-      port: 9094
-      authentication:
-        type: mtls
-        principalMappingRules:
-        - RULE:.*CN[\s]?=[\s]?([a-zA-Z0-9.]*)?.*/$1/
+    - name: tls 
+      port: 9093
       tls:
         enabled: true
-        secretRef: my-certificate
   podTemplate:
     tolerations:
     - key: "app.stateful/component"
@@ -100,7 +95,7 @@ spec:
   dataVolumeCapacity: 90Gi
   logVolumeCapacity: 10Gi
   storageClass:
-    name: premium-rwo
+    name: regional-pd
   podTemplate:
     affinity:
       nodeAffinity:

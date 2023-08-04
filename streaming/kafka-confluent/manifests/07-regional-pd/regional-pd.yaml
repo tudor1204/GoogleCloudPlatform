@@ -11,27 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
----
-apiVersion: v1
-kind: Pod
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+allowVolumeExpansion: true
 metadata:
-  name: kafkacat
-spec:
-  containers:
-  - name: kafkacat
-    image: confluentinc/cp-kcat:7.4.0
-    command: ["sh", "-c", "exec tail -f /dev/null"]
-    volumeMounts:
-    - name: config-volume
-      mountPath: /home/appuser/.config
-  volumes:
-  - name: config-volume
-    configMap:
-      name: kcat-config
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kcat-config
-data:
-  kcat.conf: enable.ssl.certificate.verification=false
+  name: regional-pd
+parameters:
+  type: pd-ssd
+  replication-type: regional-pd
+provisioner: pd.csi.storage.gke.io
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
