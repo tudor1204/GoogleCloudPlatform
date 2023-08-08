@@ -30,7 +30,7 @@ spec:
       - name: maven-vulns-app
         # Replace $LOCATION with your Artifact Registry location (e.g., us-west1).
         # Replace $GCLOUD_PROJECT with your project ID.
-        image: us-docker.pkg.dev/google-samples/containers/gke/maven-vulns
+        image: us-docker.pkg.dev/google-samples/containers/gke/security/maven-vulns
         # This app listens on port 8080 for web traffic by default.
         ports:
         - containerPort: 8080
