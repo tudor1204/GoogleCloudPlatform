@@ -24,7 +24,12 @@ import logging
 
 run_date = datetime.now()
 logging.basicConfig(level=config.log_level_mapping.get(config.LOGGING_LEVEL.upper(), logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
-    
+client = monitoring_v3.MetricServiceClient()
+project_name = f"projects/{config.PROJECT_ID}"
+now = time.time()
+seconds = int(now)
+nanos = int((now - seconds) * 10 ** 9)
+
 async def get_gke_metrics(metric_name, query, namespace):
     """
     Retrieves Google Kubernetes Engine (GKE) metrics.
@@ -36,11 +41,6 @@ async def get_gke_metrics(metric_name, query, namespace):
     Returns:
     list: List of metrics.
     """
-    client = monitoring_v3.MetricServiceClient()
-    project_name = f"projects/{config.PROJECT_ID}"
-    now = time.time()
-    seconds = int(now)
-    nanos = int((now - seconds) * 10 ** 9)
      
     interval = monitoring_v3.TimeInterval(
         {
@@ -70,7 +70,6 @@ async def get_gke_metrics(metric_name, query, namespace):
         logging.info("Building Row")
         
         for result in results: 
-            row = {}
             label = result.resource.labels
             metadata = result.metadata.system_labels.fields
             metric_label = result.metric.labels
@@ -112,7 +111,6 @@ async def get_gke_metrics(metric_name, query, namespace):
     except Exception as error:
         logging.info(f'Unexpected error: {error}')
     return rows
-
     
 
 async def write_to_bigquery(rows_to_insert):
@@ -136,10 +134,49 @@ async def run_pipeline(namespace):
             logging.info(f'{metric} unavailable. Skip')
     logging.info("Run Completed")   
 
+def get_namespaces():
+    namespaces = set()
+    interval = monitoring_v3.TimeInterval(
+        {
+            "start_time": {"seconds": int(time.time() - config.METRIC_WINDOW)},  
+            "end_time": {"seconds": int(time.time())}
+        }
+    )
+    aggregation = monitoring_v3.Aggregation(
+        {
+            "alignment_period": {"seconds": config.METRIC_WINDOW}, 
+            "per_series_aligner": monitoring_v3.types.Aggregation.Aligner.ALIGN_RATE,
+            "cross_series_reducer": monitoring_v3.types.Aggregation.Reducer.REDUCE_SUM,
+            "group_by_fields": ['resource.label."namespace_name"'],
+        }
+    )
+    try:
+        results = client.list_time_series(
+        request={
+                "name": project_name,
+                "filter": f'metric.type = "kubernetes.io/container/cpu/core_usage_time"  AND {config.namespace_filter}',
+                "interval": interval,
+                "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.FULL,
+                "aggregation": aggregation
+            }
+        )
+        logging.info("Building Row")
+        
+        for result in results:
+            label = result.resource.labels
+            namespaces.add(label['namespace_name'])
+        return list(namespaces)
+       
+    except GoogleAPICallError as error:
+        logging.info(f'Google API call error: {error}')
+    except Exception as error:
+        logging.info(f'Unexpected error: {error}')
+    return list(namespaces)
+
 if __name__ == "__main__":
     if 'PROJECT_ID' not in os.environ or not os.environ['PROJECT_ID']:
         logging.info("Please set the 'PROJECT_ID' environment variable.")
     else:
-        monitor_namespaces = config.NAMESPACES.split(',')
+        monitor_namespaces = get_namespaces()
         for namespace in monitor_namespaces:
             asyncio.run(run_pipeline(namespace))
