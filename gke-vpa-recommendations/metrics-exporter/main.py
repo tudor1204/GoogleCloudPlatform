@@ -11,17 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from datetime import datetime, date
 import time
-import os
 import config
+import asyncio
+import logging
+import utils
+import warnings
+
+from datetime import datetime
 from google.cloud import monitoring_v3
 from google.cloud import bigquery
 from google.api_core.exceptions import GoogleAPICallError
-import asyncio
 
-import logging
+warnings.filterwarnings("ignore", "Your application has authenticated using end user credentials")
 
+run_date = datetime.now()
+project_name = f"projects/{config.PROJECT_ID}"
+now = time.time()
+seconds = int(now)
+nanos = int((now - seconds) * 10 ** 9)
 
 async def get_gke_metrics(metric_name, query, namespace):
     """
@@ -38,13 +46,18 @@ async def get_gke_metrics(metric_name, query, namespace):
 
     interval = monitoring_v3.TimeInterval(
         {
-            "end_time": {"seconds": seconds, "nanos": nanos},
-            "start_time": {"seconds": (seconds - query.window), "nanos": nanos},
-        }
-    )
+            "end_time": {
+                "seconds": seconds,
+                "nanos": nanos},
+            "start_time": {
+                "seconds": (
+                    seconds -
+                    query.window),
+                "nanos": nanos},
+        })
     aggregation = monitoring_v3.Aggregation(
         {
-            "alignment_period": {"seconds": query.seconds_between_points}, 
+            "alignment_period": {"seconds": query.seconds_between_points},
             "per_series_aligner": query.per_series_aligner,
             "cross_series_reducer": query.cross_series_reducer,
             "group_by_fields": query.columns,
@@ -53,50 +66,48 @@ async def get_gke_metrics(metric_name, query, namespace):
     rows = []
     try:
         results = client.list_time_series(
-        request={
+            request={
                 "name": project_name,
                 "filter": f'metric.type = "{query.metric}" AND resource.label.namespace_name = {namespace}',
                 "interval": interval,
                 "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.FULL,
-                "aggregation": aggregation
-            }
-        )
+                "aggregation": aggregation})
         logging.info("Building Row")
-        
-        for result in results: 
+
+        for result in results:
             label = result.resource.labels
             metadata = result.metadata.system_labels.fields
             metric_label = result.metric.labels
-        
+
             if "hpa" in metric_name:
                 controller_name = metric_label['targetref_name']
                 controller_type = metric_label['targetref_kind']
                 container_name = metric_label['container_name']
-            elif "vpa" in metric_name:               
+            elif "vpa" in metric_name:
                 controller_name = label['controller_name']
                 controller_type = label['controller_kind']
-                container_name = metric_label['container_name'] 
+                container_name = metric_label['container_name']
             else:
                 controller_name = metadata['top_level_controller_name'].string_value
                 controller_type = metadata['top_level_controller_type'].string_value
                 container_name = label['container_name']
             row = {
-                    "run_date": run_date.strftime('%Y-%m-%d %H:%M:%S'),
-                    "metric_name": metric_name,
-                    "project_id": label['project_id'],
-                    "location": label['location'],
-                    "cluster_name": label['cluster_name'],
-                    "namespace_name": label['namespace_name'], 
-                    "controller_name": controller_name,
-                    "controller_type": controller_type,
-                    "container_name": container_name
-                }
-            points = []         
+                "run_date": run_date.strftime('%Y-%m-%d %H:%M:%S'),
+                "metric_name": metric_name,
+                "project_id": label['project_id'],
+                "location": label['location'],
+                "cluster_name": label['cluster_name'],
+                "namespace_name": label['namespace_name'],
+                "controller_name": controller_name,
+                "controller_type": controller_type,
+                "container_name": container_name
+            }
+            points = []
             for point in result.points:
                 test = {
-                        "metric_timestamp": point.interval.start_time.strftime('%Y-%m-%d %H:%M:%S.%f'),
-                        "metric_value": point.value.double_value or float(point.value.int64_value)
-                    }     
+                    "metric_timestamp": point.interval.start_time.strftime('%Y-%m-%d %H:%M:%S.%f'),
+                    "metric_value": point.value.double_value or float(
+                        point.value.int64_value)}
                 points.append(test)
             row["points_array"] = points
             rows.append(row)
@@ -105,21 +116,21 @@ async def get_gke_metrics(metric_name, query, namespace):
     except Exception as error:
         logging.info(f'Unexpected error: {error}')
     return rows
-    
+
 
 async def write_to_bigquery(rows_to_insert):
     client = bigquery.Client()
     errors = client.insert_rows_json(config.TABLE_ID, rows_to_insert)
     if not errors:
-        logging.info(f'Successfully wrote {len(rows_to_insert)} rows to BigQuery table {config.TABLE_ID}.')
+        logging.info(
+            f'Successfully wrote {len(rows_to_insert)} rows to BigQuery table {config.TABLE_ID}.')
     else:
-        error_message = "Encountered errors while inserting rows: {}".format(errors)
+        error_message = "Encountered errors while inserting rows: {}".format(
+            errors)
         logging.error(error_message)
-        raise Exception(error_message)     
+        raise Exception(error_message)
 
 async def run_pipeline(namespace):
-    global query_count 
-      
     for metric, query in config.MQL_QUERY.items():
         logging.info(f'Retrieving {metric} for namespace {namespace}...')
         query_count += 1
@@ -128,65 +139,54 @@ async def run_pipeline(namespace):
             await write_to_bigquery(rows_to_insert)
         else:
             logging.info(f'{metric} unavailable. Skip')
-        if query_count >= config.QUERY_LIMIT:
-            logging.info("Exceed query limit, pausing for 1 minute")
-            await asyncio.sleep(60)
-            query_count = 0
-    logging.info("Run Completed")   
+
+    logging.info("Run Completed")
 
 def get_namespaces():
     client = monitoring_v3.MetricServiceClient()
-   
+
     namespaces = set()
     interval = monitoring_v3.TimeInterval(
         {
-            "start_time": {"seconds": int(time.time() - config.METRIC_WINDOW)},  
+            "start_time": {"seconds": int(time.time() - config.METRIC_WINDOW)},
             "end_time": {"seconds": int(time.time())}
         }
     )
     aggregation = monitoring_v3.Aggregation(
         {
-            "alignment_period": {"seconds": config.METRIC_WINDOW}, 
+            "alignment_period": {
+                "seconds": config.METRIC_WINDOW},
             "per_series_aligner": monitoring_v3.types.Aggregation.Aligner.ALIGN_RATE,
             "cross_series_reducer": monitoring_v3.types.Aggregation.Reducer.REDUCE_SUM,
             "group_by_fields": ['resource.label."namespace_name"'],
-        }
-    )
+        })
     try:
         results = client.list_time_series(
-        request={
+            request={
                 "name": project_name,
                 "filter": f'metric.type = "kubernetes.io/container/cpu/core_usage_time"  AND {config.namespace_filter}',
                 "interval": interval,
                 "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.FULL,
-                "aggregation": aggregation
-            }
-        )
+                "aggregation": aggregation})
         logging.info("Building Row")
-        
+
         for result in results:
             label = result.resource.labels
             namespaces.add(label['namespace_name'])
         return list(namespaces)
-       
+
     except GoogleAPICallError as error:
-        logging.info(f'Google API call error: {error}')
+        logging.error(f'Google API call error: {error}')
     except Exception as error:
-        logging.info(f'Unexpected error: {error}')
+        logging.error(f'Unexpected error: {error}')
     return list(namespaces)
 
-if __name__ == "__main__":
-    query_count = 0
-    run_date = datetime.now()
-    project_name = f"projects/{config.PROJECT_ID}"
-    now = time.time()
-    seconds = int(now)
-    nanos = int((now - seconds) * 10 ** 9) 
-    logging.basicConfig(level=config.log_level_mapping.get(config.LOGGING_LEVEL.upper(), logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
 
-    if 'PROJECT_ID' not in os.environ or not os.environ['PROJECT_ID']:
-        logging.info("Please set the 'PROJECT_ID' environment variable.")
-    else:
-        monitor_namespaces = get_namespaces()
+if __name__ == "__main__":
+    utils.setup_logging()
+    monitor_namespaces = get_namespaces()
+    if len(monitor_namespaces) > 0:
         for namespace in monitor_namespaces:
             asyncio.run(run_pipeline(namespace))
+    else:
+        logging.error("Monitored Namespace list is zero size, end Job")
