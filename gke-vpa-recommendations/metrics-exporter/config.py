@@ -47,6 +47,7 @@ log_level_mapping = {
     'ERROR': logging.ERROR,
     'CRITICAL': logging.CRITICAL
 }
+QUERY_LIMIT = 6000
 
 PROJECT_ID = os.getenv("PROJECT_ID", "")
 if not PROJECT_ID:

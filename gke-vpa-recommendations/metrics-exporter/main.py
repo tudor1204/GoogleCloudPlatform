@@ -22,12 +22,6 @@ import asyncio
 
 import logging
 
-run_date = datetime.now()
-project_name = f"projects/{config.PROJECT_ID}"
-now = time.time()
-seconds = int(now)
-nanos = int((now - seconds) * 10 ** 9) 
-logging.basicConfig(level=config.log_level_mapping.get(config.LOGGING_LEVEL.upper(), logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
 
 async def get_gke_metrics(metric_name, query, namespace):
     """
@@ -123,15 +117,21 @@ async def write_to_bigquery(rows_to_insert):
         logging.error(error_message)
         raise Exception(error_message)     
 
-
-async def run_pipeline(namespace):   
+async def run_pipeline(namespace):
+    global query_count 
+      
     for metric, query in config.MQL_QUERY.items():
         logging.info(f'Retrieving {metric} for namespace {namespace}...')
+        query_count += 1
         rows_to_insert = await get_gke_metrics(metric, query, namespace)
         if rows_to_insert:
             await write_to_bigquery(rows_to_insert)
         else:
             logging.info(f'{metric} unavailable. Skip')
+        if query_count >= config.QUERY_LIMIT:
+            logging.info("Exceed query limit, pausing for 1 minute")
+            await asyncio.sleep(60)
+            query_count = 0
     logging.info("Run Completed")   
 
 def get_namespaces():
@@ -176,6 +176,14 @@ def get_namespaces():
     return list(namespaces)
 
 if __name__ == "__main__":
+    query_count = 0
+    run_date = datetime.now()
+    project_name = f"projects/{config.PROJECT_ID}"
+    now = time.time()
+    seconds = int(now)
+    nanos = int((now - seconds) * 10 ** 9) 
+    logging.basicConfig(level=config.log_level_mapping.get(config.LOGGING_LEVEL.upper(), logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
+
     if 'PROJECT_ID' not in os.environ or not os.environ['PROJECT_ID']:
         logging.info("Please set the 'PROJECT_ID' environment variable.")
     else:
