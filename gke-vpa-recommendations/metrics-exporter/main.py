@@ -23,12 +23,11 @@ import asyncio
 import logging
 
 run_date = datetime.now()
-logging.basicConfig(level=config.log_level_mapping.get(config.LOGGING_LEVEL.upper(), logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
-client = monitoring_v3.MetricServiceClient()
 project_name = f"projects/{config.PROJECT_ID}"
 now = time.time()
 seconds = int(now)
-nanos = int((now - seconds) * 10 ** 9)
+nanos = int((now - seconds) * 10 ** 9) 
+logging.basicConfig(level=config.log_level_mapping.get(config.LOGGING_LEVEL.upper(), logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
 
 async def get_gke_metrics(metric_name, query, namespace):
     """
@@ -41,7 +40,8 @@ async def get_gke_metrics(metric_name, query, namespace):
     Returns:
     list: List of metrics.
     """
-     
+    client = monitoring_v3.MetricServiceClient()
+
     interval = monitoring_v3.TimeInterval(
         {
             "end_time": {"seconds": seconds, "nanos": nanos},
@@ -135,6 +135,8 @@ async def run_pipeline(namespace):
     logging.info("Run Completed")   
 
 def get_namespaces():
+    client = monitoring_v3.MetricServiceClient()
+   
     namespaces = set()
     interval = monitoring_v3.TimeInterval(
         {
