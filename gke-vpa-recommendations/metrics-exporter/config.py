@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+import utils
 from google.cloud import monitoring_v3
-import logging
 
 
 class MetricConfig:
@@ -47,19 +47,7 @@ class MetricConfig:
         self.columns = columns
 
 
-# Get the desired logging level from the environment variable
-LOGGING_LEVEL = os.getenv('LOGGING_LEVEL', 'INFO')
-log_level_mapping = {
-    'DEBUG': logging.DEBUG,
-    'INFO': logging.INFO,
-    'WARNING': logging.WARNING,
-    'ERROR': logging.ERROR,
-    'CRITICAL': logging.CRITICAL
-}
-
-PROJECT_ID = os.getenv("PROJECT_ID", "")
-if not PROJECT_ID:
-    raise ValueError("The PROJECT_ID environment variable is not set.")
+PROJECT_ID = utils.get_gcp_project_id()
 
 BIGQUERY_DATASET = os.getenv("BIGQUERY_DATASET", "gke_metrics_dataset")
 BIGQUERY_TABLE = os.getenv("BIGQUERY_TABLE", "gke_metrics")

@@ -11,27 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from datetime import datetime, date
 import time
-import os
 import config
+import asyncio
+import logging
+import utils
+import warnings
+
+from datetime import datetime
 from google.cloud import monitoring_v3
 from google.cloud import bigquery
 from google.api_core.exceptions import GoogleAPICallError
-import asyncio
 
-import logging
+warnings.filterwarnings("ignore", "Your application has authenticated using end user credentials")
 
 run_date = datetime.now()
 project_name = f"projects/{config.PROJECT_ID}"
 now = time.time()
 seconds = int(now)
 nanos = int((now - seconds) * 10 ** 9)
-logging.basicConfig(
-    level=config.log_level_mapping.get(
-        config.LOGGING_LEVEL.upper(),
-        logging.INFO),
-    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 async def get_gke_metrics(metric_name, query, namespace):
@@ -179,16 +177,17 @@ def get_namespaces():
         return list(namespaces)
 
     except GoogleAPICallError as error:
-        logging.info(f'Google API call error: {error}')
+        logging.error(f'Google API call error: {error}')
     except Exception as error:
-        logging.info(f'Unexpected error: {error}')
+        logging.error(f'Unexpected error: {error}')
     return list(namespaces)
 
 
 if __name__ == "__main__":
-    if 'PROJECT_ID' not in os.environ or not os.environ['PROJECT_ID']:
-        logging.info("Please set the 'PROJECT_ID' environment variable.")
-    else:
-        monitor_namespaces = get_namespaces()
+    utils.setup_logging()
+    monitor_namespaces = get_namespaces()
+    if len(monitor_namespaces) > 0:
         for namespace in monitor_namespaces:
             asyncio.run(run_pipeline(namespace))
+    else:
+        logging.error("Monitored Namespace list is zero size, end Job")
