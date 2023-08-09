@@ -51,7 +51,8 @@ async def get_gke_metrics(metric_name, query, namespace, start_time, client):
                 "interval": interval,
                 "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.FULL,
                 "aggregation": aggregation})
-        logging.info("Building Row")
+
+        logging.info(f"Building Row of metric results")
 
         for result in results:
             label = result.resource.labels
@@ -137,7 +138,7 @@ def get_namespaces(client, start_time):
                 "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.HEADERS,
                 "aggregation": aggregation})
 
-        logging.info("Building Row")
+        logging.info("Building Row of Namespace results")
         for result in results:
             label = result.resource.labels
             namespaces.add(label['namespace_name'])
