@@ -31,7 +31,6 @@ now = time.time()
 seconds = int(now)
 nanos = int((now - seconds) * 10 ** 9)
 
-
 async def get_gke_metrics(metric_name, query, namespace):
     """
     Retrieves Google Kubernetes Engine (GKE) metrics.
@@ -131,17 +130,17 @@ async def write_to_bigquery(rows_to_insert):
         logging.error(error_message)
         raise Exception(error_message)
 
-
 async def run_pipeline(namespace):
     for metric, query in config.MQL_QUERY.items():
         logging.info(f'Retrieving {metric} for namespace {namespace}...')
+        query_count += 1
         rows_to_insert = await get_gke_metrics(metric, query, namespace)
         if rows_to_insert:
             await write_to_bigquery(rows_to_insert)
         else:
             logging.info(f'{metric} unavailable. Skip')
-    logging.info("Run Completed")
 
+    logging.info("Run Completed")
 
 def get_namespaces():
     client = monitoring_v3.MetricServiceClient()
