@@ -31,10 +31,6 @@ resource "google_cloud_run_v2_job" "metric_exporter" {
           value = var.project_id
         }
         env {
-            name = "NAMESPACES"
-            value = var.NAMESPACES            
-        }
-        env {
             name = "LOGGING_LEVEL"
             value = "INFO"
         }

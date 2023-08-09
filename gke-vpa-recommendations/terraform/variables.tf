@@ -68,11 +68,6 @@ variable "job_run_cpu" {
   default     = "1"
 }
 
-variable "NAMESPACES" {
-  description = "The namespaces to monitor separated by ,"
-  default = "default"
-}
-
 variable "RECOMMENDATION_WINDOW_SECONDS" {
   description = "The timeframe for VPA recommendations. Defaults to 1209600 seconds, or 14 days. "
   default     = 1209600
