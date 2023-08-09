@@ -46,7 +46,6 @@ class MetricConfig:
         self.data_type = data_type
         self.columns = columns
 
-
 PROJECT_ID = utils.get_gcp_project_id()
 
 BIGQUERY_DATASET = os.getenv("BIGQUERY_DATASET", "gke_metrics_dataset")

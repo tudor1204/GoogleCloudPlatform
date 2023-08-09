@@ -27,6 +27,7 @@ warnings.filterwarnings(
     "Your application has authenticated using end user credentials")
 
 
+
 async def get_gke_metrics(metric_name, query, namespace, start_time, client):
     """
     Retrieves Google Kubernetes Engine (GKE) metrics.
@@ -114,12 +115,13 @@ async def run_pipeline(namespace, client, bqclient, start_time):
     for metric, query in config.MQL_QUERY.items():
         logging.info(f'Retrieving {metric} for namespace {namespace}...')
         rows_to_insert = await get_gke_metrics(metric, query, namespace, start_time, client)
+
         if rows_to_insert:
             await write_to_bigquery(bqclient, rows_to_insert)
         else:
             logging.info(f'{metric} unavailable. Skip')
-    logging.info("Run Completed")
 
+    logging.info("Run Completed")
 
 def get_namespaces(client, start_time):
     namespaces = set()
