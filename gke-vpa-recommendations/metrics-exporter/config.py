@@ -62,8 +62,6 @@ METRIC_WINDOW = int(os.getenv("METRIC_WINDOW", '259200'))
 METRIC_DISTANCE = int(os.getenv("METRIC_DISTANCE", '600'))
 RECOMMENDATION_DISTANCE = int(os.getenv("RECOMMENDATION_DISTANCE", "86400"))
 
-NAMESPACES = os.getenv("NAMESPACES","default")
-
 gke_group_by_fields = [ 'resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."controller_name"','resource.label."namespace_name"','resource.label."container_name"','metadata.system_labels."top_level_controller_name"','metadata.system_labels."top_level_controller_type"']
 hpa_group_by_fields = ['resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."namespace_name"','metric.label."container_name"','metric.label."targetref_kind"','metric.label."targetref_name"']
 scale_group_by_fields = ['resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."namespace_name"','metric.label."container_name"','resource.label."controller_kind"','resource.label."controller_name"'] 
