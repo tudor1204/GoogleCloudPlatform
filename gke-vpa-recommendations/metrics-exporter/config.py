@@ -98,6 +98,17 @@ excluded_namespaces = [
 
 namespace_filter = ' AND '.join(
     f'NOT resource.label.namespace_name = "{namespace}"' for namespace in excluded_namespaces)
+
+NS_QUERY = MetricConfig(
+    metric="kubernetes.io/container/cpu/core_usage_time",
+    window=METRIC_WINDOW,
+    seconds_between_points=METRIC_DISTANCE,
+    per_series_aligner=monitoring_v3.types.Aggregation.Aligner.ALIGN_NONE,
+    cross_series_reducer=monitoring_v3.types.Aggregation.Reducer.REDUCE_COUNT,
+    data_type="double_value",
+    columns=['resource.labels.namespace_name']
+)
+
 MQL_QUERY = {
     "cpu_usage": MetricConfig(
         metric="kubernetes.io/container/cpu/core_usage_time",

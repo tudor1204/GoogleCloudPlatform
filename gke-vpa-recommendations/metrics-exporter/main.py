@@ -18,21 +18,16 @@ import logging
 import utils
 import warnings
 
-from datetime import datetime
 from google.cloud import monitoring_v3
 from google.cloud import bigquery
 from google.api_core.exceptions import GoogleAPICallError
 
-warnings.filterwarnings("ignore", "Your application has authenticated using end user credentials")
-
-run_date = datetime.now()
-project_name = f"projects/{config.PROJECT_ID}"
-now = time.time()
-seconds = int(now)
-nanos = int((now - seconds) * 10 ** 9)
+warnings.filterwarnings(
+    "ignore",
+    "Your application has authenticated using end user credentials")
 
 
-async def get_gke_metrics(metric_name, query, namespace):
+async def get_gke_metrics(metric_name, query, namespace, start_time, client):
     """
     Retrieves Google Kubernetes Engine (GKE) metrics.
 
@@ -43,27 +38,10 @@ async def get_gke_metrics(metric_name, query, namespace):
     Returns:
     list: List of metrics.
     """
-    client = monitoring_v3.MetricServiceClient()
+    interval = utils.get_interval(start_time, query.window)
+    aggregation = utils.get_aggregation(query)
+    project_name = utils.get_request_name()
 
-    interval = monitoring_v3.TimeInterval(
-        {
-            "end_time": {
-                "seconds": seconds,
-                "nanos": nanos},
-            "start_time": {
-                "seconds": (
-                    seconds -
-                    query.window),
-                "nanos": nanos},
-        })
-    aggregation = monitoring_v3.Aggregation(
-        {
-            "alignment_period": {"seconds": query.seconds_between_points},
-            "per_series_aligner": query.per_series_aligner,
-            "cross_series_reducer": query.cross_series_reducer,
-            "group_by_fields": query.columns,
-        }
-    )
     rows = []
     try:
         results = client.list_time_series(
@@ -93,7 +71,7 @@ async def get_gke_metrics(metric_name, query, namespace):
                 controller_type = metadata['top_level_controller_type'].string_value
                 container_name = label['container_name']
             row = {
-                "run_date": run_date.strftime('%Y-%m-%d %H:%M:%S'),
+                "run_date": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time)),
                 "metric_name": metric_name,
                 "project_id": label['project_id'],
                 "location": label['location'],
@@ -119,8 +97,7 @@ async def get_gke_metrics(metric_name, query, namespace):
     return rows
 
 
-async def write_to_bigquery(rows_to_insert):
-    client = bigquery.Client()
+async def write_to_bigquery(client, rows_to_insert):
     errors = client.insert_rows_json(config.TABLE_ID, rows_to_insert)
     if not errors:
         logging.info(
@@ -132,45 +109,35 @@ async def write_to_bigquery(rows_to_insert):
         raise Exception(error_message)
 
 
-async def run_pipeline(namespace):
+async def run_pipeline(namespace, client, bqclient, start_time):
     for metric, query in config.MQL_QUERY.items():
         logging.info(f'Retrieving {metric} for namespace {namespace}...')
-        rows_to_insert = await get_gke_metrics(metric, query, namespace)
+        rows_to_insert = await get_gke_metrics(metric, query, namespace, start_time, client)
         if rows_to_insert:
-            await write_to_bigquery(rows_to_insert)
+            await write_to_bigquery(bqclient, rows_to_insert)
         else:
             logging.info(f'{metric} unavailable. Skip')
     logging.info("Run Completed")
 
 
-def get_namespaces():
-    client = monitoring_v3.MetricServiceClient()
-
+def get_namespaces(client, start_time):
     namespaces = set()
-    interval = monitoring_v3.TimeInterval(
-        {
-            "start_time": {"seconds": int(time.time() - config.METRIC_WINDOW)},
-            "end_time": {"seconds": int(time.time())}
-        }
-    )
-    aggregation = monitoring_v3.Aggregation(
-        {
-            "alignment_period": {
-                "seconds": config.METRIC_WINDOW},
-            "per_series_aligner": monitoring_v3.types.Aggregation.Aligner.ALIGN_RATE,
-            "cross_series_reducer": monitoring_v3.types.Aggregation.Reducer.REDUCE_SUM,
-            "group_by_fields": ['resource.label."namespace_name"'],
-        })
+    query = config.NS_QUERY
+
+    interval = utils.get_interval(start_time, query.window)
+    aggregation = utils.get_aggregation(query)
+    project_name = utils.get_request_name()
+
     try:
         results = client.list_time_series(
             request={
                 "name": project_name,
-                "filter": f'metric.type = "kubernetes.io/container/cpu/core_usage_time"  AND {config.namespace_filter}',
+                "filter": f'metric.type = "{query.metric}" AND {config.namespace_filter}',
                 "interval": interval,
-                "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.FULL,
+                "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.HEADERS,
                 "aggregation": aggregation})
-        logging.info("Building Row")
 
+        logging.info("Building Row")
         for result in results:
             label = result.resource.labels
             namespaces.add(label['namespace_name'])
@@ -185,9 +152,25 @@ def get_namespaces():
 
 if __name__ == "__main__":
     utils.setup_logging()
-    monitor_namespaces = get_namespaces()
-    if len(monitor_namespaces) > 0:
+    start_time = time.time()
+
+    try:
+        client = monitoring_v3.MetricServiceClient()
+        bqclient = bigquery.Client()
+    except Exception as error:
+        logging.error(f'Google client connection error: {error}')
+
+    monitor_namespaces = get_namespaces(client, start_time)
+    namespace_count = len(monitor_namespaces)
+
+    logging.debug(f"Discovered {namespace_count} namespaces to query")
+    if (namespace_count > 0):
         for namespace in monitor_namespaces:
-            asyncio.run(run_pipeline(namespace))
+            asyncio.run(
+                run_pipeline(
+                    namespace,
+                    client=client,
+                    bqclient=bqclient,
+                    start_time=start_time))
     else:
         logging.error("Monitored Namespace list is zero size, end Job")
