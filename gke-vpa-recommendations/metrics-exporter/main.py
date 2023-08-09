@@ -18,13 +18,14 @@ import config
 from google.cloud import monitoring_v3
 from google.cloud import bigquery
 from google.api_core.exceptions import GoogleAPICallError
+import asyncio
 
 import logging
 
 run_date = datetime.now()
 logging.basicConfig(level=config.log_level_mapping.get(config.LOGGING_LEVEL.upper(), logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
     
-def get_gke_metrics(metric_name, query):
+async def get_gke_metrics(metric_name, query, namespace):
     """
     Retrieves Google Kubernetes Engine (GKE) metrics.
 
@@ -60,7 +61,7 @@ def get_gke_metrics(metric_name, query):
         results = client.list_time_series(
         request={
                 "name": project_name,
-                "filter": f'metric.type = "{query.metric}" AND {config.namespace_filter}',
+                "filter": f'metric.type = "{query.metric}" AND resource.label.namespace_name = {namespace}',
                 "interval": interval,
                 "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.FULL,
                 "aggregation": aggregation
@@ -114,7 +115,7 @@ def get_gke_metrics(metric_name, query):
 
     
 
-def write_to_bigquery(rows_to_insert):
+async def write_to_bigquery(rows_to_insert):
     client = bigquery.Client()
     errors = client.insert_rows_json(config.TABLE_ID, rows_to_insert)
     if not errors:
@@ -125,12 +126,12 @@ def write_to_bigquery(rows_to_insert):
         raise Exception(error_message)     
 
 
-def run_pipeline():   
+async def run_pipeline(namespace):   
     for metric, query in config.MQL_QUERY.items():
-        logging.info(f'Retrieving {metric}...')
-        rows_to_insert = get_gke_metrics(metric, query)
+        logging.info(f'Retrieving {metric} for namespace {namespace}...')
+        rows_to_insert = await get_gke_metrics(metric, query, namespace)
         if rows_to_insert:
-            write_to_bigquery(rows_to_insert)
+            await write_to_bigquery(rows_to_insert)
         else:
             logging.info(f'{metric} unavailable. Skip')
     logging.info("Run Completed")   
@@ -139,4 +140,6 @@ if __name__ == "__main__":
     if 'PROJECT_ID' not in os.environ or not os.environ['PROJECT_ID']:
         logging.info("Please set the 'PROJECT_ID' environment variable.")
     else:
-        run_pipeline()
+        monitor_namespaces = config.NAMESPACES.split(',')
+        for namespace in monitor_namespaces:
+            asyncio.run(run_pipeline(namespace))

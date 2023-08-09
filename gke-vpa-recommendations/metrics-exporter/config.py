@@ -52,7 +52,7 @@ PROJECT_ID = os.getenv("PROJECT_ID", "")
 if not PROJECT_ID:
     raise ValueError("The PROJECT_ID environment variable is not set.")
 
-BIGQUERY_DATASET = os.getenv("BIGQUERY_DATASET", "gke_metric_dataset")
+BIGQUERY_DATASET = os.getenv("BIGQUERY_DATASET", "gke_metrics_dataset")
 BIGQUERY_TABLE = os.getenv("BIGQUERY_TABLE", "gke_metrics")
 TABLE_ID = f'{PROJECT_ID}.{BIGQUERY_DATASET}.{BIGQUERY_TABLE}'
 
@@ -61,6 +61,8 @@ LATEST_WINDOW_SECONDS = int(os.getenv("LATEST_WINDOW_SECONDS", '300'))
 METRIC_WINDOW = int(os.getenv("METRIC_WINDOW", '259200'))
 METRIC_DISTANCE = int(os.getenv("METRIC_DISTANCE", '600'))
 RECOMMENDATION_DISTANCE = int(os.getenv("RECOMMENDATION_DISTANCE", "86400"))
+
+NAMESPACES = os.getenv("NAMESPACES","default")
 
 gke_group_by_fields = [ 'resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."controller_name"','resource.label."namespace_name"','resource.label."container_name"','metadata.system_labels."top_level_controller_name"','metadata.system_labels."top_level_controller_type"']
 hpa_group_by_fields = ['resource.label."location"','resource.label."project_id"','resource.label."cluster_name"','resource.label."namespace_name"','metric.label."container_name"','metric.label."targetref_kind"','metric.label."targetref_name"']
