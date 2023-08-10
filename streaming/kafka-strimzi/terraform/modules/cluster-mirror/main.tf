@@ -31,7 +31,7 @@ module "kafka_cluster" {
   logging_enabled_components = ["SYSTEM_COMPONENTS","WORKLOADS"]
   monitoring_enabled_components = ["SYSTEM_COMPONENTS"]
   enable_cost_allocation = true
-  remove_default_node_pool = true
+  initial_node_count = 1
 
   cluster_dns_domain   = "${var.cluster_prefix}.local"
   cluster_dns_provider = "CLOUD_DNS"
