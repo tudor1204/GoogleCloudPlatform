@@ -33,6 +33,7 @@ steps:
   - MODEL_VERSION
   - "."
 substitutions:
+  _LOCATION: us-central1
   _MODEL_NAME: t5-small
   _MODEL_VERSION: "1.0"
   _MACHINE: cpu
