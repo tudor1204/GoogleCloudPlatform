@@ -98,7 +98,7 @@ async def get_gke_metrics(metric_name, query, namespace, start_time, client):
     return rows
 
 
-async def write_to_bigquery(write_client, rows):   
+async def write_to_bigquery(write_client, rows):       
     parent = write_client.table_path(config.PROJECT_ID, config.BIGQUERY_DATASET, config.BIGQUERY_TABLE)
     write_stream = types.WriteStream()
     write_stream.type_ = types.WriteStream.Type.PENDING
@@ -130,8 +130,8 @@ async def write_to_bigquery(write_client, rows):
     # Create a batch of row data by appending proto2 serialized bytes to the
     # serialized_rows repeated field.
     proto_rows = types.ProtoRows()
-    #for row in rows:
-    #    proto_rows.serialized_rows.append(row)
+    for row in rows:
+        proto_rows.serialized_rows.append(row)
     request = types.AppendRowsRequest()
     request.offset = 0
     proto_data = types.AppendRowsRequest.ProtoData()
