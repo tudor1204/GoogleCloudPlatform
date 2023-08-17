@@ -120,20 +120,8 @@ async def get_gke_metrics(metric_name, query, namespace, start_time, client):
         logging.info(f'Unexpected error: {error}')
     return rows
 
-"""
-async def write_to_bigquery(client, rows_to_insert):
-    errors = client.insert_rows_json(config.TABLE_ID, rows_to_insert)
-    if not errors:
-        logging.info(
-            f'Successfully wrote {len(rows_to_insert)} rows to BigQuery table {config.TABLE_ID}.')
-    else:
-        error_message = "Encountered errors while inserting rows: {}".format(
-            errors)
-        logging.error(error_message)
-        raise Exception(error_message)
-"""
-async def write_to_bigquery(write_client, rows):
-    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")    
+
+async def write_to_bigquery(write_client, rows):   
     parent = write_client.table_path(config.PROJECT_ID, config.BIGQUERY_DATASET, config.BIGQUERY_TABLE)
     write_stream = types.WriteStream()
     write_stream.type_ = types.WriteStream.Type.PENDING
@@ -248,10 +236,8 @@ if __name__ == "__main__":
         client = monitoring_v3.MetricServiceClient()
         bqclient = bigquery_storage_v1.BigQueryWriteClient()
     except Exception as error:
-        logging.error(f'Google client connection error: {error}')
-    print("#############NAMESPACE#############")    
+        logging.error(f'Google client connection error: {error}')   
     monitor_namespaces = get_namespaces(client, start_time)
-    print("############NAMESPACE##############")  
     namespace_count = len(monitor_namespaces)
 
     logging.debug(f"Discovered {namespace_count} namespaces to query")
