@@ -227,4 +227,3 @@ MQL_QUERY = {
         columns=scale_group_by_fields
     )
 }
-
