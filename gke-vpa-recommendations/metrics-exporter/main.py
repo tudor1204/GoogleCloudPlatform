@@ -45,7 +45,6 @@ async def get_gke_metrics(metric_name, query, namespace, start_time, client):
     interval = utils.get_interval(start_time, query.window)
     aggregation = utils.get_aggregation(query)
     project_name = utils.get_request_name()
-    
     rows = []
     try:
         results = client.list_time_series(
@@ -86,35 +85,12 @@ async def get_gke_metrics(metric_name, query, namespace, start_time, client):
             row.controller_name = controller_name
             row.controller_type = controller_type
             row.container_name = container_name
-            """
-            row = {
-                "run_date": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time)),
-                "metric_name": metric_name,
-                "project_id": label['project_id'],
-                "location": label['location'],
-                "cluster_name": label['cluster_name'],
-                "namespace_name": label['namespace_name'],
-                "controller_name": controller_name,
-                "controller_type": controller_type,
-                "container_name": container_name
-            }
-            """
             points = []
             for point in result.points:
-  
-                """
-                test = {
-                    "metric_timestamp": point.interval.start_time.strftime('%Y-%m-%d %H:%M:%S.%f'),
-                    "metric_value": point.value.double_value or float(
-                        point.value.int64_value)}
-                points.append(test)
-                """
-                
                 new_point = row.points_array.add()
                 new_point.metric_timestamp = point.interval.start_time.strftime('%Y-%m-%d %H:%M:%S.%f')
                 new_point.metric_value = point.value.double_value or float(point.value.int64_value)
             rows.append(row.SerializeToString())
-            print(rows)
     except GoogleAPICallError as error:
         logging.info(f'Google API call error: {error}')
     except Exception as error:
@@ -183,7 +159,6 @@ async def run_pipeline(namespace, client, bqclient, start_time):
     for metric, query in config.MQL_QUERY.items():
         logging.info(f'Retrieving {metric} for namespace {namespace}...')
         rows_to_insert = await get_gke_metrics(metric, query, namespace, start_time, client)
-        print(rows_to_insert)
         if rows_to_insert:
             await write_to_bigquery(bqclient, rows_to_insert)
         else:
@@ -222,14 +197,6 @@ def get_namespaces(client, start_time):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            #logging.FileHandler("debug.log"),
-            logging.StreamHandler()
-        ]
-    )
     utils.setup_logging()
     start_time = time.time()
 
