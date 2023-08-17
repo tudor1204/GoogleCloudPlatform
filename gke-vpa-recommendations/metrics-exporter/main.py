@@ -45,6 +45,7 @@ async def get_gke_metrics(metric_name, query, namespace, start_time, client):
     interval = utils.get_interval(start_time, query.window)
     aggregation = utils.get_aggregation(query)
     project_name = utils.get_request_name()
+    
     rows = []
     try:
         results = client.list_time_series(
