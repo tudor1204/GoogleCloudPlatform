@@ -41,7 +41,7 @@ spec:
       - name: cloud-sql-proxy
         image: us.gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.3.0-alpine
         args:
-          - "PROJECT_ID:REGION:airflow-metadata"
+          - "PROJECT_ID:us-central1:airflow-metadata"
           - "--private-ip"
           - "--address"
           - "0.0.0.0"
