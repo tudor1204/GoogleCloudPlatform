@@ -21,7 +21,7 @@ kind: PriorityClass
 metadata:
   name: user-daemonset-priority
 value: 999999999
-preemptionPolicy: Never
+preemptionPolicy: PreemptLowerPriority
 globalDefault: false
 description: "User DaemonSet priority"
 ---
