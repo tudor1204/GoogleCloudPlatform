@@ -14,10 +14,13 @@ import grpc
 from six import b
 import whereami_pb2
 import whereami_pb2_grpc
+# hack for metadata access
+from time import sleep
 
 METADATA_URL = 'http://metadata.google.internal/computeMetadata/v1/'
 METADATA_HEADERS = {'Metadata-Flavor': 'Google'}
 GRPC_SECURE_PORTS = ['443', '8443'] # when using gRPC, this list is checked when determining to use a secure or insecure channel
+METADATA_CALL_DELAY_SECS = 10 # delay in seconds before calling metadata endpoint
 
 # set up logging
 dictConfig({
@@ -50,8 +53,13 @@ class WhereamiPayload(object):
         # configure retries for GCE metadata GET
         # we're doing this because, on GKE, metadata endpoint can take a few seconds to be available
         # see https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#limitations
+
+        # hack for delaying 
+        sleep(METADATA_CALL_DELAY_SECS) # wait a few seconds for metadata service to become accessible
+
+        # everything else
         session = requests.Session()
-        adapter = HTTPAdapter(max_retries=Retry(total=3, backoff_factor=1, allowed_methods=['GET'])) #, status_forcelist=[429, 500, 502, 503, 504]))
+        adapter = HTTPAdapter(max_retries=Retry(connect=3, read=3, other=5, total=10, backoff_factor=2)) #, status_forcelist=[429, 500, 502, 503, 504]))
         session.mount("http://", adapter)
         session.mount("https://", adapter)
 
