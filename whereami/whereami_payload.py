@@ -53,7 +53,7 @@ class WhereamiPayload(object):
 
         # everything else
         session = requests.Session()
-        adapter = HTTPAdapter(max_retries=Retry(connect=10, read=10, other=10, total=10, backoff_factor=4)) #, status_forcelist=[429, 500, 502, 503, 504]))
+        adapter = HTTPAdapter(max_retries=Retry(connect=3, read=3, other=3, total=3, backoff_factor=5)) #, status_forcelist=[429, 500, 502, 503, 504]))
         session.mount("http://", adapter)
         session.mount("https://", adapter)
 
