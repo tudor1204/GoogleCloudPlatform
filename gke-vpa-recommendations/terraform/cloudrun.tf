@@ -64,7 +64,7 @@ resource "google_cloud_run_v2_job" "metric_exporter" {
         }
         env {
             name = "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"
-            value = "python
+            value = "python"
         }
         resources {
           limits = {
