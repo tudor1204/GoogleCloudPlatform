@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	cloud.google.com/go/secretmanager v1.11.1
-	google.golang.org/genproto v0.0.0-20230815205213-6bfd019c3878
+	google.golang.org/genproto v0.0.0-20230822172742-b8732ec3820d
 )
 
 require (
