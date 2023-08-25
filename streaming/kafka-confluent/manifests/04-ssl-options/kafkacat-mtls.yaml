@@ -30,7 +30,7 @@ spec:
   volumes:
   - name: my-user
     secret:
-      secretName: my-user-credentials
+      secretName: my-user-tls-credentials
   - name: config-volume
     configMap:
       name: kcat-config
