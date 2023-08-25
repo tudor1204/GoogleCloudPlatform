@@ -18,4 +18,4 @@ metadata:
   name: airflow
   namespace: airflow
   annotations:
-    iam.gke.io/gcp-service-account: airflow-dags-reader@lustrous-baton-363720.iam.gserviceaccount.com
+    iam.gke.io/gcp-service-account: airflow-dags-reader@PROJECT_ID.iam.gserviceaccount.com
