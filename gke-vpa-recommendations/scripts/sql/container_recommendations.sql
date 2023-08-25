@@ -19,7 +19,7 @@ WITH
     *,
     ROW_NUMBER() OVER (PARTITION BY run_date, metric_name, project_id, location, cluster_name, namespace_name, controller_name, container_name ORDER BY run_date DESC) AS rn
   FROM
-    `$PROJECT_ID.gke_metric_dataset.gke_metrics` ),
+    `${project_id}.${table_dataset}.${table_id}` ),
 flattened AS (SELECT
   DATE(TIMESTAMP_TRUNC(TIMESTAMP(run_date), DAY)) AS run_date,
   location,
@@ -91,15 +91,15 @@ GROUP BY 1,2,3,4,5,6,7,8
 SELECT
 *,
   CEIL(CASE
-        WHEN controller_type = 'Deployment' THEN (IF((cpu_requested_mcores = cpu_limit_mcores ), cpu_vpa_rec, cpu_vpa_rec_95th))
+        WHEN controller_type = 'Deployment' THEN (IF((cpu_requested_mcores = cpu_limit_mcores ), (cpu_vpa_rec + SAFE_DIVIDE( cpu_vpa_rec, 30)), (cpu_vpa_rec_95th + SAFE_DIVIDE(cpu_vpa_rec_95th, 30 ))))
       ELSE
-      SAFE_DIVIDE(cpu_mcore_usage, 0.70)
+      cpu_mcore_usage + SAFE_DIVIDE(cpu_mcore_usage, 30)
     END
       ) AS cpu_requested_recommendation,
   CEIL(CASE
-        WHEN controller_type = 'Deployment' THEN (memory_vpa_rec)
+        WHEN controller_type = 'Deployment' THEN (memory_vpa_rec + SAFE_DIVIDE( memory_vpa_rec , 20 ))
       ELSE
-      SAFE_DIVIDE( memory_mib_usage_max, 0.80)
+      memory_mib_usage_max + SAFE_DIVIDE(memory_mib_usage_max , 20 )
     END
       ) AS memory_requested_recommendation, 
 FROM staging )
@@ -110,6 +110,7 @@ SELECT
     cluster_name,
     controller_name,
     controller_type,
+    namespace_name,
     container_name,
     cpu_mcore_usage,
     memory_mib_usage_max,
@@ -129,6 +130,7 @@ SELECT
 END), CEIL(cpu_mcore_usage))
   AS cpu_limit_recommendation,
   CEIL(GREATEST(memory_requested_recommendation, memory_mib_usage_max)) AS memory_requested_recommendation,
-  CEIL(GREATEST(memory_requested_recommendation, memory_mib_usage_max)) AS memory_limit_recommendation
+  CEIL(GREATEST(memory_requested_recommendation, memory_mib_usage_max)) AS memory_limit_recommendation,
+  ((cpu_requested_mcores-cpu_requested_recommendation) + ((memory_requested_mib - memory_requested_recommendation)/13.4)) AS priority
 FROM
   recommendation_staging ORDER BY run_date

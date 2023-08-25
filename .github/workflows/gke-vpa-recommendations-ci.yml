@@ -12,14 +12,15 @@ on:
       - 'gke-vpa-recommendations/**'
 jobs:
   job:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: build metric-exporter container
         run: |
           cd gke-vpa-recommendations/metrics-exporter
           docker build --tag metric-exporter .
-      - name: build hpa-metrics-exporter container
+      - name: Validate terraform
         run: |
-          cd gke-vpa-recommendations/scripts
-          docker build --tag hpa-metrics-exporter .
+          cd gke-vpa-recommendations/terraform
+          terraform init
+          terraform validate

@@ -12,7 +12,7 @@ on:
       - 'ai-ml/**'
 jobs:
   gke-a100-jax:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: build tensorflow container for gke-a100-jax tutorial
@@ -20,7 +20,7 @@ jobs:
           cd ai-ml/gke-a100-jax
           docker build --tag tensorflow .
   t5-model-serving:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: build client-app container for t5-model-serving tutorial

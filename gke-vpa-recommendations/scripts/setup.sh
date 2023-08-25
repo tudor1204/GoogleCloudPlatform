@@ -1,7 +1,3 @@
-echo "Configuring region and zone"
-gcloud config set compute/region $REGION
-gcloud config set compute/zone $ZONE
-
 echo "Create a new IAM service account"
 gcloud iam service-accounts create svc-metric-exporter \
     --project=${PROJECT_ID}
@@ -55,8 +51,8 @@ echo "deploy the onlineshop"
 kubectl apply -f k8s/online-shop.yaml
 
 echo "To simulate a more realistic environment, create an HPA for Online Boutique deployments"
-kubectl get deployments --field-selector='metadata.name==adservice' -o go-template-file=scripts/k8s/templates/cpu-hpa.gtpl | kubectl apply -f -
-kubectl get deployments --field-selector='metadata.name==redis-cart' -o go-template-file=scripts/k8s/templates/memory-hpa.gtpl | kubectl apply -f -
+kubectl autoscale deployment adservice --cpu-percent=70 --min=2 --max=100
+
 kubectl get hpa
 
 kubectl create ns custom-metrics

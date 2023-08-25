@@ -11,20 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from datetime import datetime, date
 import time
-import os
 import config
+import asyncio
+import logging
+import utils
+import warnings
+from google.protobuf import descriptor_pb2
+import bigquery_schema_pb2
 from google.cloud import monitoring_v3
-from google.cloud import bigquery
+from google.cloud import bigquery_storage_v1
+from google.cloud.bigquery_storage_v1 import types
+from google.cloud.bigquery_storage_v1 import writer
 from google.api_core.exceptions import GoogleAPICallError
 
-import logging
+warnings.filterwarnings(
+    "ignore",
+    "Your application has authenticated using end user credentials")
 
-run_date = datetime.now()
-logging.basicConfig(level=config.log_level_mapping.get(config.LOGGING_LEVEL.upper(), logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
-    
-def get_gke_metrics(metric_name, query):
+
+
+async def get_gke_metrics(metric_name, query, namespace, start_time, client):
     """
     Retrieves Google Kubernetes Engine (GKE) metrics.
 
@@ -35,108 +42,180 @@ def get_gke_metrics(metric_name, query):
     Returns:
     list: List of metrics.
     """
-    client = monitoring_v3.MetricServiceClient()
-    project_name = f"projects/{config.PROJECT_ID}"
-    now = time.time()
-    seconds = int(now)
-    nanos = int((now - seconds) * 10 ** 9)
-     
-    interval = monitoring_v3.TimeInterval(
-        {
-            "end_time": {"seconds": seconds, "nanos": nanos},
-            "start_time": {"seconds": (seconds - query.window), "nanos": nanos},
-        }
-    )
-    aggregation = monitoring_v3.Aggregation(
-        {
-            "alignment_period": {"seconds": query.seconds_between_points}, 
-            "per_series_aligner": query.per_series_aligner,
-            "cross_series_reducer": query.cross_series_reducer,
-            "group_by_fields": query.columns,
-        }
-    )
+    interval = utils.get_interval(start_time, query.window)
+    aggregation = utils.get_aggregation(query)
+    project_name = utils.get_request_name()
     rows = []
     try:
         results = client.list_time_series(
-        request={
+            request={
                 "name": project_name,
-                "filter": f'metric.type = "{query.metric}" AND {config.namespace_filter}',
+                "filter": f'metric.type = "{query.metric}" AND resource.label.namespace_name = {namespace}',
                 "interval": interval,
                 "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.FULL,
-                "aggregation": aggregation
-            }
-        )
-        logging.info("Building Row")
-        
-        for result in results: 
-            row = {}
+                "aggregation": aggregation})
+
+        logging.info(f"Building Row of metric results")
+
+        for result in results:
+            row = bigquery_schema_pb2.Record()
             label = result.resource.labels
             metadata = result.metadata.system_labels.fields
             metric_label = result.metric.labels
-        
+
             if "hpa" in metric_name:
                 controller_name = metric_label['targetref_name']
                 controller_type = metric_label['targetref_kind']
                 container_name = metric_label['container_name']
-            elif "vpa" in metric_name:               
+            elif "vpa" in metric_name:
                 controller_name = label['controller_name']
                 controller_type = label['controller_kind']
-                container_name = metric_label['container_name'] 
+                container_name = metric_label['container_name']
             else:
                 controller_name = metadata['top_level_controller_name'].string_value
                 controller_type = metadata['top_level_controller_type'].string_value
                 container_name = label['container_name']
-            row = {
-                    "run_date": run_date.strftime('%Y-%m-%d %H:%M:%S'),
-                    "metric_name": metric_name,
-                    "project_id": label['project_id'],
-                    "location": label['location'],
-                    "cluster_name": label['cluster_name'],
-                    "namespace_name": label['namespace_name'], 
-                    "controller_name": controller_name,
-                    "controller_type": controller_type,
-                    "container_name": container_name
-                }
-            points = []         
+            
+            row.run_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))
+            row.metric_name = metric_name
+            row.project_id = label['project_id']
+            row.location = label['location']
+            row.cluster_name = label['cluster_name']
+            row.namespace_name = label['namespace_name']
+            row.controller_name = controller_name
+            row.controller_type = controller_type
+            row.container_name = container_name
+            points = []
             for point in result.points:
-                test = {
-                        "metric_timestamp": point.interval.start_time.strftime('%Y-%m-%d %H:%M:%S.%f'),
-                        "metric_value": point.value.double_value or float(point.value.int64_value)
-                    }     
-                points.append(test)
-            row["points_array"] = points
-            rows.append(row)
+                new_point = row.points_array.add()
+                new_point.metric_timestamp = point.interval.start_time.strftime('%Y-%m-%d %H:%M:%S.%f')
+                new_point.metric_value = point.value.double_value or float(point.value.int64_value)
+            rows.append(row.SerializeToString())
     except GoogleAPICallError as error:
         logging.info(f'Google API call error: {error}')
     except Exception as error:
         logging.info(f'Unexpected error: {error}')
     return rows
 
+
+async def write_to_bigquery(write_client, rows):       
+    parent = write_client.table_path(config.PROJECT_ID, config.BIGQUERY_DATASET, config.BIGQUERY_TABLE)
+    write_stream = types.WriteStream()
+    write_stream.type_ = types.WriteStream.Type.PENDING
+    write_stream = write_client.create_write_stream(
+        parent=parent, write_stream=write_stream
+    )
+    stream_name = write_stream.name
+
+    # Create a template with fields needed for the first request.
+    request_template = types.AppendRowsRequest()
+
+    # The initial request must contain the stream name.
+    request_template.write_stream = stream_name
+
+    # So that BigQuery knows how to parse the serialized_rows, generate a
+    # protocol buffer representation of your message descriptor.
+    proto_schema = types.ProtoSchema()
+    proto_descriptor = descriptor_pb2.DescriptorProto()
+    bigquery_schema_pb2.Record.DESCRIPTOR.CopyToProto(proto_descriptor)
+    proto_schema.proto_descriptor = proto_descriptor
+    proto_data = types.AppendRowsRequest.ProtoData()
+    proto_data.writer_schema = proto_schema
+    request_template.proto_rows = proto_data
     
+    # Some stream types support an unbounded number of requests. Construct an
+    # AppendRowsStream to send an arbitrary number of requests to a stream.
+    append_rows_stream = writer.AppendRowsStream(write_client, request_template)
 
-def write_to_bigquery(rows_to_insert):
-    client = bigquery.Client()
-    errors = client.insert_rows_json(config.TABLE_ID, rows_to_insert)
-    if not errors:
-        logging.info(f'Successfully wrote {len(rows_to_insert)} rows to BigQuery table {config.TABLE_ID}.')
-    else:
-        error_message = "Encountered errors while inserting rows: {}".format(errors)
-        logging.error(error_message)
-        raise Exception(error_message)     
+    # Create a batch of row data by appending proto2 serialized bytes to the
+    # serialized_rows repeated field.
+    proto_rows = types.ProtoRows()
+    for row in rows:
+        proto_rows.serialized_rows.append(row)
+    request = types.AppendRowsRequest()
+    request.offset = 0
+    proto_data = types.AppendRowsRequest.ProtoData()
+    proto_data.rows = proto_rows
+    request.proto_rows = proto_data
 
+    append_rows_stream.send(request)
 
-def run_pipeline():   
+    # Shutdown background threads and close the streaming connection.
+    append_rows_stream.close()
+
+    # A PENDING type stream must be "finalized" before being committed. No new
+    # records can be written to the stream after this method has been called.
+    write_client.finalize_write_stream(name=write_stream.name)
+
+    # Commit the stream you created earlier.
+    batch_commit_write_streams_request = types.BatchCommitWriteStreamsRequest()
+    batch_commit_write_streams_request.parent = parent
+    batch_commit_write_streams_request.write_streams = [write_stream.name]
+    write_client.batch_commit_write_streams(batch_commit_write_streams_request)
+
+    logging.info(f"Writes to stream: '{write_stream.name}' have been committed.")
+
+async def run_pipeline(namespace, client, bqclient, start_time):
     for metric, query in config.MQL_QUERY.items():
-        logging.info(f'Retrieving {metric}...')
-        rows_to_insert = get_gke_metrics(metric, query)
+        logging.info(f'Retrieving {metric} for namespace {namespace}...')
+        rows_to_insert = await get_gke_metrics(metric, query, namespace, start_time, client)
         if rows_to_insert:
-            write_to_bigquery(rows_to_insert)
+            await write_to_bigquery(bqclient, rows_to_insert)
         else:
             logging.info(f'{metric} unavailable. Skip')
-    logging.info("Run Completed")   
+
+    logging.info("Run Completed")
+
+def get_namespaces(client, start_time):
+    namespaces = set()
+    query = config.NS_QUERY
+
+    interval = utils.get_interval(start_time, query.window)
+    aggregation = utils.get_aggregation(query)
+    project_name = utils.get_request_name()
+
+    try:
+        results = client.list_time_series(
+            request={
+                "name": project_name,
+                "filter": f'metric.type = "{query.metric}" AND {config.namespace_filter}',
+                "interval": interval,
+                "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.HEADERS,
+                "aggregation": aggregation})
+
+        logging.info("Building Row of Namespace results")
+        for result in results:
+            label = result.resource.labels
+            namespaces.add(label['namespace_name'])
+        return list(namespaces)
+
+    except GoogleAPICallError as error:
+        logging.error(f'Google API call error: {error}')
+    except Exception as error:
+        logging.error(f'Unexpected error: {error}')
+    return list(namespaces)
+
 
 if __name__ == "__main__":
-    if 'PROJECT_ID' not in os.environ or not os.environ['PROJECT_ID']:
-        logging.info("Please set the 'PROJECT_ID' environment variable.")
+    utils.setup_logging()
+    start_time = time.time()
+
+    try:
+        client = monitoring_v3.MetricServiceClient()
+        bqclient = bigquery_storage_v1.BigQueryWriteClient()
+    except Exception as error:
+        logging.error(f'Google client connection error: {error}')   
+    monitor_namespaces = get_namespaces(client, start_time)
+    namespace_count = len(monitor_namespaces)
+
+    logging.debug(f"Discovered {namespace_count} namespaces to query")
+    if (namespace_count > 0):
+        for namespace in monitor_namespaces:
+            asyncio.run(
+                run_pipeline(
+                    namespace,
+                    client=client,
+                    bqclient=bqclient,
+                    start_time=start_time))
     else:
-        run_pipeline()
+        logging.error("Monitored Namespace list is zero size, end Job")
