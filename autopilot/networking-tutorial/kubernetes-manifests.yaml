@@ -70,7 +70,7 @@ metadata:
   annotations:
     networking.gke.io/managed-certificates: networking-managed-cert
     networking.gke.io/v1beta1.FrontendConfig: networking-fc
-    kubernetes.io/ingress.global-static-ip-name: networking-static-ip
+    kubernetes.io/ingress.global-static-ip-name: networking-tutorial
     kubernetes.io/ingress.class: gce
   labels:
     app: frontend
