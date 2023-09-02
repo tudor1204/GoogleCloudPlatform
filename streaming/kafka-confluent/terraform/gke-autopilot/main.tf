@@ -22,7 +22,7 @@ module "network" {
   cluster_prefix = var.cluster_prefix
 }
 
-# [START gke_streaming_kafka_confluent_standard_private_regional_cluster]
+# [START gke_streaming_kafka_confluent_autopilot_private_regional_cluster]
 module "kafka_cluster" {
   source                   = "../modules/cluster-autopilot"
   project_id               = var.project_id
