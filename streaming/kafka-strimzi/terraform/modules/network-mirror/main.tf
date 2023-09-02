@@ -95,7 +95,7 @@ output "target_subnet_name" {
 # [START gke_streaming_kafka_strimzi_cloudnat_simple_create]
 module "source_cloud_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 5.0"
+  version = "~> 6.0"
   project = var.project_id 
   name    = "${var.cluster_prefix}-source-nat-router"
   network = module.gcp-network.network_name
@@ -107,7 +107,7 @@ module "source_cloud_router" {
 
 module "target_cloud_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 5.0"
+  version = "~> 6.0"
   project = var.project_id 
   name    = "${var.cluster_prefix}-target-nat-router"
   network = module.gcp-network.network_name
