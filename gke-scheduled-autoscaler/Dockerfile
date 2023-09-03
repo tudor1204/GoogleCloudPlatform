@@ -13,11 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.19-alpine as builder
+FROM golang:1.21.0 as builder
 WORKDIR /go/src/custom-metric-exporter
-COPY . .
-RUN go build -o /export .
+COPY * ./
+RUN CGO_ENABLED=0 GOOS=linux go build -o /export .
 
-FROM alpine as release
+FROM gcr.io/distroless/base-debian11
+WORKDIR /
 COPY --from=builder /export /export
-CMD [ "/export"]
+USER nonroot:nonroot
+ENTRYPOINT ["/export"]
