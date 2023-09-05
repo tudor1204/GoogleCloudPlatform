@@ -50,12 +50,19 @@ module "redis_cluster" {
   ]
   node_pools_labels = {
     all = {}
-    pool-redis = {
+    pool-rec = {
       "app.stateful/component" = "rec"
     }
   }
   node_pools_taints = {
     all = []
+    pool-rec = [
+      {
+        key    = "app.stateful/component"
+        value  = "redis-operator"
+        effect = "NO_SCHEDULE"
+      }
+    ]
   }
 }
 
