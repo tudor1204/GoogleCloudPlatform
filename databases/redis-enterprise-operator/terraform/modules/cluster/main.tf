@@ -40,6 +40,8 @@ module "redis_cluster" {
     name      = "${var.cluster_prefix}-cluster"
     component = "redis-operator"
   }
+
+  monitoring_enable_managed_prometheus = true
  
   node_pools        = var.node_pools
   node_pools_labels = var.node_pools_labels
@@ -47,4 +49,3 @@ module "redis_cluster" {
   gce_pd_csi_driver = true
 }
 # [END gke_redis_enterprise_standard_private_regional_cluster]
-
