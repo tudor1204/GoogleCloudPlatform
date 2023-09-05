@@ -22,52 +22,18 @@ module "network" {
   cluster_prefix = var.cluster_prefix
 }
 
-# [START gke_redis_enterprise_standard_private_regional_cluster]]
+# [START gke_redis_enterprise_autopilot_private_regional_cluster]
 module "redis_cluster" {
-  source                   = "../modules/cluster"
+  source                   = "../modules/cluster-autopilot"
   project_id               = var.project_id
   region                   = var.region
   cluster_prefix           = var.cluster_prefix
   network                  = module.network.network_name
   subnetwork               = module.network.subnet_name
-
-  node_pools = [
-    {
-      name            = "pool-rec"
-      disk_size_gb    = 50
-      disk_type       = "pd-standard"
-      autoscaling     = true
-      min_count       = 1
-      max_count       = 2
-      max_surge       = 1
-      max_unavailable = 0
-      machine_type    = "e2-standard-4"
-      auto_repair     = true
-      auto_upgrade    = false
-      version         = "1.26.7-gke.500"
-      
-    }
-  ]
-  node_pools_labels = {
-    all = {}
-    pool-rec = {
-      "app.stateful/component" = "rec"
-    }
-  }
-  node_pools_taints = {
-    all = []
-    pool-rec = [
-      {
-        key    = "app.stateful/component"
-        value  = "redis-operator"
-        effect = "NO_SCHEDULE"
-      }
-    ]
-  }
 }
 
 output "kubectl_connection_command" {
   value       = "gcloud container clusters get-credentials ${var.cluster_prefix}-cluster --region ${var.region}"
   description = "Connection command"
 }
-# [END gke_redis_enterprise_standard_private_regional_cluster]
+# [END gke_redis_enterprise_autopilot_private_regional_cluster]
