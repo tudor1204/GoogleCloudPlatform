@@ -62,7 +62,10 @@ resource "google_cloud_run_v2_job" "metric_exporter" {
             name = "LATEST_WINDOW_SECONDS"
             value = var.LATEST_WINDOW_SECONDS
         }
-        
+        env {
+            name = "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"
+            value = "python"
+        }
         resources {
           limits = {
             memory = var.job_run_memory

@@ -18,7 +18,7 @@ terraform {
   required_version = "~> 1.3"
 }
  
-variable "base_domin" {
+variable "base_domain" {
   type        = string
   description = "Your base domain"
 }
@@ -37,7 +37,7 @@ resource "google_compute_global_address" "default" {
  
 resource "google_dns_managed_zone" "default" {
   name        = var.name
-  dns_name    = "${var.name}.${var.base_domin}."
+  dns_name    = "${var.name}.${var.base_domain}."
   description = "DNS Zone for web application"
 }
  
