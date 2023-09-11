@@ -14,7 +14,7 @@ jobs:
   gke-a100-jax:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: build tensorflow container for gke-a100-jax tutorial
         run: |
           cd ai-ml/gke-a100-jax
@@ -22,7 +22,7 @@ jobs:
   t5-model-serving:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: build client-app container for t5-model-serving tutorial
         run: |
           cd ai-ml/t5-model-serving/client-app
