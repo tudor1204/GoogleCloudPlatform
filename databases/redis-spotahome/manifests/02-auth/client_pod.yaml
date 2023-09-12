@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-client
+spec:
+  containers:
+  - name: redis-client
+    image: redis:latest
+    command: ["sleep", "3600"]
+    env:
+    - name: PASS
+      valueFrom:
+        secretKeyRef:
+          name: my-user
+          key: password
+
