@@ -37,8 +37,9 @@ spec:
         memory: 4Gi
     exporter: 
       enabled: true
-      image: oliver006/redis_exporter:v1.3.5-alpine
+      image: oliver006/redis_exporter:v1.43.1
       args:
+        - --include-system-metrics
         - --web.telemetry-path
         - /metrics
       env:
