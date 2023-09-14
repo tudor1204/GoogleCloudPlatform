@@ -11,15 +11,15 @@ spec:
     - name: PORT 
       valueFrom:
         secretKeyRef:
-          name: redb-a-app-db           
+          name: redb-app-db           
           key: port
     - name: PASS
       valueFrom:
         secretKeyRef:
-          name: redb-a-app-db
+          name: redb-app-db
           key: password
     - name: SERVICE
       valueFrom:
         secretKeyRef:
-          name: redb-a-app-db
+          name: redb-app-db
           key: service_name

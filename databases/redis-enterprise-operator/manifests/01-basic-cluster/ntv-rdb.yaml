@@ -1,8 +1,0 @@
-apiVersion: app.redislabs.com/v1alpha1
-kind: RedisEnterpriseDatabase
-metadata:
-  name: native-app-db
-  labels:
-    app: redis-enterprise
-spec:
-  memorySize: 2GB

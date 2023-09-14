@@ -1,7 +1,7 @@
 apiVersion: app.redislabs.com/v1alpha1
 kind: RedisEnterpriseDatabase
 metadata:
-  name: a-app-db
+  name: app-db
 spec:
   memorySize: 1GB
   redisEnterpriseCluster:
