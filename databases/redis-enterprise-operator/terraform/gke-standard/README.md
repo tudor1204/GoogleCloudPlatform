@@ -8,7 +8,6 @@
 ```
 export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
 export PROJECT_ID="your project"
-export PROJECT_ID="or2-msq-go2-gkes-t1iylu"
 export REGION="us-central1"
 export CLUSTER_PREFIX="redis"
 
