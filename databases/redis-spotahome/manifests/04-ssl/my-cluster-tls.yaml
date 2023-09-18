@@ -46,8 +46,23 @@ spec:
       env:
         - name: REDIS_EXPORTER_LOG_FORMAT
           value: txt
-  auth:
-    secretPath: my-user
+    extraVolumes:
+    - name: certificate
+      secret:
+        secretName: redis-certificate
+        optional: false
+    extraVolumeMounts:
+    - name: certificate
+      mountPath: "/cert"
+      readOnly: true
+    customConfig:
+      - "tls-cert-file /cert/fullchain.pem"
+      - "tls-key-file /cert/privkey.pem"
+      - "tls-ca-cert-file /cert/cacerts.pem"
+      - "tls-cluster no"
+      - "tls-auth-clients no"
+      - "tls-replication no"
+      - "tls-port 6380"
   sentinel:
     replicas: 3
     affinity: *affinity
@@ -78,6 +93,10 @@ spec:
     port: 6379
     protocol: TCP
     targetPort: 6379
+  - name: redis-tls
+    port: 6380
+    protocol: TCP
+    targetPort: 6380
   selector:
     app.kubernetes.io/component: redis
     app.kubernetes.io/name: my-cluster
