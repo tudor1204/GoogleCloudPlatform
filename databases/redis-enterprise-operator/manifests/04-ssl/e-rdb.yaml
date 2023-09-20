@@ -1,0 +1,11 @@
+apiVersion: app.redislabs.com/v1alpha1
+kind: RedisEnterpriseDatabase
+metadata:
+  name: e-app-db
+spec:
+  tlsMode: enabled
+  clientAuthenticationCertificates:
+    - client-certificate-only
+  memorySize: 1GB
+  redisEnterpriseCluster:
+    name: gke-rec
