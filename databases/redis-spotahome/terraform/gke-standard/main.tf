@@ -47,13 +47,13 @@ module "redis_cluster" {
   ]
   node_pools_labels = {
     all = {}
-    pool-kafka = {
+    pool-redis = {
       "app.stateful/component" = "redis-operator"
     }
   }
   node_pools_taints = {
     all = []
-    pool-kafka = [
+    pool-redis = [
       {
         key    = "app.stateful/component"
         value  = "redis-operator"

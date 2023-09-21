@@ -9,6 +9,6 @@ variable "region" {
 
 variable "cluster_prefix" {
   description = "The prefix for all cluster resources"
-  default     = "kafka"
+  default     = "redis"
 }
 
