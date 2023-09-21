@@ -6,7 +6,6 @@ spec:
   nodes: 3
   dataInternodeEncryption: true
   certificates:
-    apiCertificateSecretName: api-certificate
     cmCertificateSecretName: cm-certificate
     syncerCertificateSecretName: syncer-certificate
     metricsExporterCertificateSecretName: metrics-exporter-certificate
