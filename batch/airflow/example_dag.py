@@ -15,6 +15,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+# [START gke_batch_airflow_dag_example]
 """Example DAG demonstrating the usage of the BashOperator."""
 from __future__ import annotations
 
@@ -68,3 +69,4 @@ this_will_skip >> run_this_last
 
 if __name__ == "__main__":
     dag.test()
+# [END gke_batch_airflow_dag_example]

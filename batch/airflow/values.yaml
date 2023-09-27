@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_batch_airflow_helm_values]
+# [START gke_batch_airflow_helm_values_ingress]
 ingress:
   web:
     enabled: true
@@ -24,6 +26,7 @@ ingress:
     pathType: "Prefix"
     hosts:
       - airflow.BASE_DOMAIN
+# [END gke_batch_airflow_helm_values_ingress]
 
 # Airflow executor
 executor: "KubernetesExecutor"
@@ -33,6 +36,7 @@ extraEnvFrom: |
       name: 'airflow-google-oauth-creds'
 
 # Airflow database & redis config
+# [START gke_batch_airflow_helm_values_metadata_db_connection]
 data:
   metadataConnection:
     user: airflow-metadata
@@ -41,8 +45,10 @@ data:
     port: 5432
     db: airflow-metadata
     sslmode: disable
+# [END gke_batch_airflow_helm_values_metadata_db_connection]
 
 # Airflow Worker Config
+# [START gke_batch_airflow_helm_values_workers_config]
 workers:
   serviceAccount:
     create: false
@@ -74,8 +80,10 @@ workers:
       operator: Equal
       value: "workers"
       effect: NoSchedule
+# [END gke_batch_airflow_helm_values_workers_config]
 
 # Airflow scheduler settings
+# [START gke_batch_airflow_helm_values_scheduler_config]
 scheduler:
   serviceAccount:
     create: false
@@ -105,8 +113,10 @@ scheduler:
         cpu: 250m
         memory: 512Mi
         ephemeral-storage: 1Gi
+# [END gke_batch_airflow_helm_values_scheduler_config]
 
 # Airflow database migration job settings
+# [START gke_batch_airflow_helm_values_migrate_database_job_config]
 migrateDatabaseJob:
   enabled: true
 
@@ -119,8 +129,10 @@ migrateDatabaseJob:
       cpu: 250m
       memory: 512Mi
       ephemeral-storage: 1Gi
+# [END gke_batch_airflow_helm_values_migrate_database_job_config]
 
 # Airflow webserver settings
+# [START gke_batch_airflow_helm_values_webserver_config]
 webserver:
   serviceAccount:
     create: false
@@ -185,8 +197,10 @@ webserver:
 
     AUTH_ROLES_SYNC_AT_LOGIN = True
     PERMANENT_SESSION_LIFETIME = 1800
+# [END gke_batch_airflow_helm_values_webserver_config]
 
 # Airflow Triggerer Config
+# [START gke_batch_airflow_helm_values_trigger_config]
 triggerer:
   enabled: true
 
@@ -223,8 +237,10 @@ triggerer:
         cpu: 250m
         memory: 512Mi
         ephemeral-storage: 1Gi
+# [END gke_batch_airflow_helm_values_trigger_config]
 
 # StatsD settings
+# [START gke_batch_airflow_helm_values_statsd_config]
 statsd:
   enabled: true
 
@@ -237,8 +253,10 @@ statsd:
       cpu: 250m
       memory: 512Mi
       ephemeral-storage: 1Gi
+# [END gke_batch_airflow_helm_values_statsd_config]
 
 # Configuration for the redis provisioned by the chart
+# [START gke_batch_airflow_helm_values_redis_config]
 redis:
   enabled: true
 
@@ -251,8 +269,10 @@ redis:
       cpu: 250m
       memory: 512Mi
       ephemeral-storage: 1Gi
+# [END gke_batch_airflow_helm_values_redis_config]
 
 # This runs as a CronJob to cleanup old pods.
+# [START gke_batch_airflow_helm_values_cleanup_job_config]
 cleanup:
   enabled: true
 
@@ -265,14 +285,18 @@ cleanup:
       cpu: 250m
       memory: 512Mi
       ephemeral-storage: 1Gi
+# [END gke_batch_airflow_helm_values_cleanup_job_config]
 
 postgresql:
   enabled: false
 
+# [START gke_batch_airflow_helm_values_dags_persistence_config]
 dags:
   persistence:
     enabled: true
     existingClaim: "airflow-dags-gcs"
+# [END gke_batch_airflow_helm_values_dags_persistence_config]
+# [END gke_batch_airflow_helm_values]
   # gitSync:
   #   enabled: true
   #   repo: https://github.com/apache/airflow.git

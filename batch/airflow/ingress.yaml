@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_batch_airflow_frontend_config]
 apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig
 metadata:
@@ -21,7 +22,9 @@ spec:
   redirectToHttps:
     enabled: true
     responseCodeName: MOVED_PERMANENTLY_DEFAULT
+# [END gke_batch_airflow_frontend_config]
 ---
+# [START gke_batch_airflow_managed_certificate]
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
@@ -30,3 +33,4 @@ metadata:
 spec:
   domains:
     - airflow.BASE_DOMAIN
+# [END gke_batch_airflow_managed_certificate]

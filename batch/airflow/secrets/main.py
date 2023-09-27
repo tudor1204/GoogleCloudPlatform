@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_batch_airflow_secrets_generator]
 from cryptography.fernet import Fernet
 import secrets;
 
 fernet_key = Fernet.generate_key()
 print(f'Fernet Key: {fernet_key.decode()}')
 print(f'Webserver Secret Key: {secrets.token_hex(16)}')
+# [END gke_batch_airflow_secrets_generator]

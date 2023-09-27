@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_batch_airflow_gcs_persistent_volume]
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -33,7 +34,9 @@ spec:
     driver: gcsfuse.csi.storage.gke.io
     volumeHandle: PROJECT_ID-airflow-dags
     readOnly: true
+# [END gke_batch_airflow_gcs_persistent_volume]
 ---
+# [START gke_batch_airflow_gcs_persistent_volume_claim]
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -47,3 +50,4 @@ spec:
       storage: 10Gi
   volumeName: airflow-dags-gcs
   storageClassName: should-not-be-empty
+# [END gke_batch_airflow_gcs_persistent_volume_claim]

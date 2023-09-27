@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_batch_airflow_cloud_sql_proxy_service_account]
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -19,7 +20,9 @@ metadata:
   namespace: airflow
   annotations:
     iam.gke.io/gcp-service-account: airflow-metadata-db@PROJECT_ID.iam.gserviceaccount.com
+# [END gke_batch_airflow_cloud_sql_proxy_service_account]
 ---
+# [START gke_batch_airflow_cloud_sql_proxy_deployment]
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -58,7 +61,9 @@ spec:
             cpu: 250m
             memory: 512Mi
             ephemeral-storage: 1Gi
+# [END gke_batch_airflow_cloud_sql_proxy_deployment]
 ---
+# [START gke_batch_airflow_cloud_sql_proxy_service]
 apiVersion: v1
 kind: Service
 metadata:
@@ -71,3 +76,4 @@ spec:
   ports:
   - port: 5432
     targetPort: 5432
+# [END gke_batch_airflow_cloud_sql_proxy_service]
