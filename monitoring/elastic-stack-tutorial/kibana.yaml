@@ -16,6 +16,7 @@
 # our public Docker images such as gcr.io/google-samples/hello-app:1.0
 # are rebuilt and updated upon changes to the repository.
 
+# [START gke_monitoring_elastic_stack_kibana]
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
@@ -93,3 +94,4 @@ spec:
             memory: 1Gi
             cpu: 500m
             ephemeral-storage: 1Gi
+# [END gke_monitoring_elastic_stack_kibana]

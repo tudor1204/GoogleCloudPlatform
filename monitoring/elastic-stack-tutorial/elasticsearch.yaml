@@ -16,6 +16,7 @@
 # our public Docker images such as gcr.io/google-samples/hello-app:1.0
 # are rebuilt and updated upon changes to the repository.
 
+# [START gke_monitoring_elastic_stack_elasticsearch]
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
@@ -84,3 +85,4 @@ spec:
               requests:
                 storage: 2Gi
             storageClassName: standard-rwo
+# [END gke_monitoring_elastic_stack_elasticsearch]

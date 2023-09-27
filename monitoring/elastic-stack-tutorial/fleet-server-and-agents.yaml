@@ -16,6 +16,7 @@
 # our public Docker images such as gcr.io/google-samples/hello-app:1.0
 # are rebuilt and updated upon changes to the repository.
 
+# [START gke_monitoring_elastic_stack_fleet_agent]
 apiVersion: agent.k8s.elastic.co/v1alpha1
 kind: Agent
 metadata:
@@ -67,7 +68,9 @@ spec:
         automountServiceAccountToken: true
         securityContext:
           runAsUser: 0
+# [END gke_monitoring_elastic_stack_fleet_agent]
 ---
+# [START gke_monitoring_elastic_stack_generic_nodes_agent]
 apiVersion: agent.k8s.elastic.co/v1alpha1
 kind: Agent
 metadata:
@@ -118,7 +121,9 @@ spec:
         automountServiceAccountToken: true
         securityContext:
           runAsUser: 0
+# [END gke_monitoring_elastic_stack_generic_nodes_agent]
 ---
+# [START gke_monitoring_elastic_stack_balanced_nodes_agent]
 apiVersion: agent.k8s.elastic.co/v1alpha1
 kind: Agent
 metadata:
@@ -171,7 +176,9 @@ spec:
         automountServiceAccountToken: true
         securityContext:
           runAsUser: 0
+# [END gke_monitoring_elastic_stack_balanced_nodes_agent]
 ---
+# [START gke_monitoring_elastic_stack_fleet_agent_cluster_role]
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -193,13 +200,17 @@ rules:
   - get
   - create
   - update
+# [END gke_monitoring_elastic_stack_fleet_agent_cluster_role]
 ---
+# [START gke_monitoring_elastic_stack_fleet_agent_service_account]
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: fleet-server
   namespace: elastic-system
+# [END gke_monitoring_elastic_stack_fleet_agent_service_account]
 ---
+# [START gke_monitoring_elastic_stack_fleet_agent_cluster_role_binding]
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -212,7 +223,9 @@ roleRef:
   kind: ClusterRole
   name: fleet-server
   apiGroup: rbac.authorization.k8s.io
+# [END gke_monitoring_elastic_stack_fleet_agent_cluster_role_binding]
 ---
+# [START gke_monitoring_elastic_stack_node_agent_cluster_role]
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -274,13 +287,17 @@ rules:
   - "get"
   - "list"
   - "watch"
+# [END gke_monitoring_elastic_stack_node_agent_cluster_role]
 ---
+# [START gke_monitoring_elastic_stack_node_agent_service_account]
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: elastic-agent
   namespace: elastic-system
+# [END gke_monitoring_elastic_stack_node_agent_service_account]
 ---
+# [START gke_monitoring_elastic_stack_node_agent_cluster_role_binding]
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -293,3 +310,4 @@ roleRef:
   kind: ClusterRole
   name: elastic-agent
   apiGroup: rbac.authorization.k8s.io
+# [END gke_monitoring_elastic_stack_node_agent_cluster_role_binding]

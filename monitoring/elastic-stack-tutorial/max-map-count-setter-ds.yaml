@@ -16,6 +16,7 @@
 # our public Docker images such as gcr.io/google-samples/hello-app:1.0
 # are rebuilt and updated upon changes to the repository.
 
+# [START gke_monitoring_elastic_stack_daemon_set_priority_class]
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
@@ -24,7 +25,9 @@ value: 999999999
 preemptionPolicy: PreemptLowerPriority
 globalDefault: false
 description: "User DaemonSet priority"
+# [END gke_monitoring_elastic_stack_daemon_set_priority_class]
 ---
+# [START gke_monitoring_elastic_stack_vm_memory_config_daemon_set]
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -73,3 +76,4 @@ spec:
               cpu: 10m
               memory: 10Mi
               ephemeral-storage: 10Mi
+# [END gke_monitoring_elastic_stack_vm_memory_config_daemon_set]
