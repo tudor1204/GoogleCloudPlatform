@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_service_mesh_istio_monitoring]
 apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
@@ -26,7 +27,9 @@ spec:
     path: /metrics
     timeout: 30s
     interval: 60s
+# [END gke_service_mesh_istio_monitoring]
 ---
+# [START gke_service_mesh_istio_containers_envoy_proxies_monitoring]
 apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
@@ -41,3 +44,4 @@ spec:
     path: /metrics
     timeout: 30s
     interval: 60s
+# [END gke_service_mesh_istio_containers_envoy_proxies_monitoring]
