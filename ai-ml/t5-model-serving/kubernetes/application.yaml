@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: main
-          image: gcr.io/PROJECT_ID/apps/fastdash:latest
+          image: us-central1-docker.pkg.dev/PROJECT_ID/models/fastdash:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: MODEL_PREDICTION
