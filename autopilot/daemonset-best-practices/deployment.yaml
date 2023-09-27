@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_autopilot_daemonset_best_practices_deployment]
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,3 +46,4 @@ spec:
             cpu: 2000m
             memory: 4Gi
             ephemeral-storage: 1Gi
+# [END gke_autopilot_daemonset_best_practices_deployment]
