@@ -18,7 +18,7 @@ steps:
   - buildx
   - build
   - --tag
-  - gcr.io/${PROJECT_ID}/apps/fastdash:latest
+  - us-central1-docker.pkg.dev/${PROJECT_ID}/models/fastdash:latest
   - "."
 images:
-- gcr.io/${PROJECT_ID}/apps/fastdash:latest
+- us-central1-docker.pkg.dev/${PROJECT_ID}/models/fastdash:latest

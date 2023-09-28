@@ -12,9 +12,9 @@ on:
       - 'custom-metrics-autoscaling/**'
 jobs:
   job:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: build direct-to-sd container
         run: |
           cd custom-metrics-autoscaling/direct-to-sd

@@ -12,9 +12,9 @@ on:
       - 'gke-stateful-kafka/**'
 jobs:
   job:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Validate GKE Autopilot TF
         run: |
           cd gke-stateful-kafka/terraform/gke-autopilot

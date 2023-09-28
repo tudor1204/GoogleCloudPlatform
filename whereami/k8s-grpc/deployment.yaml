@@ -46,7 +46,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.20
+        image: us-docker.pkg.dev/google-samples/containers/gke/whereami:v1.2.21
         ports:
           - name: grpc
             containerPort: 9090
@@ -55,7 +55,7 @@ spec:
         readinessProbe:
           grpc:
             port: 9090
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
         livenessProbe:
           grpc:
             port: 9090
