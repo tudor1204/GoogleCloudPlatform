@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	cloud.google.com/go/secretmanager v1.11.1
-	google.golang.org/genproto v0.0.0-20230920204549-e6e6cdab5c13
+	google.golang.org/genproto v0.0.0-20231002182017-d307bd883b97
 )
 
 require (
@@ -26,8 +26,8 @@ require (
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/api v0.126.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20230913181813-007df8e322eb // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20230920183334-c177e329c48b // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20230920204549-e6e6cdab5c13 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20230920204549-e6e6cdab5c13 // indirect
 	google.golang.org/grpc v1.57.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 )
