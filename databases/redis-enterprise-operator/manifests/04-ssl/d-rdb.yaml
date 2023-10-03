@@ -1,0 +1,9 @@
+apiVersion: app.redislabs.com/v1alpha1
+kind: RedisEnterpriseDatabase
+metadata:
+  name: d-app-db
+spec:
+  tlsMode: enabled
+  memorySize: 1GB
+  redisEnterpriseCluster:
+    name: gke-rec

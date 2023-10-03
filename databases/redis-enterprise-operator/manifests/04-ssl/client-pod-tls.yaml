@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-client-d
+spec:
+  containers:
+  - name: redis-client-d
+    image: redis:latest
+    command: ["sleep", "3600"]
+    env:
+    - name: PORT 
+      valueFrom:
+        secretKeyRef:
+          name: redb-d-app-db           
+          key: port
+    - name: PASS
+      valueFrom:
+        secretKeyRef:
+          name: redb-d-app-db
+          key: password
+    - name: SERVICE
+      valueFrom:
+        secretKeyRef:
+          name: redb-d-app-db
+          key: service_name
+    volumeMounts:
+      - name: ca-certificate
+        readOnly: true
+        mountPath: "/cert"
+  volumes:
+    - name: ca-certificate
+      secret:
+        secretName: ca-certificate
