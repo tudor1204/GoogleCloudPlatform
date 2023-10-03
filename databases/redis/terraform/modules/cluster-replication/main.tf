@@ -13,7 +13,7 @@
 #limitations under the License.
 
 # [START gke_redis_standard_private_regional_cluster]
-module "kafka_cluster" {
+module "redis_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
