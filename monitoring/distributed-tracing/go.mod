@@ -6,7 +6,7 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.19.1
 	github.com/gorilla/mux v1.8.0
 	go.opentelemetry.io/contrib/detectors/gcp v1.19.0
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.44.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.45.0
 	go.opentelemetry.io/contrib/propagators/autoprop v0.45.0
 	go.opentelemetry.io/otel v1.19.0
 	go.opentelemetry.io/otel/sdk v1.19.0
