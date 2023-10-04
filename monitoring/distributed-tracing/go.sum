@@ -116,6 +116,8 @@ go.opentelemetry.io/contrib/detectors/gcp v1.18.0 h1:+JSl0FwhnhwDi+7bURY+79LuYI0
 go.opentelemetry.io/contrib/detectors/gcp v1.18.0/go.mod h1:5klTFB1mPY1ar2ta/sHuOQvJhx2ODUvuIvXoXblFQPY=
 go.opentelemetry.io/contrib/detectors/gcp v1.19.0 h1:jQuVHQiHTnJa8JmZLe8ivKHZUh6x7pqC0DSGDG376II=
 go.opentelemetry.io/contrib/detectors/gcp v1.19.0/go.mod h1:0OKp3ML259QXdgA40Ij04gxOHosnWLHAIh/zAjG5mu4=
+go.opentelemetry.io/contrib/detectors/gcp v1.20.0 h1:0rMhJfnT4SWmQ6UYNDZMnKBqihtkwtDZKB/3sevhqdY=
+go.opentelemetry.io/contrib/detectors/gcp v1.20.0/go.mod h1:Cr5K1Vgz+OJ6W9h65pP72wiUV3Sd5LwY+ou2vTKYshk=
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.43.0 h1:HKORGpiOY0R0nAPtKx/ub8/7XoHhRooP8yNRkuPfelI=
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.43.0/go.mod h1:e+y1M74SYXo/FcIx3UATwth2+5dDkM8dBi7eXg1tbw8=
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.44.0 h1:KfYpVmrjI7JuToy5k8XV3nkapjWx48k4E4JOtVstzQI=
