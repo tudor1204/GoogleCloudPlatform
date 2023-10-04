@@ -1,0 +1,10 @@
+apiVersion: app.redislabs.com/v1alpha1
+kind: RedisEnterpriseRemoteCluster
+metadata:
+  name: target-cluster
+spec:
+  recName: gke-rec
+  recNamespace: rec-ns
+  apiFqdnUrl: gke-rec.rec-ns.svc.redis-target.local:9443
+  dbFqdnSuffix: .rec-ns.svc.redis-target.local
+  secretName: redis-enterprise-target-cluster
