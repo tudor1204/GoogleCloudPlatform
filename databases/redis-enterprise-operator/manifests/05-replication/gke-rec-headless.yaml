@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis-enterprise
+    redis.io/cluster: gke-rec
+  name: gke-rec-headless
+spec:
+  clusterIP: None
+  ports:
+  - name: api
+    port: 9443
+    protocol: TCP
+    targetPort: 9443
+  - name: sentinel
+    port: 8001
+    protocol: TCP
+    targetPort: 8001
+  selector:
+    app: redis-enterprise
+    redis.io/cluster: gke-rec
+    redis.io/role: node
+  type: ClusterIP
+
