@@ -1,0 +1,8 @@
+apiVersion: app.redislabs.com/v1alpha1
+kind: RedisEnterpriseDatabase
+metadata:
+  name: app-db
+spec:
+  memorySize: 1GB
+  redisEnterpriseCluster:
+    name: gke-rec-target

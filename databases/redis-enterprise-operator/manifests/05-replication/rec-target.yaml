@@ -1,0 +1,29 @@
+apiVersion: "app.redislabs.com/v1"
+kind: "RedisEnterpriseCluster"
+metadata:
+  name: gke-rec-target
+spec:
+  nodes: 3
+  redisEnterpriseNodeResources:
+    limits:
+      cpu: "2"
+      memory: 4Gi
+    requests:
+      cpu: "1"
+      memory: 4Gi
+  podTolerations:
+  - key: app.stateful/component
+    operator: Equal     
+    value: redis-operator
+    effect: NoSchedule
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: "app.stateful/component"
+            operator: In
+            values:
+            - "rec"
+        topologyKey: "topology.kubernetes.io/zone"
