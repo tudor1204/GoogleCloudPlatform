@@ -1,8 +1,0 @@
-apiVersion: app.redislabs.com/v1alpha1
-kind: RedisEnterpriseActiveActiveDatabase
-metadata:
-  name: gke-rec
-spec:
-  participatingClusters:
-      - name: source-cluster
-      - name: target-cluster
