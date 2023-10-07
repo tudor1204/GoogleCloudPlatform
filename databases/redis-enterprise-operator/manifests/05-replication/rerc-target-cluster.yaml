@@ -5,6 +5,6 @@ metadata:
 spec:
   recName: gke-rec-target
   recNamespace: rec-ns
-  apiFqdnUrl: gke-rec-target.rec-ns.svc:9443
-  dbFqdnSuffix: -headless.rec-ns.svc
+  apiFqdnUrl: gke-rec-target.rec-ns.svc.redis-target.local:9443
+  dbFqdnSuffix: -headless.rec-ns.svc.redis-target.local
   secretName: redis-enterprise-target-cluster

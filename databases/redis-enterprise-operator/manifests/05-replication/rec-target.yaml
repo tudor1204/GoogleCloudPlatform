@@ -1,3 +1,4 @@
+---
 apiVersion: "app.redislabs.com/v1"
 kind: "RedisEnterpriseCluster"
 metadata:
@@ -27,3 +28,22 @@ spec:
             values:
             - "rec"
         topologyKey: "topology.kubernetes.io/zone"
+  redisEnterpriseVolumeMounts:
+  - name: avahi-config
+    mountPath: /etc/default/avahi-daemon
+    subPath: avahi-daemon
+  volumes:
+  - name: avahi-config
+    configMap:
+      name: avahi-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: avahi-config
+data:
+  avahi-daemon: |
+    # 1 = Try to detect unicast dns servers that serve .local and disable avahi in
+    # that case, 0 = Don't try to detect .local unicast dns servers, can cause
+    # troubles on misconfigured networks
+    AVAHI_DAEMON_DETECT_LOCAL=0
