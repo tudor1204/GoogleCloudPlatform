@@ -1,3 +1,4 @@
+---
 apiVersion: "app.redislabs.com/v1"
 kind: "RedisEnterpriseCluster"
 metadata:
@@ -62,4 +63,28 @@ data:
     rpc:            db files
     
     netgroup:       nis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis-enterprise
+    redis.io/cluster: gke-rec-source
+  name: gke-rec-source-headless
+spec:
+  clusterIP: None
+  ports:
+  - name: api
+    port: 9443
+    protocol: TCP
+    targetPort: 9443
+  - name: sentinel
+    port: 8001
+    protocol: TCP
+    targetPort: 8001
+  selector:
+    app: redis-enterprise
+    redis.io/cluster: gke-rec-source
+    redis.io/role: node
+  type: ClusterIP
 

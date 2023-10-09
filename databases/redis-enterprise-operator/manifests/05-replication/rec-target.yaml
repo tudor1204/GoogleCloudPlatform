@@ -29,21 +29,62 @@ spec:
             - "rec"
         topologyKey: "topology.kubernetes.io/zone"
   redisEnterpriseVolumeMounts:
-  - name: avahi-config
-    mountPath: /etc/default/avahi-daemon
-    subPath: avahi-daemon
+  - name: nsswitch
+    mountPath: /etc/nsswitch.conf
+    subPath: nsswitch.conf
   volumes:
-  - name: avahi-config
+  - name: nsswitch
     configMap:
-      name: avahi-config
+      name: nsswitch
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: avahi-config
+  name: nsswitch
 data:
-  avahi-daemon: |
-    # 1 = Try to detect unicast dns servers that serve .local and disable avahi in
-    # that case, 0 = Don't try to detect .local unicast dns servers, can cause
-    # troubles on misconfigured networks
-    AVAHI_DAEMON_DETECT_LOCAL=0
+  nsswitch.conf: |
+    # /etc/nsswitch.conf
+    #
+    # Example configuration of GNU Name Service Switch functionality.
+    # If you have the `glibc-doc-reference' and `info' packages installed, try:
+    # `info libc "Name Service Switch"' for information about this file.
+    
+    passwd:         compat
+    group:          compat
+    shadow:         compat
+    gshadow:        files
+    
+    hosts:          files dns mdns4_minimal [NOTFOUND=return]
+    networks:       files
+    
+    protocols:      db files
+    services:       db files
+    ethers:         db files
+    rpc:            db files
+    
+    netgroup:       nis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis-enterprise
+    redis.io/cluster: gke-rec-target
+  name: gke-rec-target-headless
+spec:
+  clusterIP: None
+  ports:
+  - name: api
+    port: 9443
+    protocol: TCP
+    targetPort: 9443
+  - name: sentinel
+    port: 8001
+    protocol: TCP
+    targetPort: 8001
+  selector:
+    app: redis-enterprise
+    redis.io/cluster: gke-rec-target
+    redis.io/role: node
+  type: ClusterIP
+
