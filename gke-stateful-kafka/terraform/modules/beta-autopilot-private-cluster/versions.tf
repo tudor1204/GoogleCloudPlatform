@@ -21,7 +21,7 @@ terraform {
   required_providers {
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = "< 5.1"
+      version = "< 5.0" # upgrade to ~> 5.0 *AFTER* terraform-google-network module is updated (https://github.com/terraform-google-modules/terraform-google-network/pull/506)
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
