@@ -29,6 +29,8 @@ spec:
         matchLabels:
           redisfailovers.databases.spotahome.com/name: my-cluster
           app.kubernetes.io/component: redis
+    podAnnotations:
+      cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
     resources:
       requests:
         cpu: "1"
@@ -36,6 +38,17 @@ spec:
       limits:
         cpu: "2"
         memory: 4Gi
+    storage:
+      persistentVolumeClaim:
+        metadata:
+          name: my-cluster-data
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 2Gi
+          storageClassName: premium-rwo 
     exporter: 
       enabled: true
       image: oliver006/redis_exporter:v1.43.1
@@ -46,6 +59,8 @@ spec:
       env:
         - name: REDIS_EXPORTER_LOG_FORMAT
           value: txt
+  auth:
+    secretPath: my-user
   sentinel:
     replicas: 3
     affinity: *affinity
@@ -58,6 +73,8 @@ spec:
         matchLabels:
           redisfailovers.databases.spotahome.com/name: my-cluster
           app.kubernetes.io/component: sentinel
+    podAnnotations:
+      cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
     resources:
       requests:
         cpu: 100m
