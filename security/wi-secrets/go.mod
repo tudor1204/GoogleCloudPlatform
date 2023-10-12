@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	cloud.google.com/go/secretmanager v1.11.1
-	google.golang.org/genproto v0.0.0-20231012185656-8102cb6e9bc5
+	google.golang.org/genproto v0.0.0-20231012201019-e917dd12ba7a
 )
 
 require (
