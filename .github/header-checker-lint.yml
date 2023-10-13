@@ -18,12 +18,17 @@
 
 allowedCopyrightHolders:
   - 'Google LLC'
+
 allowedLicenses:
   - 'Apache-2.0'
-ignoreFiles:
-  - '**/requirements.txt'
-# If you want to ignore checking the license year, uncomment the line below.
+
+# If you want to ignore certain files/folders, use ignoreFiles.
+# ignoreFiles:
+#  - '**/requirements.txt'
+
+# If you want to ignore checking the license year, use ignoreLicenseYear.
 # ignoreLicenseYear: true # Useful when migrating in code licensed at previous years.
+
 sourceFileExtensions:
   - 'cs'
   - 'Dockerfile'
