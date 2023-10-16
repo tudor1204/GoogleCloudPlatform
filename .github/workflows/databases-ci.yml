@@ -19,3 +19,14 @@ jobs:
         run: |
           cd databases/hello-app-cloud-spanner
           docker build --tag hello-app-cloud-spanner .
+      - name: Validate GKE Autopilot TF for Spotahome
+        run: |
+          cd databases/redis-spotahome/terraform/gke-autopilot
+          terraform init
+          terraform validate
+      - name: Validate GKE Standard TF for Spotahome
+        run: |
+          cd databases/redis-spotahome/terraform/gke-standard
+          terraform init
+          terraform validate
+
