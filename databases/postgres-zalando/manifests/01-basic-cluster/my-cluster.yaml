@@ -21,12 +21,12 @@ spec:
   teamId: "my-team"
   numberOfInstances: 3
   users:
-    zalando:
+    mydatabaseowner:
     - superuser
     - createdb
-    my-user: []
+    myuser: []
   databases:
-    my-database: zalando
+    mydatabase: mydatabaseowner
   postgresql:
     version: "15"
     parameters:
