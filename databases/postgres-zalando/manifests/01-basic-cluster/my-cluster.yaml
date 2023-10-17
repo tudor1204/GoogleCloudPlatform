@@ -60,3 +60,27 @@ spec:
     limits:
       cpu: "2"
       memory: 4Gi
+  sidecars:
+    - name: exporter
+      image: quay.io/prometheuscommunity/postgres-exporter:v0.14.0
+      args:
+      - --collector.stat_statements
+      ports:
+      - name: exporter
+        containerPort: 9187
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256M
+        requests:
+          cpu: 100m
+          memory: 256M
+      env:
+      - name: "DATA_SOURCE_URI"
+        value: "localhost/postgres?sslmode=disable"
+      - name: "DATA_SOURCE_USER"
+        value: "$(POSTGRES_USER)"
+      - name: "DATA_SOURCE_PASS"
+        value: "$(POSTGRES_PASSWORD)"
+
