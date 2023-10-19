@@ -84,4 +84,7 @@ spec:
         value: "$(POSTGRES_USER)"
       - name: "DATA_SOURCE_PASS"
         value: "$(POSTGRES_PASSWORD)"
+  tls:
+    secretName: "postgres-certificate"
+    caFile: "ca.crt"
 
