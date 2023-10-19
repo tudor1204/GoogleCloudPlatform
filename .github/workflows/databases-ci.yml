@@ -19,3 +19,9 @@ jobs:
         run: |
           cd databases/hello-app-cloud-spanner
           docker build --tag hello-app-cloud-spanner .
+      - name: Validate GKE Autopilot TF for Redis replication
+        run: |
+          cd databases/redis/terraform/gke-replication
+          terraform init
+          terraform validate
+
