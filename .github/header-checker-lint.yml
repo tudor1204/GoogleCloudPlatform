@@ -32,7 +32,6 @@ allowedLicenses:
 sourceFileExtensions:
   - 'cs'
   - 'Dockerfile'
-  - 'gitignore'
   - 'go'
   - 'java'
   - 'js'
