@@ -46,5 +46,3 @@ spec:
           name: mydatabaseowner.my-cluster.credentials.postgresql.acid.zalan.do
           key: username
 
-
-
