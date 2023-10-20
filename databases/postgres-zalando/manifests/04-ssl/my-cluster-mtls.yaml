@@ -87,9 +87,9 @@ spec:
   tls:
     secretName: "postgres-certificate"
     caFile: "ca.crt"
-  # overwrite pg_hba.conf rules
   patroni:
     pg_hba:
+    # default config
     - local   all             all                             trust
     - hostssl all             +zalandos    127.0.0.1/32       pam
     - host    all             all          127.0.0.1/32       md5
@@ -99,6 +99,7 @@ spec:
     - hostssl replication     standby      all                md5
     - hostnossl all           all          all                reject
     - hostssl all             +zalandos    all                pam
-    # require mtls authentication for myuser
-    - hostssl all             myuser       all                md5 clientcert=1
     - hostssl all             all          all                md5
+    # require mtls for myuser
+    - hostssl all             myuser       all                md5 clientcert=verify-full
+    synchronous_mode: true
