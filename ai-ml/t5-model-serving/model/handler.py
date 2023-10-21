@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 class TransformersSeqGeneration(BaseHandler, ABC):
     _LANG_MAP = {
-        "es": "Spanish",
+        "ro": "Romanian",
         "fr": "French",
         "de": "German",
         "en": "English",

@@ -29,7 +29,7 @@ LANG_MAP = {
   "en": "English",
   "fr": "French",
   "de": "German",
-  "es": "Spanish",
+  "ro": "Romanian",
 }
 
 logger.info(f"Model prediction: {PREDICTION_URL}")
@@ -40,15 +40,18 @@ def text_to_text_function(text: str = "Hello World", from_lang=LANG_MAP, to_lang
   resp = requests.post(PREDICTION_URL, json=payload, headers=headers)
   if resp.status_code == 200:
     content = resp.json()
-    return content.get("text")
+    resp = content.get("text")
   else:
-    return "Oops, something went wrong!"
+    resp = "Oops, something went wrong!"
+
+  return resp
 
 dash = FastDash(
   callback_fn=text_to_text_function,
   title="T5 model serving",
   github_url=GITHUB_URL,
+  run_kwargs=dict(debug=__name__ == "__main__", port=8050),
 )
 
 if __name__ == "__main__":
-  dash.run_server(debug=True, port=8050)
+  dash.run()

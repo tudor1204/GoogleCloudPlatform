@@ -34,5 +34,8 @@
   "nuget":{
     "addLabels": ["lang: dotnet"]
   },
-  "ignorePaths": ["security/language-vulns/**"]
+  "ignorePaths": [
+    "demos/**",
+    "security/language-vulns/**"
+  ]
 }

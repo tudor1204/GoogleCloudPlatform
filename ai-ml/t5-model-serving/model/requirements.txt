@@ -1,2 +1,2 @@
-t5
-transformers
+t5==0.9.4
+transformers==4.34.0
