@@ -89,17 +89,17 @@ spec:
     caFile: "ca.crt"
   patroni:
     pg_hba:
-    # default config
+    # basic config, don't require mtls for pre-built users
     - local   all             all                             trust
     - hostssl all             +zalandos    127.0.0.1/32       pam
     - host    all             all          127.0.0.1/32       md5
     - hostssl all             +zalandos    ::1/128            pam
     - host    all             all          ::1/128            md5
     - local   replication     standby                         trust
-    - hostssl replication     standby      all                md5
+    - hostssl all             standby      all                md5
     - hostnossl all           all          all                reject
     - hostssl all             +zalandos    all                pam
-    - hostssl all             all          all                md5
-    # require mtls for myuser
-    - hostssl all             myuser       all                md5 clientcert=verify-full
+    - hostssl all             postgres     all                md5
+    # require mtls for all non-default users
+    - hostssl all             all          all                md5 clientcert=verify-full
     synchronous_mode: true
