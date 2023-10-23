@@ -3,11 +3,11 @@
     "config:recommended",
     ":approveMajorUpdates",
   ],
-  // submit on Monday midnight (UTC)
+  // Create PRs on Monday midnight (UTC)
   "schedule": [
     "after 12am on Monday"
   ],
-  "minimumReleaseAge": "14 days",
+  "minimumReleaseAge": "7 days",
   "vulnerabilityAlerts": {
     "labels": [
       "type:security"
@@ -55,13 +55,6 @@
     {
       "matchCategories": ["java"],
       "matchPackagePatterns": [
-        "io.grpc:(?:protoc-gen-)?grpc-*"
-      ],
-      "groupName": "gRPC packages"
-    },
-    {
-      "matchCategories": ["java"],
-      "matchPackagePatterns": [
         "^org.apache.beam:"
       ],
       "groupName": "Apache Beam packages"
@@ -84,7 +77,8 @@
     },
     {
       "matchCategories": ["terraform"],
-      "matchManagers": ["google"],
+      "matchDepType": "provider",
+      "matchPackagePatterns": "^google",
       "groupName": "Terraform Google providers",
     },
   ],
