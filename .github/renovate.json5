@@ -1,0 +1,91 @@
+{
+  "extends": [
+    "config:recommended",
+    ":approveMajorUpdates",
+  ],
+  // submit on Monday midnight (UTC)
+  "schedule": [
+    "after 12am on Monday"
+  ],
+  "minimumReleaseAge": "14 days",
+  "vulnerabilityAlerts": {
+    "labels": [
+      "type:security"
+    ],
+    "minimumReleaseAge": "1 days"
+  },
+  "labels": ["dependencies"],
+  "dependencyDashboardLabels": ["type: process"],
+  "dockerfile": {
+    "enabled": false
+  },
+  "semanticCommits": true,
+  "pip-compile": {
+    "enabled": true,
+    "fileMatch": ["(^|/)requirements\\.in$"],
+    "lockFileMaintenance": {
+      "enabled": true
+    },
+  },
+  // pip-compile handles requirements.txt updates.
+  "pip_requirements": {
+    "enabled": false
+  },
+  "constraints": {
+    "python": "~=3.11.0"
+  },
+  "ignorePaths": [
+    "demos/**",
+    "security/language-vulns/**"
+  ],
+  "packageRules": [
+    {"matchCategories": ["python"], "addLabels": ["lang: python"]},
+    {"matchCategories": ["java"], "addLabels": ["lang: java"]},
+    {"matchCategories": ["golang"], "addLabels": ["lang: go"]},
+    {"matchCategories": ["js"], "addLabels": ["lang: nodejs"]},
+    {"matchCategories": ["terraform"], "addLabels": ["lang: terraform"]},
+    {
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true
+    },
+    {
+      "matchCategories": ["java"],
+      "matchPackagePatterns": [
+        "io.grpc:(?:protoc-gen-)?grpc-*"
+      ],
+      "groupName": "gRPC packages"
+    },
+    {
+      "matchCategories": ["java"],
+      "matchPackagePatterns": [
+        "^org.apache.beam:"
+      ],
+      "groupName": "Apache Beam packages"
+    },
+    {
+      "matchCategories": ["java"],
+      "matchPackagePatterns": [
+        "^org.eclipse.jetty:"
+      ],
+      "groupName": "Jetty packages"
+    },
+    {
+      "matchCategories": ["java"],
+      "matchPackagePatterns": [
+        "org.springframework.boot"
+      ],
+      "matchCurrentVersion": "!/.*[SNAPSHOT | M]/",
+      "allowedVersions": "<3",
+      "description": "@akitsch: Spring Boot V3 requires Java 17"
+    },
+    {
+      "matchCategories": ["terraform"],
+      "matchManagers": ["google"],
+      "groupName": "Terraform Google providers",
+    },
+  ],
+}
