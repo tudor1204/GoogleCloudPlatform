@@ -23,13 +23,6 @@
   "pip-compile": {
     "enabled": true,
     "fileMatch": ["(^|/)requirements\\.in$"],
-    "lockFileMaintenance": {
-      "enabled": true
-    },
-  },
-  // pip-compile handles requirements.txt updates.
-  "pip_requirements": {
-    "enabled": false
   },
   "constraints": {
     "python": "~=3.11.0"
@@ -71,7 +64,7 @@
       "matchPackagePatterns": [
         "org.springframework.boot"
       ],
-      "matchCurrentVersion": "!/.*[SNAPSHOT | M]/",
+      "matchCurrentVersion": ">=2.0.0, <3.0.0",
       "allowedVersions": "<3",
       "description": "@akitsch: Spring Boot V3 requires Java 17"
     },
