@@ -25,7 +25,7 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/gb-frontend:v5'
     - '.'
-  dir: 'guestbook/php-redis'
+  dir: 'quickstarts/guestbook/php-redis'
 
 images:
   - 'gcr.io/google-samples/gb-frontend:v5'

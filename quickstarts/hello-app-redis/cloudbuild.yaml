@@ -25,7 +25,7 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/hello-app-redis:1.0'
     - '.'
-  dir: 'hello-app-redis'
+  dir: 'quickstarts/hello-app-redis'
 
 images:
   - 'gcr.io/google-samples/hello-app-redis:1.0'

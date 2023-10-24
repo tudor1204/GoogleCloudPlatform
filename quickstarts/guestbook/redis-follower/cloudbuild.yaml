@@ -25,7 +25,7 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/gb-redis-follower:v2'
     - '.'
-  dir: 'guestbook/redis-follower'
+  dir: 'quickstarts/guestbook/redis-follower'
 
 images:
   - 'gcr.io/google-samples/gb-redis-follower:v2'

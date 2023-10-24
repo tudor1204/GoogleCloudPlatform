@@ -25,7 +25,7 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/hello-app-cdn:1.0'
     - '.'
-  dir: 'hello-app-cdn'
+  dir: 'quickstarts/hello-app-cdn'
 
 images:
   - 'gcr.io/google-samples/hello-app-cdn:1.0'

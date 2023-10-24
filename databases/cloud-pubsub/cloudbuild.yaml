@@ -25,7 +25,7 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/pubsub-sample:v2'
     - '.'
-  dir: 'cloud-pubsub'
+  dir: 'databases/cloud-pubsub'
 
 images:
   - 'gcr.io/google-samples/pubsub-sample:v2'

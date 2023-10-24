@@ -23,7 +23,7 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/metrics-exporter'
     - '.'
-  dir: 'gke-vpa-recommendations/metrics-exporter'
+  dir: 'cost-optimization/gke-vpa-recommendations/metrics-exporter'
 
 # Push images.
 images:

@@ -25,7 +25,7 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/hello-app-tls:1.0'
     - '.'
-  dir: 'hello-app-tls'
+  dir: 'quickstarts/hello-app-tls'
 
 images:
   - 'gcr.io/google-samples/hello-app-tls:1.0'

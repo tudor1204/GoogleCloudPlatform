@@ -27,13 +27,13 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0'
     - '.'
-  dir: 'hello-app'
+  dir: 'quickstarts/hello-app'
 
 # Create back-up of main.go and replace "Version: 1.0.0" with "Version: 2.0.0".
 - name: 'bash'
   args:
     - '-c'
-    - 'cp -p hello-app/main.go hello-app/main.go.bak && sed "s/Version: 1.0.0/Version: 2.0.0/g" hello-app/main.go.bak > hello-app/main.go'
+    - 'cp -p quickstarts/hello-app/main.go quickstarts/hello-app/main.go.bak && sed "s/Version: 1.0.0/Version: 2.0.0/g" quickstarts/hello-app/main.go.bak > quickstarts/hello-app/main.go'
 
 # Build hello-app:2.0.
 - name: 'gcr.io/cloud-builders/docker'
@@ -44,7 +44,7 @@ steps:
     - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/hello-app:2.0'
     - '.'
-  dir: 'hello-app'
+  dir: 'quickstarts/hello-app'
 
 # Push images.
 images:
