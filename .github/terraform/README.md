@@ -20,7 +20,7 @@ Once changes to the Terraform scripts has been merged, we need to apply these ch
 
    ```sh
    git clone https://github.com/GoogleCloudPlatform/kubernetes-engine-samples
-   cd kubernetes-engine-samples/terraform/
+   cd kubernetes-engine-samples/.github/terraform/
    ```
 
 2. Change context to point to the `google-samples` project.
