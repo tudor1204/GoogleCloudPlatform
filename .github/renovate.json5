@@ -48,20 +48,6 @@
     {
       "matchCategories": ["java"],
       "matchPackagePatterns": [
-        "^org.apache.beam:"
-      ],
-      "groupName": "Apache Beam packages"
-    },
-    {
-      "matchCategories": ["java"],
-      "matchPackagePatterns": [
-        "^org.eclipse.jetty:"
-      ],
-      "groupName": "Jetty packages"
-    },
-    {
-      "matchCategories": ["java"],
-      "matchPackagePatterns": [
         "org.springframework.boot"
       ],
       "matchCurrentVersion": ">=2.0.0, <3.0.0",
