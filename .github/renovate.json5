@@ -64,7 +64,7 @@
       ],
       "matchCurrentVersion": ">=2.0.0, <3.0.0",
       "allowedVersions": "<3",
-      "groupName": "Spring Boot upgrades for v2"
+      "groupName": "Spring Boot upgrades for v2",
       "description": "@akitsch: Spring Boot V3 requires Java 17"
     },
     {
@@ -94,7 +94,7 @@
     },
     {
       "matchCategories": ["terraform"],
-      "matchDepType": "provider",
+      "matchDepTypes": ["provider", "required_provider"],
       "matchPackagePatterns": "^google",
       "groupName": "Terraform Google providers",
     },
