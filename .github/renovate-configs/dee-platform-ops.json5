@@ -7,7 +7,7 @@
   ],
   // Rate limits, to protect maintainers (and CI) from PR floods.
   "prHourlyLimit": 10,
-  "prConcurrentLimit": 30,
+  "prConcurrentLimit": 15,
   "minimumReleaseAge": "7 days",
   "vulnerabilityAlerts":{
      "labels":[
