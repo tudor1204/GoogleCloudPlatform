@@ -1,15 +1,15 @@
-name: hello-app-ci
+name: quickstarts-hello-app-ci
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/hello-app-ci.yml'
-      - 'hello-app/**'
+      - '.github/workflows/quickstarts-hello-app-ci.yml'
+      - 'quickstarts/hello-app/**'
   pull_request:
     paths:
-      - '.github/workflows/hello-app-ci.yml'
-      - 'hello-app/**'
+      - '.github/workflows/quickstarts-hello-app-ci.yml'
+      - 'quickstarts/hello-app/**'
 jobs:
   job:
     runs-on: ubuntu-22.04
@@ -17,5 +17,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: build hello-app container
         run: |
-          cd hello-app
+          cd quickstarts/hello-app
           docker build --tag hello-app .

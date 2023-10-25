@@ -1,14 +1,14 @@
-name: gke-kafka-strimzi-ci
+name: streaming-gke-kafka-strimzi-ci
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/gke-kafka-strimzi-ci.yml'
+      - '.github/workflows/streaming-gke-kafka-strimzi-ci.yml'
       - 'streaming/kafka/**'
   pull_request:
     paths:
-      - '.github/workflows/gke-kafka-strimzi-ci.yml'
+      - '.github/workflows/streaming-gke-kafka-strimzi-ci.yml'
       - 'streaming/kafka/**'
 jobs:
   job:
