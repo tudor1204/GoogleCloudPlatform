@@ -61,7 +61,7 @@ module "postgres_cluster" {
   ]
   node_pools_labels = {
     all = {}
-    pool-redis = {
+    pool-postgres = {
       "app.stateful/component" = "postgres-operator"
     } 
   }
