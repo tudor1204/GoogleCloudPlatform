@@ -6,6 +6,7 @@ spec:
   description: "Standard GKE PostgreSQL cluster"
   imageName: ghcr.io/cloudnative-pg/postgresql:16.0
   instances: 3
+  startDelay: 300
   primaryUpdateStrategy: unsupervised
 
   postgresql:
@@ -17,16 +18,16 @@ spec:
       database: app
 
   storage:
-    storageClass: standard
+    storageClass: premium-rwo
     size: 2Gi
 
   resources:
     requests:
-      memory: "512Mi"
-      cpu: "1"
+      memory: "1Gi"
+      cpu: "1000m"
     limits:
       memory: "1Gi"
-      cpu: "2"
+      cpu: "1000m"
 
   affinity:
     enablePodAntiAffinity: true
@@ -48,3 +49,6 @@ spec:
               values:
               - "pg-cluster"
           topologyKey: topology.kubernetes.io/zone
+
+  monitoring:
+    enablePodMonitor: true
