@@ -15,7 +15,7 @@
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
-  name: my-source-cluster
+  name: my-target-cluster
 spec:
   dockerImage: ghcr.io/zalando/spilo-15:3.0-p1
   teamId: "my-team"
@@ -26,6 +26,8 @@ spec:
     - createdb
   databases:
     mydatabase: mydatabaseowner
+  standby:
+    standby_host: "my-source-cluster-headless.postgres.svc.postgres-source.local"
   postgresql:
     version: "15"
     parameters:
@@ -87,7 +89,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-source-cluster-headless
+  name: my-target-cluster-headless
 spec:
   clusterIP: None
   ports:
@@ -96,14 +98,14 @@ spec:
     protocol: TCP
     targetPort: 5432
   selector:
-    cluster-name: my-source-cluster
+    cluster-name: my-target-cluster
     spilo-role: master
   type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-source-cluster-repl-headless
+  name: my-target-cluster-repl-headless
 spec:
   clusterIP: None
   ports:
@@ -112,7 +114,7 @@ spec:
     protocol: TCP
     targetPort: 5432
   selector:
-    cluster-name: my-source-cluster
+    cluster-name: my-target-cluster
     spilo-role: replica
   type: ClusterIP
 
