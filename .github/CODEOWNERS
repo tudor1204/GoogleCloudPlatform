@@ -3,16 +3,16 @@
 
 # These owners will be the default owners for everything in
 # the repo. Unless a later match takes precedence.
-* @GoogleCloudPlatform/anthos-dpe @yoshi-approver
+* @GoogleCloudPlatform/dee-platform-ops @yoshi-approver
 
 # Directory-specific owners
-/windows-multi-arch/ @ibabou @liurupeng @mcshooter @pjh @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/gke-stateful-postgres/ @aburhan @pwschuurman @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/gke-stateful-kafka/ @aburhan @pwschuurman @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/gke-vpa-recommendations/ @aburhan @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/whereami/ @theemadnes @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/ai-ml/ @rbarberop @alizaidis @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/batch/ @rbarberop @alizaidis @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/databases/hello-app-cloud-spanner @thiagotnunes @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/security/language-vulns @thompsonmax @yoshi-approver @GoogleCloudPlatform/anthos-dpe
-/streaming/ @aburhan @yoshi-approver @GoogleCloudPlatform/anthos-dpe
+/windows-multi-arch/ @ibabou @liurupeng @mcshooter @pjh @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
+/gke-stateful-postgres/ @aburhan @pwschuurman @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
+/gke-stateful-kafka/ @aburhan @pwschuurman @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
+/gke-vpa-recommendations/ @aburhan @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
+/whereami/ @theemadnes @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
+/ai-ml/ @rbarberop @alizaidis @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
+/batch/ @rbarberop @alizaidis @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
+/databases/hello-app-cloud-spanner @thiagotnunes @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
+/security/language-vulns @thompsonmax @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
+/streaming/ @aburhan @yoshi-approver @GoogleCloudPlatform/dee-platform-ops
