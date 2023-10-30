@@ -11,7 +11,7 @@ numpy==1.26.1
     #   pandas
     #   scikit-learn
     #   scipy
-pandas==2.1.1
+pandas==2.1.2
     # via -r requirements.in
 python-dateutil==2.8.2
     # via pandas
