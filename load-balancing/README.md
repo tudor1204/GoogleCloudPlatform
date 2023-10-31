@@ -1,5 +1,9 @@
 # Setting up HTTP(S) Load Balancing with Ingress example
 
+> [!IMPORTANT]  
+> This sample has now moved to the `networking/` directory.
+> Do not update this now deprecated directory, it will eventually be removed.
+
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/kubernetes-engine-samples&cloudshell_tutorial=README.md&cloudshell_workspace=load-balancing)
 
 This example shows how to run a web application behind
