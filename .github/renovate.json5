@@ -2,10 +2,7 @@
   "extends": [
     "github>GoogleCloudPlatform/kubernetes-engine-samples//.github/renovate-configs/dee-platform-ops.json5",
     ":approveMajorUpdates",
-  ],
-  // Create PRs on Monday midnight (UTC)
-  "schedule": [
-    "after 12am on Monday"
+    "schedule:earlyMondays",
   ],
   "dockerfile": {
     "enabled": false
