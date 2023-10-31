@@ -32,4 +32,9 @@ jobs:
           cd databases/redis/terraform/gke-replication
           terraform init
           terraform validate
+      - name: Validate GKE Standard TF for Postgres replication
+        run: |
+          cd databases/postgres/terraform/gke-replication
+          terraform init
+          terraform validate
 
