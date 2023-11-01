@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Use the offical Golang image to create a build artifact.
+# [START gke_quickstarts_languages_go_dockerfile]
+# Use the offical Go image to create a build artifact.
 # This is based on Debian and sets the GOPATH to /go.
 # https://hub.docker.com/_/golang
 FROM golang:1.21.0 as builder
@@ -40,3 +41,4 @@ COPY --from=builder /quickstart-go /quickstart-go
 # Run the web service on container startup.
 USER nonroot:nonroot
 ENTRYPOINT ["/quickstart-go"]
+# [END gke_quickstarts_languages_go_dockerfile]
