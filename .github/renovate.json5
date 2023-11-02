@@ -2,10 +2,7 @@
   "extends": [
     "config:recommended",
     ":approveMajorUpdates",
-  ],
-  // Create PRs on Monday midnight (UTC)
-  "schedule": [
-    "after 12am on Monday"
+    "schedule:earlyMondays",
   ],
   "minimumReleaseAge": "7 days",
   "vulnerabilityAlerts": {
