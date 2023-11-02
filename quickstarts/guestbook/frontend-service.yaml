@@ -30,4 +30,3 @@ spec:
     app: guestbook
     tier: frontend
 # [END gke_guestbook_frontend_service_service_frontend]
----

@@ -31,4 +31,3 @@ spec:
     role: leader
     tier: backend
 # [END gke_guestbook_redis_leader_service_service_redis_leader]
----
