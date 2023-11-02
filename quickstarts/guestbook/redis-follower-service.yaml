@@ -31,4 +31,3 @@ spec:
     role: follower
     tier: backend
 # [END gke_guestbook_redis_follower_service_service_redis_follower]
----

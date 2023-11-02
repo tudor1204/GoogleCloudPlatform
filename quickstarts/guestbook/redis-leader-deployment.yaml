@@ -44,4 +44,3 @@ spec:
         ports:
         - containerPort: 6379
 # [END gke_guestbook_redis_leader_deployment_deployment_redis_leader]
----
