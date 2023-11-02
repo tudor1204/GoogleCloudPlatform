@@ -31,6 +31,8 @@ spec:
         app: prepare-three-zone-ha
     spec:
       affinity:
+        # Tell Kubernetes to avoid scheduling a replica in a zone where there
+        # is already a replica with the label "app: prepare-three-zone-ha"
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
