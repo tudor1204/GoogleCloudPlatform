@@ -5,14 +5,14 @@ Simple Client Application base on [fastdash](https://fastdash.app/) Python modul
 ## Package App
 
 ```bash
-export IMAGE="gcr.io/$GOOGLE_CLOUD_PROJECT/apps/fastdash:latest"
+export IMAGE="us-central1-docker.pkg.dev/${PROJECT_ID}/models/fastdash:latest"
 docker buildx build --tag "$IMAGE" .
 ```
 
 ## Storing the Client App
 
 ```bash
-gcloud auth configure-docker gcr.io --quiet
+gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
 docker push "$IMAGE"
 ```
 

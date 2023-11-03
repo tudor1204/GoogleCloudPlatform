@@ -1,5 +1,9 @@
 # Saving money by scalling down your Google Kubernetes Engine cluster at night
 
+> [!IMPORTANT]  
+> This sample has now moved to the `cost-optimization/` directory.
+> Do not update this now deprecated directory, it will eventually be removed.
+
 This content is designed for developers and operators who want to cost-optimize their current GKE environment by scalling down their clusters at night. 
 
 For the tutorial, see [Reducing costs by scaling down GKE clusters during off-peak hours](https://cloud.google.com/architecture/reducing-costs-by-scaling-down-gke-off-hours)

@@ -1,0 +1,39 @@
+{
+  "extends": [
+    "github>GoogleCloudPlatform/kubernetes-engine-samples//.github/renovate-configs/dee-platform-ops.json5",
+    ":approveMajorUpdates",
+    "schedule:earlyMondays",
+  ],
+  "dockerfile": {
+    "enabled": false
+  },
+  "pip-compile": {
+    "enabled": true,
+    "fileMatch": ["(^|/)requirements\\.in$"],
+  },
+  "constraints": {
+    "python": "~=3.11.0"
+  },
+  "ignorePaths": [
+    "demos/**",
+    "security/language-vulns/**"
+  ],
+  "packageRules": [
+    {
+      "matchCategories": ["java"],
+      "matchPackagePatterns": [
+        "org.springframework.boot"
+      ],
+      "matchCurrentVersion": ">=2.0.0, <3.0.0",
+      "allowedVersions": "<3",
+      "groupName": "Spring Boot upgrades for v2",
+      "description": "@akitsch: Spring Boot V3 requires Java 17"
+    },
+    {
+      "matchCategories": ["terraform"],
+      "matchDepTypes": ["provider", "required_provider"],
+      "matchPackagePatterns": "^google",
+      "groupName": "Terraform Google providers",
+    },
+  ],
+}
