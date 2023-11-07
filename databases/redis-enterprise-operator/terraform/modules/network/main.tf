@@ -15,7 +15,7 @@
 # [START gke_redis_enterprise_vpc_multi_region_network]
 module "gcp-network" {
   source  = "terraform-google-modules/network/google"
-  version = "< 8.0.0"
+  version = "~> 8.0"
 
   project_id   = var.project_id
   network_name = "${var.cluster_prefix}-vpc"
@@ -45,6 +45,7 @@ module "gcp-network" {
 }
 module "firewall_rules" {
   source       = "terraform-google-modules/network/google//modules/firewall-rules"
+  version = "~> 8.0"
   project_id   = var.project_id
   network_name = module.gcp-network.network_name
 
@@ -71,7 +72,7 @@ output "subnet_name" {
 # [START gke_redis_enterprise_cloudnat_simple_create]
 module "cloud_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 5.0"
+  version = "~> 6.0"
   project = var.project_id 
   name    = "${var.cluster_prefix}-nat-router"
   network = module.gcp-network.network_name
