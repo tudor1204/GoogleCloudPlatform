@@ -5,6 +5,8 @@
   "extends": [
     "config:recommended",
   ],
+  // This preset overrides the ignorePaths setting in subsequent configs
+  "ignorePresets": [":ignoreModulesAndTests"],
   // Rate limits, to protect maintainers (and CI) from PR floods.
   "prHourlyLimit": 10,
   "prConcurrentLimit": 15,
@@ -82,5 +84,6 @@
       "automerge": true
     },
   ],
+  // Use github's Automerge feature, rather than renovate's method.
   "platformAutomerge":true
 }

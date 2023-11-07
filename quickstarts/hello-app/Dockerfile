@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_quickstarts_hello_app_dockerfile]
 FROM golang:1.21.0 as builder
 WORKDIR /app
 RUN go mod init hello-app
@@ -24,3 +25,4 @@ COPY --from=builder /hello-app /hello-app
 ENV PORT 8080
 USER nonroot:nonroot
 CMD ["/hello-app"]
+# [END gke_quickstarts_hello_app_dockerfile]

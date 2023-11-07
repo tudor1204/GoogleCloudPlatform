@@ -14,7 +14,7 @@ follows (the double slash is intentional!) :
 ```
 {
   "extends": [
-    "github>GoogleCloudPlatform/kubernetes-engine-samples//.github/renovate-configs:purple.json5",
+    "github>GoogleCloudPlatform/kubernetes-engine-samples//.github/renovate-configs/purple.json5",
   ],
 }
 ```
