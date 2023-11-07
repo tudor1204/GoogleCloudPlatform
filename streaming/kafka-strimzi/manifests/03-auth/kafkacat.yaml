@@ -19,7 +19,7 @@ metadata:
 spec:
   containers:
   - name: kafkacat
-    image: confluentinc/cp-kcat:7.4.0
+    image: confluentinc/cp-kcat:7.5.1
     command: ["sh", "-c", "exec tail -f /dev/null"]
     volumeMounts:
     - name: rw-user
