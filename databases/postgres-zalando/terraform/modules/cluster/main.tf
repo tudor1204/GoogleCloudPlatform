@@ -15,7 +15,7 @@
 # [START gke_postgres_zalando_standard_private_regional_cluster]
 module "postgres_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version                  = "~> 28.0"
+  version                  = "~> 29.0"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
   regional                 = true
