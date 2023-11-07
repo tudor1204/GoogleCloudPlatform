@@ -19,7 +19,7 @@ metadata:
 spec:
   containers:
   - name: kafkaclient
-    image: quay.io/strimzi/kafka:0.35.0-kafka-3.4.0 
+    image: quay.io/strimzi/kafka:0.35.0-kafka-3.6.0 
     command: ["sh", "-c", "exec tail -f /dev/null"]
     env:
     - name: OAUTH_ACCESS_TOKEN
