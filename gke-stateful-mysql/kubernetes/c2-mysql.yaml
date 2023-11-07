@@ -122,7 +122,7 @@ spec:
             - "-c"
             - |
               mysql -h127.0.0.1 -uroot -p$MYSQL_ROOT_PASSWORD -e'SELECT 1'
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 2
           timeoutSeconds: 1
         livenessProbe:
