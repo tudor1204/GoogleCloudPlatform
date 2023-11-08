@@ -43,4 +43,3 @@ spec:
         ports:
         - containerPort: 80
 # [END gke_guestbook_frontend_deployment_deployment_frontend]
----

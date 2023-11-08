@@ -15,6 +15,7 @@
 # [START gke_redis_spotahome_autopilot_private_regional_cluster]
 module "redis_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
+  version                  = "~> 29.0"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
   regional                 = true
