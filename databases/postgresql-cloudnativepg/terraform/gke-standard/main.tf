@@ -22,7 +22,7 @@ module "network" {
   cluster_prefix = var.cluster_prefix
 }
 
-# [START gke_postgresql_cloudnativepg_standard_private_regional_cluster]]
+# [START gke_postgresql_cloudnativepg_standard_private_regional_cluster]
 module "postgresql_cluster" {
   source                   = "../modules/cluster"
   project_id               = var.project_id
