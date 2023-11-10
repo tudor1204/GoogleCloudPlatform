@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_redis_spotahome_standard_private_regional_cluster]
-module "redis_cluster" {
-  source                   = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
+# [START gke_postgres_zalando_autopilot_private_regional_cluster]
+module "postgres_cluster" {
+  source                   = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
   version                  = "~> 29.0"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
@@ -28,25 +28,13 @@ module "redis_cluster" {
   enable_private_endpoint  = false
   enable_private_nodes     = true
   master_ipv4_cidr_block   = "172.16.0.0/28"
-  network_policy           = true
-  logging_enabled_components = ["SYSTEM_COMPONENTS","WORKLOADS"]
-  monitoring_enabled_components = ["SYSTEM_COMPONENTS"]
   enable_cost_allocation = true
   deletion_protection = false
-  initial_node_count = 1
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"
     component = "${var.cluster_prefix}-operator"
   }
-
-  monitoring_enable_managed_prometheus = true
-  gke_backup_agent_config = true
- 
-  node_pools        = var.node_pools
-  node_pools_labels = var.node_pools_labels
-  node_pools_taints = var.node_pools_taints
-  gce_pd_csi_driver = true
 }
-# [END gke_redis_spotahome_standard_private_regional_cluster]
+# [END gke_postgres_zalando_autopilot_private_regional_cluster]
 
