@@ -15,6 +15,7 @@
 # [START gke_streaming_kafka_autopilot_private_regional_cluster]
 module "kafka_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
+  version                  = "~> 29.0"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
   regional                 = true
@@ -28,6 +29,7 @@ module "kafka_cluster" {
   enable_private_nodes     = true
   master_ipv4_cidr_block   = "172.16.0.0/28"
   enable_cost_allocation = true
+  deletion_protection = false
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"

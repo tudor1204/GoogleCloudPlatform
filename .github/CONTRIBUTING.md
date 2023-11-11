@@ -55,11 +55,11 @@ All new code sample needs the following:
   - Cloud Build configs for all container images that pushes to the `google-samples` artifact registry.
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/security/wi-secrets/cloudbuild.yaml)]
   - A Terraform resource for the above Cloud Build configs.
-  [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/terraform/google-cloud-build-triggers.tf#L194-L207)]
+  [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/terraform/google-cloud-build-triggers.tf#L194-L207)]
     - Note that in order for the Cloud Build configs to be applied to the
       `google-samples` project, you need to run `terraform init && terraform apply`
-      while in that project (a repository admin will do this for you). [[docs](/terraform/README.md)]
+      while in that project (a repository admin will do this for you). [[docs](/.github/terraform/README.md)]
     - The images will be of the form `us-docker.pkg.dev/google-samples/containers/gke<image_name>:latest`
 
-If a pull request modifies any existing files in the `terraform/` directory, these changes must be applied to the `google-samples` project
-once the pull request is merged in. A repository admin will do this for you. [[docs](/terraform/README.md)]
+If a pull request modifies any existing files in the `.github/terraform/` directory, these changes must be applied to the `google-samples` project
+once the pull request is merged in. A repository admin will do this for you. [[docs](/.github/terraform/README.md)]

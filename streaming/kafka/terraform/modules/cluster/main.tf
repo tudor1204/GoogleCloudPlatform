@@ -15,6 +15,7 @@
 # [START gke_streaming_kafka_standard_private_regional_cluster]
 module "kafka_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
+  version                  = "~> 29.0"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
   regional                 = true
@@ -31,6 +32,7 @@ module "kafka_cluster" {
   logging_enabled_components = ["SYSTEM_COMPONENTS","WORKLOADS"]
   monitoring_enabled_components = ["SYSTEM_COMPONENTS"]
   enable_cost_allocation = true
+  deletion_protection = false
   initial_node_count = 1
 
   cluster_resource_labels = {
