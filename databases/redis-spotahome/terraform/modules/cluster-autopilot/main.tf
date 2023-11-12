@@ -29,6 +29,7 @@ module "redis_cluster" {
   enable_private_nodes     = true
   master_ipv4_cidr_block   = "172.16.0.0/28"
   enable_cost_allocation = true
+  deletion_protection = false
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"
