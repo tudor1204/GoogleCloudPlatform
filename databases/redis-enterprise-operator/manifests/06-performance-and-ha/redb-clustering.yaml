@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
+# [START gke_manifests_redis_enterprise_database_sharding]
 apiVersion: app.redislabs.com/v1alpha1
 kind: RedisEnterpriseDatabase
 metadata:
@@ -21,3 +22,4 @@ spec:
   redisEnterpriseCluster:
     name: gke-rec
   shardCount: 2
+# [END gke_manifests_redis_enterprise_database_sharding]

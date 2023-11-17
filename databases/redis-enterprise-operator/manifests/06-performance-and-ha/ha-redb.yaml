@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
+# [START gke_manifests_ha_redis_enterprise_database]
 apiVersion: app.redislabs.com/v1alpha1
 kind: RedisEnterpriseDatabase
 metadata:
@@ -22,3 +23,4 @@ spec:
     name: gke-rec
   rackAware: true
   replication: true
+# [END gke_manifests_ha_redis_enterprise_database]
