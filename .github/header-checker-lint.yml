@@ -27,7 +27,7 @@ ignoreFiles:
  - '**/Chart.yaml'
 
 # If you want to ignore checking the license year, use ignoreLicenseYear.
-ignoreLicenseYear: true # Useful when migrating in code licensed at previous years.
+ignoreLicenseYear: false # Useful when migrating in code licensed at previous years.
 
 sourceFileExtensions:
   - 'cs'
