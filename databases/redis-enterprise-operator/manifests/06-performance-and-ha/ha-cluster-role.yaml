@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
-# [START gke_manifests_ha_redis_enterprise_cluster_role]
+# [START gke_databases_redis_enterprise_operator_cluster_role]
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -21,9 +21,9 @@ rules:
   - apiGroups: [""]
     resources: ["nodes"]
     verbs: ["get", "list", "watch"]
-# [END gke_manifests_ha_redis_enterprise_cluster_role]
+# [END gke_databases_redis_enterprise_operator_cluster_role]
 ---
-# [START gke_manifests_ha_redis_enterprise_cluster_role_binding]
+# [START gke_databases_redis_enterprise_operator_cluster_role_binding]
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -36,4 +36,4 @@ roleRef:
   kind: ClusterRole
   name: redis-enterprise-operator
   apiGroup: rbac.authorization.k8s.io
-# [END gke_manifests_ha_redis_enterprise_cluster_role_binding]
+# [END gke_databases_redis_enterprise_operator_cluster_role_binding]

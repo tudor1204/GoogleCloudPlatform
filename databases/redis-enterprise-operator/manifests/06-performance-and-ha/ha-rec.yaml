@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
-# [START gke_manifests_ha_redis_enterprise_cluster]
+# [START gke_databases_redis_enterprise_operator_ha_redis_enterprise_cluster]
 apiVersion: "app.redislabs.com/v1"
 kind: RedisEnterpriseCluster
 metadata:
@@ -45,4 +45,4 @@ spec:
             values:
             - "rec"
         topologyKey: "topology.kubernetes.io/zone"
-# [END gke_manifests_ha_redis_enterprise_cluster]
+# [END gke_databases_redis_enterprise_operator_ha_redis_enterprise_cluster]
