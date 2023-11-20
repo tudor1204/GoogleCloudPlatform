@@ -19,7 +19,6 @@ metadata:
   name: pg-client
   annotations:
     cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-
 spec:
   restartPolicy: Never
   containers:
@@ -47,5 +46,4 @@ spec:
         secretKeyRef:
           name: gke-pg-cluster-superuser
           key: username
-
 # [END gke_databases_postgresql_cloudnativepg_pg_client]

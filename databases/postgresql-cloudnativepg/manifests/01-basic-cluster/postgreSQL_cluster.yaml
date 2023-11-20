@@ -24,19 +24,15 @@ spec:
   instances: 3
   startDelay: 300
   primaryUpdateStrategy: unsupervised
-
   postgresql:
     pg_hba:
       - host all all 10.48.0.0/20 md5
-
   bootstrap:
     initdb:
       database: app
-
   storage:
     storageClass: premium-rwo
     size: 2Gi
-
   resources:
     requests:
       memory: "1Gi"
@@ -44,16 +40,13 @@ spec:
     limits:
       memory: "1Gi"
       cpu: "1000m"
-
   affinity:
     enablePodAntiAffinity: true
-    
     tolerations:
     - key: cnpg.io/cluster
       effect: NoSchedule
       value: gke-pg-cluster
       operator: Equal
-
     additionalPodAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
       - weight: 1
@@ -65,7 +58,6 @@ spec:
               values:
               - "pg-cluster"
           topologyKey: topology.kubernetes.io/zone
-
   monitoring:
     enablePodMonitor: true
 # [END gke_databases_postgresql_cloudnativepg_postgresql_cluster]
