@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_manifests_postgresql_pooler]
+# [START gke_databases_postgresql_cloudnativepg_operator_postgres_pooler]
 apiVersion: postgresql.cnpg.io/v1
 kind: Pooler
 metadata:
@@ -55,4 +55,4 @@ spec:
                   values:
                   - "pg-cluster"
               topologyKey: topology.kubernetes.io/zone
-# [END gke_manifests_postgresql_pooler]
+# [END gke_databases_postgresql_cloudnativepg_operator_postgres_pooler]

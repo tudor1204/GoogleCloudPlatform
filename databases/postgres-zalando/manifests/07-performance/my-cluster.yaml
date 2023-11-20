@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-# [START gke_manifests_postgresql_cluster]
+# [START gke_databases_postgres_zalando_operator_postgresql_cluster]
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
@@ -29,7 +28,7 @@ spec:
     myuser: []
   databases:
     mydatabase: mydatabaseowner
-# [START gke_manifests_postgresql_cluster_parameters]
+# [START gke_databases_postgres_zalando_operator_postgresql_cluster_parameters]
   postgresql:
     version: "15"
     parameters:
@@ -40,14 +39,14 @@ spec:
   # patroni:
   #   pg_hba:
   #     - host all all all md5
-# [END gke_manifests_postgresql_cluster_parameters]
-# [START gke_manifests_postgresql_cluster_volume]
+# [END gke_databases_postgres_zalando_operator_postgresql_cluster_parameters]
+# [START gke_databases_postgres_zalando_operator_postgresql_cluster_volume]
   volume:
     storageClass: premium-rwo
     size: 10Gi
-# [END gke_manifests_postgresql_cluster_volume]
+# [END gke_databases_postgres_zalando_operator_postgresql_cluster_volume]
   enableShmVolume: true
-# [START gke_manifests_postgresql_cluster_connection_pooler]
+# [START gke_databases_postgres_zalando_operator_postgresql_cluster_connection_pooler]
   enableConnectionPooler: true
   enableReplicaConnectionPooler: true
   connectionPooler:
@@ -62,7 +61,7 @@ spec:
       limits:
         cpu: 250m
         memory: 512Mi
-# [END gke_manifests_postgresql_cluster_connection_pooler]
+# [END gke_databases_postgres_zalando_operator_postgresql_cluster_connection_pooler]
   podAnnotations:
     cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
   tolerations:
@@ -86,4 +85,4 @@ spec:
     limits:
       cpu: 2000m
       memory: 4Gi
-# [END gke_manifests_postgresql_cluster]
+# [END gke_databases_postgres_zalando_operator_postgresql_cluster]

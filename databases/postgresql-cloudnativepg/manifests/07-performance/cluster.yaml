@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-# [START gke_manifests_postgresql_cluster]
+# [START gke_databases_postgresql_cloudnativepg_operator_postgres_cluster]
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -25,7 +24,7 @@ spec:
   startDelay: 300
   primaryUpdateStrategy: unsupervised
 
-# [START gke_manifests_postgresql_cluster_parameters]
+# [START gke_databases_postgresql_cloudnativepg_operator_postgres_cluster_parameters]
   postgresql:
     parameters:
       # shared_buffers: "256MB"
@@ -34,17 +33,17 @@ spec:
       password_encryption: scram-sha-256
     pg_hba:
       - host all all all md5
-# [END gke_manifests_postgresql_cluster_parameters]
+# [END gke_databases_postgresql_cloudnativepg_operator_postgres_cluster_parameters]
 
   bootstrap:
     initdb:
       database: app
 
-# [START gke_manifests_postgresql_cluster_volume]
+# [START gke_databases_postgresql_cloudnativepg_operator_postgres_cluster_volume]
   storage:
     storageClass: premium-rwo
     size: 10Gi
-# [END gke_manifests_postgresql_cluster_volume]
+# [END gke_databases_postgresql_cloudnativepg_operator_postgres_cluster_volume]
 
   resources:
     requests:
@@ -74,4 +73,4 @@ spec:
               values:
               - "pg-cluster"
           topologyKey: topology.kubernetes.io/zone
-# [END gke_manifests_postgresql_cluster]
+# [END gke_databases_postgresql_cloudnativepg_operator_postgres_cluster]

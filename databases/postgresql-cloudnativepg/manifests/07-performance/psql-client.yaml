@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_manifests_postgresql_psql_client]
+# [START gke_databases_postgresql_cloudnativepg_operator_psql_client]
 apiVersion: v1
 kind: Pod
 metadata:
@@ -61,4 +61,4 @@ spec:
       limits:
         cpu: 1000m
         memory: 1Gi
-# [END gke_manifests_postgresql_psql_client]
+# [END gke_databases_postgresql_cloudnativepg_operator_psql_client]
