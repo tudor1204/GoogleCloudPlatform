@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # [START gke_ap_autopilot_quickstart_variables_terraform]
-
 variable "project_id" {
   description = "The project ID to host the cluster in"
 }
@@ -33,6 +32,6 @@ locals {
   svc_range_name         = "ip-range-svc-simple-autopilot-public"
   subnet_names           = [for subnet_self_link in module.gcp-network.subnets_self_links : split("/", subnet_self_link)[length(split("/", subnet_self_link)) - 1]]
   ingress_IP             = google_compute_global_address.gke_ingress_ipv4.address
+  certificate_host       = ["ingress.quickstart-playground.com", "quickstart-playground.com"]
 }
-
 # [END gke_ap_autopilot_quickstart_variables_terraform]

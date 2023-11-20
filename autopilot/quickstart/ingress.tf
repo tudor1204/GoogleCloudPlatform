@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # [START gke_ap_autopilot_quickstart_ingress_terraform]
-
 resource "google_compute_global_address" "gke_ingress_ipv4" {
   name = "external-address-gke-ingress-ipv4"
   ip_version = "IPV4"
@@ -25,9 +24,7 @@ resource "google_compute_managed_ssl_certificate" "ingress-certs" {
   name = "ingress-certs"
 
   managed {
-    domains = [
-      "ingress.quickstart-playground.com",
-      "quickstart-playground.com",
+    domains = local.certificate_host
     ]
   }
 }
@@ -156,7 +153,6 @@ resource "kubernetes_pod_v1" "example2" {
         container_port = 8080
       }
     }
-
     # [END gke_ap_autopilot_quickstart_ingress_terraform]
   }
 }

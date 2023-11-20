@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # [START gke_ap_autopilot_quickstart_outputs_terraform]
-
 output "kubernetes_endpoint" {
   description = "The cluster endpoint"
   sensitive   = true
@@ -75,5 +74,4 @@ output "ingress_ip" {
   description = "This is the public IP of the ingress"
   value = google_compute_global_address.gke_ingress_ipv4.address
 }
-
 # [END gke_ap_autopilot_quickstart_outputs_terraform]

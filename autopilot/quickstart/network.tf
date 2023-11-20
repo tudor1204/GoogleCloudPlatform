@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # [START gke_ap_autopilot_quickstart_network_terraform]
-
 module "gcp-network" {
   source  = "terraform-google-modules/network/google"
   version = ">= 7.5"
@@ -47,5 +46,4 @@ module "gcp-network" {
     ]
   }
 }
-
 # [END gke_ap_autopilot_quickstart_network_terraform]

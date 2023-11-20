@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # [START gke_ap_autopilot_quickstart_providers_terraform]
-
 terraform {
   required_providers {
     google = {
@@ -27,5 +26,4 @@ terraform {
   }
   required_version = ">= 0.13"
 }
-
 # [END gke_ap_autopilot_quickstart_providers_terraform]

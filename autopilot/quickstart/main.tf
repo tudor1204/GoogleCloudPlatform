@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # [START gke_ap_autopilot_quickstart_main_terraform]
-
 data "google_client_config" "default" {}
 
 provider "kubernetes" {
@@ -37,5 +36,4 @@ module "gke" {
   network_tags                    = [local.cluster_type]
   deletion_protection             = false
 }
-
 # [END gke_ap_autopilot_quickstart_main_terraform]
