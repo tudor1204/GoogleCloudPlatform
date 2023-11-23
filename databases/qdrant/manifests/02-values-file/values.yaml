@@ -14,9 +14,9 @@
 
 replicaCount: 3
 
-additionalLabels:
-  app.kubernetes.io/component: qdrant
-
+config:
+  cluster:
+    enabled: true
 
 livenessProbe:
   enabled: true
@@ -54,7 +54,11 @@ topologySpreadConstraints:
     labelSelector:
       matchLabels:
         app.kubernetes.io/name: qdrant
-        app.kubernetes.io/component: qdrant
+        app.kubernetes.io/instance: qdrant
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
 
 persistence:
   accessModes: ["ReadWriteOnce"]
