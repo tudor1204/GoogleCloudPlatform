@@ -31,27 +31,27 @@ module "qdrant_cluster" {
 
   node_pools = [
     {
-      name            = "pool-postgres"
-      disk_size_gb    = 20
-      disk_type       = "pd-standard"
+      name            = "pool-qdrant"
+      disk_size_gb    = var.node_disk_size
+      disk_type       = var.node_disk_type
       autoscaling     = true
       min_count       = 1
-      max_count       = 2
+      max_count       = var.autoscaling_max_count
       max_surge       = 1
       max_unavailable = 0
-      machine_type    = "e2-standard-2"
+      machine_type    = var.node_machine_type
       auto_repair     = true
     }
   ]
   node_pools_labels = {
     all = {}
-    pool-postgres = {
+    pool-qdrant = {
       "app.stateful/component" = "qdrant"
     }
   }
   node_pools_taints = {
     all = []
-    pool-postgres = [
+    pool-qdrant = [
       {
         key    = "app.stateful/component"
         value  = "qdrant"
