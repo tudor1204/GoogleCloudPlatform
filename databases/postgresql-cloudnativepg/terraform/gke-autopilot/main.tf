@@ -22,7 +22,7 @@ module "network" {
   cluster_prefix = var.cluster_prefix
 }
 
-# [START gke_postgresql_cloudnativepg_autopilot_private_regional_cluster]
+# [START gke_databases_postgresql_cloudnativepg]
 module "postgresql_cluster" {
   source                   = "../modules/cluster-autopilot"
   project_id               = var.project_id
@@ -36,4 +36,4 @@ output "kubectl_connection_command" {
   value       = "gcloud container clusters get-credentials ${var.cluster_prefix}-cluster --region ${var.region}"
   description = "Connection command"
 }
-# [END gke_postgresql_cloudnativepg_autopilot_private_regional_cluster]
+# [END gke_databases_postgresql_cloudnativepg]

@@ -12,7 +12,7 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-# [START gke_postgresql_vpc_multi_region_network]
+# [START gke_databases_postgresql_cloudnativepg]
 module "gcp-network" {
   source  = "terraform-google-modules/network/google"
   version = "~> 8.0"
@@ -67,9 +67,9 @@ output "network_name" {
 output "subnet_name" {
   value = module.gcp-network.subnets_names[0]
 }
-# [END gke_postgresql_vpc_multi_region_network]
+# [END gke_databases_postgresql_cloudnativepg]
 
-# [START gke_postgresql_cloudnat_simple_create]
+# [START gke_databases_postgresql_cloudnativepg]
 module "cloud_router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 6.0"
@@ -81,4 +81,4 @@ module "cloud_router" {
     name = "${var.cluster_prefix}-nat"
   }]
 }
-# [END gke_postgresql_cloudnat_simple_create]
+# [END gke_databases_postgresql_cloudnativepg]

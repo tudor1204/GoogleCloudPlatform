@@ -12,7 +12,7 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-# [START gke_postgresql_cloudnativepg_autopilot_private_regional_cluster]
+# [START gke_databases_postgresql_cloudnativepg]
 module "postgresql_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
   version = "~> 29.0"
@@ -36,4 +36,4 @@ module "postgresql_cluster" {
     component = "${var.cluster_prefix}-operator"
   }
 }
-# [END gke_postgresql_cloudnativepg_autopilot_private_regional_cluster]
+# [END gke_databases_postgresql_cloudnativepg]
