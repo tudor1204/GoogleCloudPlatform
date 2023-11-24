@@ -67,9 +67,9 @@ output "network_name" {
 output "subnet_name" {
   value = module.gcp-network.subnets_names[0]
 }
-# [END gke_databases_postgresql_cloudnativepg_vpc_multi_region_network]
+# [END gke_databases_postgresql_cloudnativepg_module_module_vpc_multi_region_network]
 
-# [START gke_databases_postgresql_cloudnativepg_cloudnat_simple_create]
+# [START gke_databases_postgresql_cloudnativepg_module_cloudnat]
 module "cloud_router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 6.0"
@@ -81,4 +81,4 @@ module "cloud_router" {
     name = "${var.cluster_prefix}-nat"
   }]
 }
-# [END gke_databases_postgresql_cloudnativepg_cloudnat_simple_create]
+# [END gke_databases_postgresql_cloudnativepg_module_cloudnat]
