@@ -12,15 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "project_id" {
-  description = "The project ID to host the bucket in"
+# [START gke_qdrant_cloud_storage_bucket]
+module "cloud_storage" {
+  source         = "../modules/cloud-storage"
+  project_id     = var.project_id
+  region         = var.region
+  cluster_prefix = var.cluster_prefix
 }
 
-variable "region" {
-  description = "The region to host the bucket in"
+output "bucket_name" {
+  value       = module.cloud_storage.bucket_name
+  description = "Cloud Storage bucket name"
 }
 
-variable "cluster_prefix" {
-  description = "The prefix of existing GKE cluster"
+output "service_account_name" {
+  value       = module.cloud_storage.service_account_name
+  description = "Service Account to access the bucket"
 }
+
+# [END gke_qdrant_cloud_storage_bucket]
 

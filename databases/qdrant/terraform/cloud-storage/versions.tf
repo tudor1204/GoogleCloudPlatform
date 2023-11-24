@@ -12,15 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "project_id" {
-  description = "The project ID to host the bucket in"
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
+    }
+  }
+  required_version = ">= 1.3"
 }
-
-variable "region" {
-  description = "The region to host the bucket in"
-}
-
-variable "cluster_prefix" {
-  description = "The prefix of existing GKE cluster"
-}
-
