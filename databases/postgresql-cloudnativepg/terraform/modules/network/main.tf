@@ -12,7 +12,7 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-# [START gke_databases_postgresql_cloudnativepg_vpc_multi_region_network]
+# [START gke_databases_postgresql_cloudnativepg_module_module_vpc_multi_region_network]
 module "gcp-network" {
   source  = "terraform-google-modules/network/google"
   version = "~> 8.0"
