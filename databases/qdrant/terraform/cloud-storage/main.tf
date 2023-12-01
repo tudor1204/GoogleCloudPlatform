@@ -25,10 +25,16 @@ output "bucket_name" {
   description = "Cloud Storage bucket name"
 }
 
-output "service_account_name" {
-  value       = module.cloud_storage.service_account_name
+output "service_account_bucket_name" {
+  value       = module.cloud_storage.service_account_bucket_name
   description = "Service Account to access the bucket"
 }
+
+output "service_account_eventarc_name" {
+  value       = module.cloud_storage.service_account_eventarc_name
+  description = "Service Account to access the Pub/Sub topic and GKE clusters for Eventarc"
+}
+
 
 # [END gke_qdrant_cloud_storage_bucket]
 
