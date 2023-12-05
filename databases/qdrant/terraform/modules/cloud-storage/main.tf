@@ -17,13 +17,14 @@ module "cloud-storage" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 5.0"
 
-  name          = "${var.cluster_prefix}-training-docs"
+  name          = "${var.project_id}-${var.cluster_prefix}-training-docs"
   project_id    = var.project_id
   location      = var.region
   force_destroy = true
 }
 
 # use to set permissions with the dynamic SA
+
 module "cloud-storage-iam-bindings" {
   source          = "terraform-google-modules/iam/google//modules/storage_buckets_iam"
   storage_buckets = [module.cloud-storage.name]
@@ -34,25 +35,6 @@ module "cloud-storage-iam-bindings" {
   depends_on = [module.cloud-storage, module.service-account-bucket.iam_email]
 }
 
-# roles list https://cloud.google.com/eventarc/docs/gke/roles-permissions
-
-module "project-iam-bindings" {
-  source   = "terraform-google-modules/iam/google//modules/projects_iam"
-  projects = ["${var.project_id}"]
-  mode     = "additive"
-
-  bindings = {
-    "roles/pubsub.subscriber"       = ["${module.service-account-eventarc.iam_email}"]
-    "roles/pubsub.publisher"        = ["${module.service-account-eventarc.iam_email}"]
-    "roles/eventarc.admin"          = ["${module.service-account-eventarc.iam_email}"]
-    "roles/eventarc.eventReceiver"  = ["${module.service-account-eventarc.iam_email}"]
-    "roles/iam.serviceAccountUser"  = ["${module.service-account-eventarc.iam_email}"]
-    "roles/monitoring.metricWriter" = ["${module.service-account-eventarc.iam_email}"]
-    "roles/container.admin"         = ["${module.service-account-eventarc.iam_email}"]
-  }  
-  depends_on = [module.cloud-storage, module.service-account-eventarc.iam_email]
-}
-
 module "service-account-bucket" {
   source       = "terraform-google-modules/service-accounts/google"
   version      = "~> 3.0"
@@ -61,25 +43,12 @@ module "service-account-bucket" {
   description  = "Service account to access the bucket with Qdrant training documents"
 }
 
-module "service-account-eventarc" {
-  source       = "terraform-google-modules/service-accounts/google"
-  version      = "~> 3.0"
-  project_id   = var.project_id
-  names        = ["${var.cluster_prefix}-eventarc-access"]
-  description  = "Service account to access the Pub/Sub Topic and GKE clusters for Eventarc"
-}
-
-
 output "bucket_name" {
   value = module.cloud-storage.name
 }
 
 output "service_account_bucket_name" {
   value = module.service-account-bucket.email
-}
-
-output "service_account_eventarc_name" {
-  value = module.service-account-eventarc.email
 }
 
 # [END gke_qdrant_cloud_storage_bucket]
