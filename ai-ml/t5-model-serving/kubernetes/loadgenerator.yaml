@@ -34,7 +34,7 @@ data:
             self.payload = {
                 "text": "this is a test sentence",
                 "from": "en",
-                "to": "es"
+                "to": "fr"
             }
 
         @task()
