@@ -61,7 +61,7 @@ module "project-iam-bindings" {
     "roles/monitoring.metricWriter" = ["serviceAccount:${var.cluster_prefix}-eventarc-access@${var.project_id}.iam.gserviceaccount.com"] 
     "roles/container.admin"         = ["serviceAccount:${var.cluster_prefix}-eventarc-access@${var.project_id}.iam.gserviceaccount.com"] 
   }  
-  depends_on = [module.cloud-storage, module.service-account-eventarc.iam_email]
+  depends_on = [module.cloud-storage, module.service-account-eventarc]
 }
 
 module "service-account-eventarc" {
