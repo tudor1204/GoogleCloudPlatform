@@ -15,9 +15,10 @@
 # [START gke_qdrant_cloud_storage_bucket_eventarc]
 
 resource "google_eventarc_trigger" "trigger" {
-  name     = "${var.cluster_prefix}-storage-trigger"
-  location = var.region
-  project  = var.project_id
+  name            = "${var.cluster_prefix}-storage-trigger"
+  location        = var.region
+  project         = var.project_id
+  service_account = module.service-account-eventarc.email
 
   matching_criteria {
     attribute = "type"
@@ -27,7 +28,6 @@ resource "google_eventarc_trigger" "trigger" {
     attribute = "bucket"
     value     = module.cloud-storage.name
   }
-
   destination {
     gke {
       cluster   = "${var.cluster_prefix}-cluster"
@@ -37,8 +37,6 @@ resource "google_eventarc_trigger" "trigger" {
       service   = "embed-docs"
     }
   }
-
-  service_account = module.service-account-eventarc.email
 
   depends_on = [module.cloud-storage, module.project-iam-bindings]
 }
@@ -60,13 +58,14 @@ module "project-iam-bindings" {
     "roles/iam.serviceAccountUser"  = ["serviceAccount:${var.cluster_prefix}-eventarc-access@${var.project_id}.iam.gserviceaccount.com"] 
     "roles/monitoring.metricWriter" = ["serviceAccount:${var.cluster_prefix}-eventarc-access@${var.project_id}.iam.gserviceaccount.com"] 
     "roles/container.admin"         = ["serviceAccount:${var.cluster_prefix}-eventarc-access@${var.project_id}.iam.gserviceaccount.com"] 
-  }  
+  } 
+
   depends_on = [module.cloud-storage, module.service-account-eventarc]
 }
 
 module "service-account-eventarc" {
   source       = "terraform-google-modules/service-accounts/google"
-  version      = "~> 3.0"
+  version      = "~> 4.0"
   project_id   = var.project_id
   names        = ["${var.cluster_prefix}-eventarc-access"]
   description  = "Service account to access the Pub/Sub Topic and GKE clusters for Eventarc"

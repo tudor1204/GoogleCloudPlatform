@@ -14,8 +14,8 @@
 
 # [START gke_qdrant_cloud_storage_bucket]
 module "cloud-storage" {
-  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 5.0"
+  source        = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version       = "~> 5.0"
 
   name          = "${var.project_id}-${var.cluster_prefix}-training-docs"
   project_id    = var.project_id
@@ -27,20 +27,39 @@ module "cloud-storage" {
 
 module "cloud-storage-iam-bindings" {
   source          = "terraform-google-modules/iam/google//modules/storage_buckets_iam"
+  version         = "~> 7.0"
+
   storage_buckets = [module.cloud-storage.name]
-  mode = "authoritative"
-  bindings = {
+  mode            = "authoritative"
+  bindings        = {
     "roles/storage.objectViewer" = ["${module.service-account-bucket.iam_email}"]
-  }  
-  depends_on = [module.cloud-storage, module.service-account-bucket.iam_email]
+  }
+
+  depends_on      = [module.cloud-storage, module.service-account-bucket.iam_email]
 }
 
 module "service-account-bucket" {
-  source       = "terraform-google-modules/service-accounts/google"
-  version      = "~> 3.0"
-  project_id   = var.project_id
-  names        = ["${var.cluster_prefix}-bucket-access"]
-  description  = "Service account to access the bucket with Qdrant training documents"
+  source          = "terraform-google-modules/service-accounts/google"
+  version         = "~> 4.0"
+
+  project_id      = var.project_id
+  names           = ["${var.cluster_prefix}-bucket-access"]
+  description     = "Service account to access the bucket with Qdrant training documents"
+}
+
+module "project-iam-bindings-bucket" {
+  source     = "terraform-google-modules/iam/google//modules/projects_iam"
+  version    = "~> 7.0"
+
+  projects   = ["${var.project_id}"]
+  mode       = "additive"
+
+  bindings = {
+    "roles/aiplatform.user"          = ["serviceAccount:${var.cluster_prefix}-bucket-access@${var.project_id}.iam.gserviceaccount.com"] 
+    "roles/iam.workloadIdentityUser" = ["serviceAccount:${var.project_id}.svc.id.goog[qdrant/embed-docs-sa]"] 
+  } 
+
+  depends_on = [module.service-account-bucket]
 }
 
 output "bucket_name" {
