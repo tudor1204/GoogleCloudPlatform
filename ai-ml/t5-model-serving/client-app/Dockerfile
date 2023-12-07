@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.10-alpine
+FROM python:3.11.5-alpine
 
 ARG PORT=8050
 ENV PORT=${PORT}
@@ -23,6 +23,22 @@ WORKDIR /app
 
 COPY requirements.txt /app
 COPY src/ /app
+
+# https://github.com/pandas-dev/pandas/issues/50945#issuecomment-1407044982
+RUN apk update
+RUN apk add \
+    build-base \
+    freetds-dev \
+    g++ \
+    gcc \
+    tar \
+    gfortran \
+    gnupg \
+    libffi-dev \
+    libpng-dev \
+    libsasl \
+    openblas-dev \
+    openssl-dev
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 

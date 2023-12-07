@@ -12,6 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# [START gke_security_language_vulns_maven_deployment]
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,4 +46,4 @@ spec:
             memory: "1Gi"
             cpu: "500m"
             ephemeral-storage: "1Gi"
----
+# [END gke_security_language_vulns_maven_deployment]

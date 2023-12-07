@@ -34,7 +34,7 @@ data:
             self.payload = {
                 "text": "this is a test sentence",
                 "from": "en",
-                "to": "es"
+                "to": "fr"
             }
 
         @task()
@@ -52,8 +52,8 @@ metadata:
   name: loadgenerator-env
 data:
   LOCUST_HOST: http://t5-inference:8080
-  LOCUST_USERS: "100"
-  LOCUST_SPAWN_RATE: "5"
+  LOCUST_USERS: "10000"
+  LOCUST_SPAWN_RATE: "250"
   LOCUST_LOGLEVEL: error
   LOCUST_WEB_PORT: "8080"
   MODEL_NAME: "t5-small"

@@ -30,4 +30,4 @@ spec:
         name: prometheus.googleapis.com|ts_queue_latency_microseconds|counter
       target:
         type: AverageValue
-        averageValue: "7000000"
+        averageValue: "30000"
