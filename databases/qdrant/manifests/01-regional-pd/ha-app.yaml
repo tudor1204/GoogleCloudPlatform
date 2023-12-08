@@ -1,0 +1,20 @@
+kind: HighAvailabilityApplication
+apiVersion: ha.gke.io/v1alpha1
+metadata:
+  name: qdrant-ha-app
+  namespace: qdrant
+spec:
+  resourceSelection:
+    type: "Selector"
+    resourceKind: StatefulSet
+    selector:
+      matchLabels:
+        app.kubernetes.io/name: qdrant
+
+  policy:
+    storageSettings:
+      requireRegionalStorage: true
+    failoverSettings:
+      forceDeleteStrategy: AfterNodeUnreachable
+      afterNodeUnreachable:
+        afterNodeUnreachableSeconds: 20 # 60 seconds total

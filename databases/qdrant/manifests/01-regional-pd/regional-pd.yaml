@@ -16,10 +16,11 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 allowVolumeExpansion: true
 metadata:
-  name: regional-pd
+  name: ha-regional
 parameters:
-  type: pd-ssd
   replication-type: regional-pd
+  type: pd-ssd
+  availability-class: regional-hard-failover
 provisioner: pd.csi.storage.gke.io
 reclaimPolicy: Retain
 volumeBindingMode: WaitForFirstConsumer

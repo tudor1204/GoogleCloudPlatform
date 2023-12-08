@@ -44,6 +44,24 @@ module "gcp-network" {
   }
 }
 
+module "firewall_rules" {
+  source       = "terraform-google-modules/network/google//modules/firewall-rules"
+  version = "~> 8.0"
+  project_id   = var.project_id
+  network_name = module.gcp-network.network_name
+
+  ingress_rules = [{
+    name                    = "allow-webhook"
+    description             = "open webhook port for statefulha operator"
+    source_ranges           = ["172.16.0.0/28",]
+    allow = [{
+      protocol = "tcp"
+      ports    = ["443","9443"]
+    }]
+    deny = []
+  }]
+}
+
 output "network_name" {
   value = module.gcp-network.network_name
 }

@@ -63,7 +63,7 @@ podDisruptionBudget:
 persistence:
   accessModes: ["ReadWriteOnce"]
   size: 10Gi
-  storageClassName: regional-pd
+  storageClassName: ha-regional
 
 apiKey: true
 
