@@ -20,7 +20,7 @@ documents = loader.load_and_split(text_splitter)
 embeddings = VertexAIEmbeddings()
 qdrant = Qdrant.from_documents(
     documents, embeddings,
-   collection_name="training-docs",
+    collection_name="training-docs",
     url=os.getenv("QDRANT_URL"), 
     api_key=os.getenv("APIKEY"),
     shard_number=6,
