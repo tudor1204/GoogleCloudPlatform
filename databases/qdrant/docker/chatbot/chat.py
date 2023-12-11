@@ -28,7 +28,7 @@ client = QdrantClient(
     url=os.getenv("QDRANT_URL"),
     api_key=os.getenv("APIKEY"),
 )
-collection_name = "training-docs"
+collection_name = os.getenv("COLLECTION_NAME")
 qdrant = Qdrant(client, collection_name, embeddings=embedding_model)
 
 def format_docs(docs):
@@ -47,7 +47,7 @@ if chat_input := st.chat_input():
         st.write(chat_input)
         st.session_state.messages.append({"role": "human", "content": chat_input})
 
-    found_docs = qdrant.similarity_serch(chat_input)
+    found_docs = qdrant.similarity_search(chat_input)
     context = format_docs(found_docs)
 
     promt_value = promt_template.format_messages(name="Bob", query=chat_input, context=context)
