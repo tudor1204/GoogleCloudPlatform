@@ -1,28 +1,35 @@
 from langchain.chat_models import ChatVertexAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.embeddings import VertexAIEmbeddings
+from langchain.memory import ConversationBufferMemory
 from langchain.vectorstores import Qdrant
 from qdrant_client import QdrantClient
 import streamlit as st
 import os
+import logging
 
 vertexAI = ChatVertexAI(streaming=True)
-promt_template = ChatPromptTemplate.from_messages(
+prompt_template = ChatPromptTemplate.from_messages(
     [
         ("system", "You are a helpful AI bot. Your name is {name}."),
         ("human", """
-        Use the provided context to answer the provided user query. Only use the provided context to answer the query. If you do not know the answer, response with "I don't know"
+        Use the provided context to answer the provided user query. Only use the provided context and the previous conversation to answer the query. If you do not know the answer, response with "I don't know"
 
         CONTEXT:
         {context}
 
         QUERY:
         {query}
+
+        CONVERSATION:
+        {history}
         """),
     ]
 )
 
 embedding_model = VertexAIEmbeddings()
+
+memory = ConversationBufferMemory(memory_key="history")
 
 client = QdrantClient(
     url=os.getenv("QDRANT_URL"),
@@ -50,13 +57,15 @@ if chat_input := st.chat_input():
     found_docs = qdrant.similarity_search(chat_input)
     context = format_docs(found_docs)
 
-    promt_value = promt_template.format_messages(name="Bob", query=chat_input, context=context)
+    prompt_value = prompt_template.format_messages(name="Bob", query=chat_input, context=context, history=memory.load_memory_variables({}))
     with st.chat_message("ai"):
         with st.spinner("Typing..."):
             content = ""
             with st.empty():
-                for chunk in vertexAI.stream(promt_value):
+                for chunk in vertexAI.stream(prompt_value):
                     content += chunk.content
                     st.write(content)
             st.session_state.messages.append({"role": "ai", "content": content})
+
+    memory.save_context({"input": chat_input}, {"output": content})
 
