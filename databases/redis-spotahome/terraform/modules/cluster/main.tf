@@ -32,6 +32,7 @@ module "redis_cluster" {
   logging_enabled_components = ["SYSTEM_COMPONENTS","WORKLOADS"]
   monitoring_enabled_components = ["SYSTEM_COMPONENTS"]
   enable_cost_allocation = true
+  deletion_protection = false
   initial_node_count = 1
 
   cluster_resource_labels = {
