@@ -1,7 +1,7 @@
 from langchain.chat_models import ChatVertexAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.embeddings import VertexAIEmbeddings
-from langchain.memory import ConversationBufferMemory
+from langchain.memory import ConversationTokenBufferMemory 
 from langchain.vectorstores import Qdrant
 from qdrant_client import QdrantClient
 import streamlit as st
@@ -13,23 +13,29 @@ prompt_template = ChatPromptTemplate.from_messages(
     [
         ("system", "You are a helpful AI bot. Your name is {name}."),
         ("human", """
-        Use the provided context to answer the provided user query. Only use the provided context and the previous conversation to answer the query. If you do not know the answer, response with "I don't know"
+        Use the provided context and the current conversation to answer the provided user query. Only use the provided context and the current conversation to answer the query. If you do not know the answer, response with "I don't know"
 
         CONTEXT:
         {context}
 
+        Current conversation:
+        {history}
+
         QUERY:
         {query}
-
-        CONVERSATION:
-        {history}
         """),
     ]
 )
 
 embedding_model = VertexAIEmbeddings()
 
-memory = ConversationBufferMemory(memory_key="history")
+memory = ConversationTokenBufferMemory(
+    llm=vertaxAI,
+    memory_key="history",
+    ai_prefix="Bob",
+    human_prefix="User",
+    max_token_limit=2000,
+)
 
 client = QdrantClient(
     url=os.getenv("QDRANT_URL"),
