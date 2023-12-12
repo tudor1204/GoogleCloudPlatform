@@ -25,7 +25,6 @@ resource "google_compute_managed_ssl_certificate" "ingress-certs" {
 
   managed {
     domains = local.certificate_host
-    ]
   }
 }
 
