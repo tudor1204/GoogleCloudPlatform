@@ -41,6 +41,13 @@ jobs:
       - name: Validate GKE Standard TF for Spotahome
         run: |
           cd databases/redis-spotahome/terraform/gke-standard
+          terraform init
+          terraform validate
+      - name: Validate GKE Standard TF for Redis Enterprise
+        run: |
+          cd databases/redis-enterprise-operator/terraform/gke-standard
+          terraform init
+          terraform validate
       - name: Validate GKE Autopilot TF for Redis replication
         run: |
           cd databases/redis/terraform/gke-replication
