@@ -28,13 +28,6 @@ prompt_template = ChatPromptTemplate.from_messages(
 
 embedding_model = VertexAIEmbeddings()
 
-memory = ConversationBufferWindowMemory(
-    memory_key="history",
-    ai_prefix="Bob",
-    human_prefix="User",
-    k=3,
-)
-
 client = QdrantClient(
     url=os.getenv("QDRANT_URL"),
     api_key=os.getenv("APIKEY"),
