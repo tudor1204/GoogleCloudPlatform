@@ -1,7 +1,7 @@
 from langchain.chat_models import ChatVertexAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.embeddings import VertexAIEmbeddings
-from langchain.memory import ConversationTokenBufferMemory 
+from langchain.memory import ConversationBufferWindowMemory
 from langchain.vectorstores import Qdrant
 from qdrant_client import QdrantClient
 import streamlit as st
@@ -18,7 +18,7 @@ prompt_template = ChatPromptTemplate.from_messages(
         CONTEXT:
         {context}
 
-        Current conversation:
+        CURRENT CONVERSATION:
         {history}
 
         QUERY:
@@ -29,12 +29,11 @@ prompt_template = ChatPromptTemplate.from_messages(
 
 embedding_model = VertexAIEmbeddings()
 
-memory = ConversationTokenBufferMemory(
-    llm=vertaxAI,
+memory = ConversationBufferWindowMemory(
     memory_key="history",
     ai_prefix="Bob",
     human_prefix="User",
-    max_token_limit=2000,
+    k=3,
 )
 
 client = QdrantClient(
@@ -51,6 +50,14 @@ st.title("🤖 Chatbot")
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "ai", "content": "How can I help you?"}]
 
+if "memory" not in st.session_state:
+    st.session_state["memory"] = ConversationBufferWindowMemory(
+        memory_key="history",
+        ai_prefix="Bob",
+        human_prefix="User",
+        k=3,
+    )
+
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
@@ -63,7 +70,7 @@ if chat_input := st.chat_input():
     found_docs = qdrant.similarity_search(chat_input)
     context = format_docs(found_docs)
 
-    prompt_value = prompt_template.format_messages(name="Bob", query=chat_input, context=context, history=memory.load_memory_variables({}))
+    prompt_value = prompt_template.format_messages(name="Bob", query=chat_input, context=context, history=st.session_state.memory.load_memory_variables({}))
     with st.chat_message("ai"):
         with st.spinner("Typing..."):
             content = ""
@@ -73,5 +80,5 @@ if chat_input := st.chat_input():
                     st.write(content)
             st.session_state.messages.append({"role": "ai", "content": content})
 
-    memory.save_context({"input": chat_input}, {"output": content})
+    st.session_state.memory.save_context({"input": chat_input}, {"output": content})
 
