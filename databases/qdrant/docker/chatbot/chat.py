@@ -6,7 +6,6 @@ from langchain.vectorstores import Qdrant
 from qdrant_client import QdrantClient
 import streamlit as st
 import os
-import logging
 
 vertexAI = ChatVertexAI(streaming=True)
 prompt_template = ChatPromptTemplate.from_messages(
