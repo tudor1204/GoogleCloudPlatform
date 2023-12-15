@@ -108,10 +108,10 @@ spec:
         resources:
           requests:
             memory: "512Mi"
-            cpu: "500m"
+            cpu: "250m"
           limits:
             memory: "512Mi"
-            cpu: "500m"
+            cpu: "250m"
         ports:
           - name: http
             containerPort: 8080 #The application is listening on port 8080
