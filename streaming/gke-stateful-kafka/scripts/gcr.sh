@@ -24,7 +24,7 @@ pull_push () {
   REGISTRY=us-docker.pkg.dev
   REPO_NAME=main
   REPO_FORMAT=docker
-  LOCATION=us
+  
 
   if [[ "$3" == "" ]]; then
     export SOURCE_REG=docker.io
