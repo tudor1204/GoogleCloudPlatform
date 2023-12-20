@@ -1,3 +1,8 @@
+# Update Helm Chart.yaml dependency and version
+
+# Usage update the Helm Chart kafka version 20.0.6
+
+# scripts/chart.sh kafka 20.0.6 
 #!/bin/bash
 
 # Dependency name and new version as arguments
