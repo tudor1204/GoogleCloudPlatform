@@ -1,7 +1,7 @@
 # Copy image from source Reg to Artifact Registry Repo
 
 # Usage #1: Pull image from the default source docker.io
-# scripts/gcr.sh bitnami/postgresql 14.4.0-debian-11-r21
+# scripts/gcr.sh bitnami/kafka 3.3.2-debian-11-r0
 
 # Usage #2: Pull image from any specified source
 # bash scripts/gcr.sh prometheus-operator/prometheus-operator v0.58.0 quay.io
