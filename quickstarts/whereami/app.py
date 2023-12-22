@@ -190,7 +190,7 @@ if __name__ == '__main__':
 
     else:
         app.run(
-            host=host_ip.strip('[]'),
-            port=int(os.environ.get('PORT', 8080)), # stripping out the brackets if present
+            host=host_ip.strip('[]'), # stripping out the brackets if present
+            port=int(os.environ.get('PORT', 8080)),
             debug=True,
             threaded=True)
