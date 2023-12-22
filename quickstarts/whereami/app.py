@@ -51,8 +51,11 @@ dictConfig({
     }
 })
 
+# get host IP
+host_ip = os.getenv("HOST", "0.0.0.0") # in absence of env var, default to 0.0.0.0 (IPv4)
+
 # check to see if tracing enabled and sampling probability
-trace_sampling_ratio = 0  # default to not sampling if absense of environment var
+trace_sampling_ratio = 0  # default to not sampling if absence of environment var
 if os.getenv("TRACE_SAMPLING_RATIO"):
 
     try:
@@ -140,11 +143,11 @@ def grpc_serve():
             reflection.SERVICE_NAME, health.SERVICE_NAME)
 
     # Start an end point to expose metrics at host:$grpc_metrics_port/metrics
-    start_http_server(grpc_metrics_port)  # starts a flask server for metrics
+    start_http_server(port=grpc_metrics_port)  # starts a flask server for metrics
 
     # Add the reflection service to the server.
     reflection.enable_server_reflection(services, server)
-    server.add_insecure_port('[::]:' + str(grpc_serving_port))
+    server.add_insecure_port(host_ip + ':' + str(grpc_serving_port))
     server.start()
 
     # Mark all services as healthy.
@@ -187,5 +190,7 @@ if __name__ == '__main__':
 
     else:
         app.run(
-            host='0.0.0.0', port=int(os.environ.get('PORT', 8080)),
+            host=host_ip.strip('[]'),
+            port=int(os.environ.get('PORT', 8080)), # stripping out the brackets if present
+            debug=True,
             threaded=True)

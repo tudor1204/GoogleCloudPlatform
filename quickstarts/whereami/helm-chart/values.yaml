@@ -31,3 +31,4 @@ config:
   grpc:
     enabled: false # flag to switch whereami service to gRPC mode
   traceSamplingRatio: "0.00" # trace sampling ratio; i.e. the % likelyhood a trace will be sent to Cloud Trace; setting to zero disables tracing; expects float. "0.10" == 10%
+  host: "0.0.0.0" # host to listen on - setting this to "[::]" will support IPv6
