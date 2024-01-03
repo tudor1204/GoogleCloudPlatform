@@ -30,6 +30,7 @@ spec:
       - name: embed-docs
         image: <DOCKER_REPO>/embed-docs:1.0
         imagePullPolicy: Always
+        command: ["python", "/app/endpoint.py"]
         env:
         - name: QDRANT_URL
           value: http://qdrant:6333

@@ -10,5 +10,5 @@ COPY . .
 RUN chmod 765 endpoint.py
 EXPOSE 5001
 
-CMD ["/app/endpoint.py"]
+CMD ["/app/embedding-job.py"]
 ENTRYPOINT ["python"]

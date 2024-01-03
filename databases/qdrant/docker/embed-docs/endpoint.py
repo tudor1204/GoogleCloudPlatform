@@ -45,7 +45,6 @@ def kube_create_job_object(name, container_image, bucket_name, f_name, namespace
         client.V1EnvVar(name="APIKEY", value_from=client.V1EnvVarSource(secret_key_ref=client.V1SecretKeySelector(key="api-key", name="qdrant-apikey"))), 
     ]
     
-
     container = client.V1Container(name=container_name, image=container_image, env=env_list)
     template.template.spec = client.V1PodSpec(containers=[container], restart_policy='Never', service_account='embed-docs-sa')
 
@@ -69,7 +68,6 @@ def kube_create_job(bckt, f_name, id):
     except ApiException as e:
         print("Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e)
     return
-
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5001, debug=True)
