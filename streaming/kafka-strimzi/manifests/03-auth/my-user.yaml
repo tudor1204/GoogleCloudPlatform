@@ -12,6 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kcat-config
+data:
+  kcat.conf: enable.ssl.certificate.verification=false
+---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaUser
 metadata:
@@ -34,34 +41,3 @@ spec:
           - Write
           - Read
         host: "*"
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: kafkacat
-spec:
-  containers:
-  - name: kafkacat
-    image: confluentinc/cp-kcat:7.4.0
-    command: ["sh", "-c", "exec tail -f /dev/null"]
-    volumeMounts:
-    - name: my-user
-      mountPath: "/my-user"
-      readOnly: true
-    - name: config-volume
-      mountPath: /home/appuser/.config
-  volumes:
-  - name: my-user
-    secret:
-      secretName: my-user
-  - name: config-volume
-    configMap:
-      name: kcat-config
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kcat-config
-data:
-  kcat.conf: enable.ssl.certificate.verification=false
-
