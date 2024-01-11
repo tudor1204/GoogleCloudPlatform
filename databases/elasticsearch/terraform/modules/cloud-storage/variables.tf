@@ -1,4 +1,4 @@
-# Copyright 2024 Google LLC
+# Copyright 2023 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
 # limitations under the License.
 
 variable "project_id" {
-  description = "The project ID to host the cluster in"
+  description = "The project ID to host the bucket in"
 }
 
 variable "region" {
-  description = "The region to host the cluster in"
+  description = "The region to host the bucket in"
 }
 
 variable "cluster_prefix" {
-  description = "The prefix for all cluster resources"
+  description = "The prefix of existing GKE cluster"
 }
 
