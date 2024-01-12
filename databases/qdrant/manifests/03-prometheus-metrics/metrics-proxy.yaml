@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
+# [START gke_databases_qdrant_03_prometheus_metrics_proxy]
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -76,3 +76,4 @@ spec:
           items:
             - key: default.conf.template
               path: default.conf.template
+# [END gke_databases_qdrant_03_prometheus_metrics_proxy]

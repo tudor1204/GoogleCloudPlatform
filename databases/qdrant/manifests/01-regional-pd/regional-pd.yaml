@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_databases_qdrant_01_regional_pd_storage]
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 allowVolumeExpansion: true
@@ -24,4 +25,4 @@ parameters:
 provisioner: pd.csi.storage.gke.io
 reclaimPolicy: Retain
 volumeBindingMode: WaitForFirstConsumer
-
+# [END gke_databases_qdrant_01_regional_pd_storage]

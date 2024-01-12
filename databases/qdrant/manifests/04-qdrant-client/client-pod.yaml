@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_databases_qdrant_04_client_pod]
 apiVersion: v1
 kind: Pod
 metadata:
@@ -37,4 +38,4 @@ spec:
   - name: books-dataset
     configMap:
       name: books-dataset
- 
+ # [END gke_databases_qdrant_04_client_pod]

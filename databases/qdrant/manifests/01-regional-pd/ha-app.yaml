@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_databases_qdrant_01_regional_pd_ha_app]
 kind: HighAvailabilityApplication
 apiVersion: ha.gke.io/v1alpha1
 metadata:
@@ -32,3 +33,4 @@ spec:
       forceDeleteStrategy: AfterNodeUnreachable
       afterNodeUnreachable:
         afterNodeUnreachableSeconds: 20 # 60 seconds total
+# [END gke_databases_qdrant_01_regional_pd_ha_app]
