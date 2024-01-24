@@ -9,7 +9,6 @@
     }
   ],
   "displayName": "Qdrant Overview",
-  "etag": "ae937deb98835d06d54420de51422a98",
   "labels": {},
   "mosaicLayout": {
     "columns": 48,
@@ -131,6 +130,5 @@
         "yPos": 16
       }
     ]
-  },
-  "name": "projects/233959860574/dashboards/afd5daa6-94cd-49d0-9d73-aa08baab8c5b"
+  }
 }
