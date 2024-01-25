@@ -39,3 +39,11 @@ jobs:
           cd databases/qdrant/terraform/gke-autopilot
           terraform init
           terraform validate
+      - name: Build chatbot app container
+        run: |
+          cd databases/qdrant/docker/chatbot
+          docker build --tag chatbot:1.0 .
+      - name: Build docs embeder container
+        run: |
+          cd databases/qdrant/docker/embed-docs
+          docker build --tag embed-docs:1.0 .
