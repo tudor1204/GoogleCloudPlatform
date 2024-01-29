@@ -18,6 +18,16 @@ replicaCount: 3
 config:
   cluster:
     enabled: true
+  storage:
+    optimizers:
+      deleted_threshold: 0.5
+      vacuum_min_vector_number: 1500
+      default_segment_number: 2
+      max_segment_size_kb: null
+      memmap_threshold_kb: null
+      indexing_threshold_kb: 25000
+      flush_interval_sec: 5
+      max_optimization_threads: 1
 
 livenessProbe:
   enabled: true
