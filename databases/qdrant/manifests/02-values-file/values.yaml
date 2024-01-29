@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_databases_qdrant_02_values_file_config]
 replicaCount: 3
 
 config:
@@ -63,7 +64,7 @@ podDisruptionBudget:
 persistence:
   accessModes: ["ReadWriteOnce"]
   size: 10Gi
-  storageClassName: regional-pd
+  storageClassName: ha-regional
 
 apiKey: true
-
+# [END gke_databases_qdrant_02_values_file_config]
