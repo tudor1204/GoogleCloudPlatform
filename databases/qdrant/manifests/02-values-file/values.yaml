@@ -77,4 +77,35 @@ persistence:
   storageClassName: ha-regional
 
 apiKey: true
+
+sidecarContainers:
+  - name: metrics
+    image: nginx:1.25
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+    - containerPort: 80
+    env:
+    - name: QDRANT_APIKEY 
+      valueFrom:
+        secretKeyRef:
+          name: qdrant-apikey          
+          key: api-key
+    volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/templates/default.conf.template
+          subPath: default.conf.template
+          readOnly: true
+additionalVolumes:
+  - name: nginx-conf
+    configMap:
+      name: nginx-conf
+      items:
+        - key: default.conf.template
+          path: default.conf.template 
 # [END gke_databases_qdrant_02_values_file_config]

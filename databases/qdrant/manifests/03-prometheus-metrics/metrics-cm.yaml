@@ -12,18 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_databases_qdrant_03_prometheus_metrics_monitor]
-apiVersion: monitoring.googleapis.com/v1
-kind: PodMonitoring
+# [START gke_databases_qdrant_03_prometheus_metrics_proxy]
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: qdrant
-spec:
-  selector:
-    matchLabels:
-      app: qdrant
-      app.kubernetes.io/instance: qdrant
-  endpoints:
-  - port: 80
-    interval: 30s
-    path: / 
-# [END gke_databases_qdrant_03_prometheus_metrics_monitor]
+  name: nginx-conf
+data:
+  default.conf.template: |
+    server {
+      listen 80;
+      location / {
+        proxy_pass http://localhost:6333/metrics;
+        proxy_http_version 1.1;
+        proxy_set_header Host $http_host;
+        proxy_set_header api-key ${QDRANT_APIKEY};
+        proxy_set_header X-Forwarded-For $remote_addr;
+      }
+    }
+# [END gke_databases_qdrant_03_prometheus_metrics_proxy]

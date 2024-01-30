@@ -15,7 +15,7 @@
 # [START gke_qdrant_cloud_storage_bucket_eventarc]
 
 resource "google_eventarc_trigger" "trigger" {
-  name            = "${var.cluster_prefix}-storage-trigger"
+  name            = "${var.cluster_prefix}-storage-new-trigger"
   location        = var.region
   project         = var.project_id
   service_account = module.service-account-eventarc.email
