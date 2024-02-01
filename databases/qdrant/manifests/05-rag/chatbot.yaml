@@ -30,6 +30,13 @@ spec:
       - name: chatbot
         image: <DOCKER_REPO>/chatbot:1.0
         imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
         env:
         - name: APIKEY
           valueFrom:
