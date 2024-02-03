@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from langchain.embeddings import VertexAIEmbeddings
-from langchain.document_loaders import PyPDFLoader
+from langchain_google_vertexai import VertexAIEmbeddings
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Qdrant
+from langchain_community.vectorstores import Qdrant
 from google.cloud import storage
 import os
 
@@ -31,7 +31,7 @@ loader = PyPDFLoader("/documents/" + filename)
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=0)
 documents = loader.load_and_split(text_splitter)
 
-embeddings = VertexAIEmbeddings()
+embeddings = VertexAIEmbeddings("textembedding-gecko@001")
 qdrant = Qdrant.from_documents(
     documents, embeddings,
     collection_name=os.getenv("COLLECTION_NAME"),

@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from langchain.chat_models import ChatVertexAI
+from langchain_google_vertexai import ChatVertexAI
 from langchain.prompts import ChatPromptTemplate
-from langchain.embeddings import VertexAIEmbeddings
+from langchain_google_vertexai import VertexAIEmbeddings
 from langchain.memory import ConversationBufferWindowMemory
-from langchain.vectorstores import Qdrant
+from langchain_community.vectorstores import Qdrant
 from qdrant_client import QdrantClient
 import streamlit as st
 import os
@@ -40,7 +40,7 @@ prompt_template = ChatPromptTemplate.from_messages(
     ]
 )
 
-embedding_model = VertexAIEmbeddings()
+embedding_model = VertexAIEmbeddings("textembedding-gecko@001")
 
 client = QdrantClient(
     url=os.getenv("QDRANT_URL"),
