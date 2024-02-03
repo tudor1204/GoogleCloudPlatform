@@ -2,10 +2,19 @@
   "displayName": "Qdrant Overview",
   "dashboardFilters": [
     {
-      "filterType": "METRIC_LABEL",
-      "labelKey": "exported_cluster",
-      "stringValue": "",
+      "filterType": "RESOURCE_LABEL",
+      "labelKey": "cluster",
       "templateVariable": "Cluster"
+    },
+    {
+      "filterType": "RESOURCE_LABEL",
+      "labelKey": "location",
+      "templateVariable": "Location"
+    },
+    {
+      "filterType": "RESOURCE_LABEL",
+      "labelKey": "namespace",
+      "templateVariable": "Namespace"
     }
   ],
   "category": "CUSTOM",
@@ -28,7 +37,7 @@
                 "plotType": "STACKED_AREA",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "avg(collections_total{noop_filter=~\".*\"})",
+                  "prometheusQuery": "avg(collections_total{${Cluster},${Location},${Namespace}})",
                   "unitOverride": ""
                 }
               }
@@ -57,7 +66,7 @@
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "collections_vector_total{noop_filter=~\".*\"}",
+                  "prometheusQuery": "collections_vector_total{${Cluster},${Location},${Namespace}}",
                   "unitOverride": ""
                 }
               }
@@ -86,7 +95,7 @@
                 "plotType": "STACKED_AREA",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum(cluster_pending_operations_total{noop_filter=~\".*\"})",
+                  "prometheusQuery": "sum(cluster_pending_operations_total{${Cluster},${Location},${Namespace}})",
                   "unitOverride": ""
                 }
               }
@@ -115,7 +124,7 @@
                 "plotType": "STACKED_AREA",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "avg(cluster_peers_total{noop_filter=~\".*\"})",
+                  "prometheusQuery": "avg(cluster_peers_total{${Cluster},${Location},${Namespace}})",
                   "unitOverride": ""
                 }
               }
