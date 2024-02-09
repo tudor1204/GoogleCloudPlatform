@@ -33,17 +33,14 @@ spec:
             storage: 10Gi
         storageClassName: ha-regional
     config:
-      node.store.allow_mmap: false
     podTemplate:
       metadata:
         labels:
           app.stateful/component: elasticsearch
       spec:
         initContainers:
-        - name: sysctl
-          securityContext:
-            privileged: true
-          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        - name: max-map-count-check
+          command: ['sh', '-c', "while true; do mmc=$(cat /proc/sys/vm/max_map_count); if [ ${mmc} -eq 262144 ]; then exit 0; fi; sleep 1; done"]
         containers:
         - name: elasticsearch
           resources:
