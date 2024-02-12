@@ -1,7 +1,7 @@
 google-cloud-storage==2.14.0
 google-cloud-aiplatform==1.40.0
-langchain==0.1.4
-langchain-community==0.0.16
+langchain==0.1.5
+langchain-community==0.0.17
 langchain-google-vertexai==0.0.3
 qdrant-client==1.7.2
 pypdf==3.17.4
@@ -9,6 +9,6 @@ click==8.1.7
 Flask==2.3.3
 itsdangerous==2.1.2
 Jinja2==3.1.3
-MarkupSafe==2.1.4
+MarkupSafe==2.1.5
 Werkzeug==2.3.8
 kubernetes==28.1.0
