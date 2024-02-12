@@ -1,20 +1,6 @@
 # How to contribute to kubernetes-engine-samples
 
-## Contributor License Agreements
-
-Before you're able to contribute to this repository, you need to sign a Contributor License Agreement (CLA).
-You can follow the links below to fill out the appropriate CLA (individual, or corporate):
-
-* **[Individual CLA](https://developers.google.com/open-source/cla/individual):**
-  You are an individual writing original source code and own the intellectual property.
-* **[Corporate CLA](https://developers.google.com/open-source/cla/corporate):**
-  You work for a company that allows you to contribute your work.
-
-Follow either of the two links above to access the appropriate CLA and instructions for how to sign and
-return it. Once we receive it, we'll be able to accept your pull requests. You can visit
-<https://cla.developers.google.com/> to confirm your current agreements or to sign a new one.
-
-## Contributing a patch
+## Steps to follow
 
 1. [Submit an issue](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/issues/new) describing your proposed changes.
 1. Wait for the proposed changes to be accepted by a repo maintainer.
@@ -62,6 +48,20 @@ All new code samples require the following:
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/ai-ml/llm-multiple-gpus/llm-service.yaml#L15-L28)]
   - These are typically of the form `[START gke_category_sample_title_file_name]` and
     `[END gke_category_sample_title_file_name]`.
+
+## Contributor License Agreement (CLA)
+
+Before you're able to contribute to this repository, you need to sign a Contributor License Agreement (CLA).
+You can follow the links below to fill out the appropriate CLA (individual, or corporate):
+
+* **[Individual CLA](https://developers.google.com/open-source/cla/individual):**
+  You are an individual writing original source code and own the intellectual property.
+* **[Corporate CLA](https://developers.google.com/open-source/cla/corporate):**
+  You work for a company that allows you to contribute your work.
+
+Follow either of the two links above to access the appropriate CLA and instructions for how to sign and
+return it. Once we receive it, we'll be able to accept your pull requests. You can visit
+<https://cla.developers.google.com/> to confirm your current agreements or to sign a new one.
 
 ## Community guidelines
 
