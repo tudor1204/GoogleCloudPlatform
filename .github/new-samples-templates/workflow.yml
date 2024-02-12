@@ -1,0 +1,33 @@
+# (use this template if your samples contain Dockerfiles or Terraform scripts)
+# @TODO: replace all placeholders
+# @TODO: file name should be <topic>-<sample>-ci.yml
+# @TODO: see examples in the workflows/ directory for inspiration.)
+
+name: <FILE_NAME>
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/<FILE_NAME>.yml'
+      - '<PATH/TO/SAMPLE>/**'
+  pull_request:
+    paths:
+      - '.github/workflows/<FILE_NAME>.yml'
+      - '<PATH/TO/SAMPLE>/**'
+jobs:
+  job:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      # @TODO: Use a step like this to build container images
+      - name: Build container image
+        run: |
+          cd <PATH/TO/DOCKERFILE>
+          docker build --tag <CONTAINER_NAME> .
+      # @TODO: Use a step like this to validate Terraform scripts
+      - name: Validate Terraform config
+        run: |
+          cd <PATH/TO/TF>
+          terraform init
+          terraform validate
