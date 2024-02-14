@@ -21,7 +21,7 @@ from qdrant_client import QdrantClient
 import streamlit as st
 import os
 
-vertexAI = ChatVertexAI(streaming=True)
+vertexAI = ChatVertexAI(model_name="chat-bison", streaming=True)
 prompt_template = ChatPromptTemplate.from_messages(
     [
         ("system", "You are a helpful AI bot. Your name is {name}."),
