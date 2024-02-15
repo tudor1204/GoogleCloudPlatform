@@ -28,7 +28,7 @@ blob = bucket.blob(filename)
 blob.download_to_filename("/documents/" + filename)
 
 loader = PyPDFLoader("/documents/" + filename)
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=0)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 documents = loader.load_and_split(text_splitter)
 
 embeddings = VertexAIEmbeddings("textembedding-gecko@001")
