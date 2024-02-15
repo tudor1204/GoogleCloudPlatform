@@ -27,12 +27,12 @@ prompt_template = ChatPromptTemplate.from_messages(
         ("system", "You are a helpful assistant who helps in finding answers to questions using the provided context."),
         ("human", """
         The answer should be based on the text context given in "text_context" and the conversation history given in "conversation_history" along with its Caption: \n
-        Base your response on the provided text context and the current conversation history to answer the query. 
+        Base your response on the provided text context and the current conversation history to answer the query.
         Select the most relevant information from the context.
         Generate a draft response using the selected information. Remove duplicate content from the draft response.
         Generate your final response after adjusting it to increase accuracy and relevance.
-        Now only show your final response! Do not provide any explanations or details.
-        If you do not know the answer, response with "I don't know".
+        Now only show your final response!
+        If you do not know the answer or context is not relevant, response with "I don't know".
 
         text_context:
         {context}
