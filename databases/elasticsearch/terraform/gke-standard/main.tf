@@ -31,7 +31,7 @@ module "elasticsearch_cluster" {
 
   node_pools = [
     {
-      name            = "pool-elasticsearch"
+      name            = "pool-elastic"
       disk_size_gb    = var.node_disk_size
       disk_type       = var.node_disk_type
       autoscaling     = true
@@ -45,19 +45,12 @@ module "elasticsearch_cluster" {
   ]
   node_pools_labels = {
     all = {}
-    pool-elasticsearch = {
+    pool-elastic = {
       "app.stateful/component" = "elasticsearch"
     }
   }
   node_pools_taints = {
     all = []
-    pool-elasticsearch = [
-      {
-        key    = "app.stateful/component"
-        value  = "elasticsearch"
-        effect = "NO_SCHEDULE"
-      }
-    ]
   }
 }
 

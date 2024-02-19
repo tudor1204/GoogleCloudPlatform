@@ -48,6 +48,15 @@ spec:
               memory: 4Gi
               cpu: 1
         affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 1
+                preference:
+                  matchExpressions:
+                  - key: app.stateful/component
+                    operator: In
+                    values:
+                    - elasticsearch
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 1

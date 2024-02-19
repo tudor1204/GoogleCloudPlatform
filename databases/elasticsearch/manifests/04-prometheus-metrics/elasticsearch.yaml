@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_databases_elasticsearch_02_elasticsearch_cluster]
+# [START gke_databases_elasticsearch_04_prometheus_metrics_cluster]
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
@@ -86,4 +86,4 @@ spec:
                   matchLabels:
                     app.stateful/component: elasticsearch
                 topologyKey: topology.kubernetes.io/zone
-# [END gke_databases_elasticsearch_02_elasticsearch_cluster]
+# [END gke_databases_elasticsearch_04_prometheus_metrics_cluster]
