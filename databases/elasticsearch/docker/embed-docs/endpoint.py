@@ -43,7 +43,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 # Setup K8 configs
 config.load_incluster_config()
 
-def kube_create_job_object(name, container_image, bucket_name, f_name, namespace="qdrant", container_name="jobcontainer", env_vars={}):
+def kube_create_job_object(name, container_image, bucket_name, f_name, namespace="elastic", container_name="jobcontainer", env_vars={}):
 
     body = client.V1Job(api_version="batch/v1", kind="Job")
     body.metadata = client.V1ObjectMeta(namespace=namespace, name=name)
@@ -59,7 +59,7 @@ def kube_create_job_object(name, container_image, bucket_name, f_name, namespace
         client.V1EnvVar(name="PASSWORD", value_from=client.V1EnvVarSource(secret_key_ref=client.V1SecretKeySelector(key="elastic", name="elasticsearch-ha-es-elastic-user"))), 
     ]
     
-    container = client.V1Container(name=container_name, image=container_image, env=env_list)
+    container = client.V1Container(name=container_name, image=container_image, image_pull_policy='Always', env=env_list)
     template.template.spec = client.V1PodSpec(containers=[container], restart_policy='Never', service_account='embed-docs-sa')
 
     body.spec = client.V1JobSpec(backoff_limit=3, ttl_seconds_after_finished=60, template=template.template)
@@ -78,7 +78,7 @@ def kube_create_job(bckt, f_name, id):
     body = kube_create_job_object(name, container_image, bckt, f_name)
     v1=client.BatchV1Api()
     try: 
-        v1.create_namespaced_job("qdrant", body, pretty=True)
+        v1.create_namespaced_job("elastic", body, pretty=True)
     except ApiException as e:
         print("Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e)
     return

@@ -15,7 +15,6 @@
 from langchain_google_vertexai import VertexAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-# from langchain_community.vectorstores import Qdrant
 from elasticsearch import Elasticsearch
 from langchain_community.vectorstores.elasticsearch import ElasticsearchStore
 from google.cloud import storage
@@ -43,7 +42,7 @@ client = Elasticsearch(
 )
 
 db = ElasticsearchStore.from_documents(
-    documentss,
+    documents,
     embeddings,
     es_connection=client,
     index_name=os.getenv("INDEX_NAME")

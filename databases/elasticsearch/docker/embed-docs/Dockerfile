@@ -1,7 +1,7 @@
 FROM python:3.12-slim-bookworm
 
-ENV QDRANT_URL http://qdrant:6333
-ENV COLLECTION_NAME training-docs
+ENV ES_URL https://elasticsearch-ha-es-http:9200
+ENV INDEX_NAME training-docs
 RUN apt update && \
     apt install -y --no-install-recommends gcc libc6-dev && \
     rm -rf /var/lib/apt/lists/*

@@ -17,7 +17,7 @@ kind: Deployment
 metadata:
   name: embed-docs
   labels: &labels
-    app: qdrant-docs-embedder
+    app: elastic-docs-embedder
 spec:
   selector:
     matchLabels: *labels
@@ -47,7 +47,7 @@ kind: Service
 metadata:
   name: embed-docs
   labels: &labels
-    app: qdrant-docs-embedder
+    app: elastic-docs-embedder
 spec:
   type: ClusterIP
   ports:
