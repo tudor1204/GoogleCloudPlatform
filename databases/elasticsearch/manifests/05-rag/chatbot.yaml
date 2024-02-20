@@ -38,11 +38,11 @@ spec:
             memory: "1Gi"
             cpu: "1"
         env:
-        - name: APIKEY
+        - name: PASSWORD
           valueFrom:
             secretKeyRef:
-              name: qdrant-apikey
-              key: api-key
+              name: elasticsearch-ha-es-elastic-user
+              key: elastic
         - name: ES_URL
           value: https://elasticsearch-ha-es-http:9200
         - name: STREAMLIT_SERVER_PORT
