@@ -26,4 +26,4 @@ spec:
   - port: 9114
     interval: 30s
     path: /metrics
-# [END gke_databases_elasticsearch_04_prometheus_metrics_podmonitorin]
+# [END gke_databases_elasticsearch_04_prometheus_metrics_podmonitoring]
