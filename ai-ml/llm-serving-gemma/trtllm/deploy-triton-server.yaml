@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_llm_serving_gemma_trtllm_triton_server_deployment]
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -132,3 +133,4 @@ spec:
       name: http-metrics
   selector:
     app: gemma-server
+# [END gke_ai_ml_llm_serving_gemma_trtllm_triton_server_deployment]

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_llm_serving_gemma_trtllm_download_gemma_2b]
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -102,3 +103,4 @@ spec:
       - key: "key"
         operator: "Exists"
         effect: "NoSchedule"
+# [END gke_ai_ml_llm_serving_gemma_trtllm_download_gemma_2b]

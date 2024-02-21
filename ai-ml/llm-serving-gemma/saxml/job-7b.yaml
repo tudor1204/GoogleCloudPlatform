@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_llm_serving_gemma_saxml_job_7b]
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -73,3 +74,4 @@ spec:
         configMap:
           defaultMode: 0700
           name: fetch-model-scripts
+# [END gke_ai_ml_llm_serving_gemma_saxml_job_7b]

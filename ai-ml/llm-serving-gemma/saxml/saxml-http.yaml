@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_llm_serving_gemma_saxml_http]
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -49,3 +50,4 @@ spec:
     port: 8888
     targetPort: 8888
   type: ClusterIP
+# [END gke_ai_ml_llm_serving_gemma_saxml_http]

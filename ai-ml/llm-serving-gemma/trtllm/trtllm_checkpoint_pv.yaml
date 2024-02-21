@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_llm_serving_gemma_trtllm_checkpoint_pv]
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -22,3 +23,4 @@ spec:
   resources:
     requests:
       storage: 100G
+# [END gke_ai_ml_llm_serving_gemma_trtllm_checkpoint_pv]
