@@ -70,7 +70,7 @@ if "messages" not in st.session_state:
 if "memory" not in st.session_state:
     st.session_state["memory"] = ConversationBufferWindowMemory(
         memory_key="history",
-        ai_prefix="Bob",
+        ai_prefix="Bot",
         human_prefix="User",
         k=3,
     )
@@ -87,7 +87,7 @@ if chat_input := st.chat_input():
     found_docs = elastic_vector_search.similarity_search(chat_input)
     context = format_docs(found_docs)
 
-    prompt_value = prompt_template.format_messages(name="Bob", query=chat_input, context=context, history=st.session_state.memory.load_memory_variables({}))
+    prompt_value = prompt_template.format_messages(name="Bot", query=chat_input, context=context, history=st.session_state.memory.load_memory_variables({}))
     with st.chat_message("ai"):
         with st.spinner("Typing..."):
             content = ""
