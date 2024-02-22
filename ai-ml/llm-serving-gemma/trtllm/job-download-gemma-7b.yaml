@@ -74,7 +74,7 @@ spec:
         - name: KAGGLE_CONFIG_DIR
           value: /kaggle
         - name: MODEL_PATH
-          value: "google/gemma/tensorrtllm/7b-it/1"
+          value: "google/gemma/tensorrtllm/7b-it/2"
         - name: WORLD_SIZE
           value: "1"
         volumeMounts:
