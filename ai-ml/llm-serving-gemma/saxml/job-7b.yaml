@@ -57,7 +57,7 @@ spec:
         - name: KAGGLE_CONFIG_DIR
           value: /kaggle
         - name: MODEL_PATH
-          value: "google/gemma/pax/7b-it/1"
+          value: "google/gemma/pax/7b-it/2"
         volumeMounts:
         - mountPath: "/kaggle/"
           name: kaggle-credentials
