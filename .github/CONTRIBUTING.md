@@ -4,7 +4,7 @@
 
 1. [Submit an issue](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/issues/new) describing your proposed changes.
 1. Wait for the proposed changes to be accepted by a repo maintainer.
-1. Sign a [Contributor License Agreement](#contributor-license-agreements) if you haven't done so.
+1. Sign a [Contributor License Agreement](#contributor-license-agreement-cla) if you haven't done so.
 1. Fork the repo, develop, and test your code changes.
 1. Ensure that your code follows [samples requirements](#samples-requirements).
 1. Create a [pull request (PR)](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/compare).
