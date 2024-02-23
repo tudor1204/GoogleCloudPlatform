@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_gke_ray_rayserve_ap_falcon_40b]
 apiVersion: ray.io/v1
 kind: RayService
 metadata:
@@ -129,3 +130,4 @@ spec:
           - name: worker-disk-vol
             persistentVolumeClaim:
               claimName: worker-disk
+# [END gke_ai_ml_gke_ray_rayserve_ap_falcon_40b]

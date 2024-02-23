@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_gke_ray_rayserve_models_llama2_7b_chat_hf]
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -59,3 +60,4 @@ data:
       placement_strategy: "STRICT_PACK"
       resources_per_worker:
         accelerator_type_l4: 0.01
+# [END gke_ai_ml_gke_ray_rayserve_models_llama2_7b_chat_hf]

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_gke_ray_rayserve_gradio]
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,3 +54,4 @@ spec:
       port: 80
       targetPort: 7860
   type: LoadBalancer
+# [END gke_ai_ml_gke_ray_rayserve_gradio]

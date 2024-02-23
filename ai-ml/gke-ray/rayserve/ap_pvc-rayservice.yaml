@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_gke_ray_rayserve_ap_pvc_rayservice]
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -23,3 +24,4 @@ spec:
     requests:
       storage: 200Gi
   storageClassName: standard-rwo
+# [END gke_ai_ml_gke_ray_rayserve_ap_pvc_rayservice]
