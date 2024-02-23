@@ -21,20 +21,26 @@ from qdrant_client import QdrantClient
 import streamlit as st
 import os
 
-vertexAI = ChatVertexAI(streaming=True)
+vertexAI = ChatVertexAI(model_name="gemini-pro", streaming=True, convert_system_message_to_human=True)
 prompt_template = ChatPromptTemplate.from_messages(
     [
-        ("system", "You are a helpful AI bot. Your name is {name}."),
+        ("system", "You are a helpful assistant who helps in finding answers to questions using the provided context."),
         ("human", """
-        Use the provided context and the current conversation to answer the provided user query. Only use the provided context and the current conversation to answer the query. If you do not know the answer, response with "I don't know"
+        The answer should be based on the text context given in "text_context" and the conversation history given in "conversation_history" along with its Caption: \n
+        Base your response on the provided text context and the current conversation history to answer the query.
+        Select the most relevant information from the context.
+        Generate a draft response using the selected information. Remove duplicate content from the draft response.
+        Generate your final response after adjusting it to increase accuracy and relevance.
+        Now only show your final response!
+        If you do not know the answer or context is not relevant, response with "I don't know".
 
-        CONTEXT:
+        text_context:
         {context}
 
-        CURRENT CONVERSATION:
+        conversation_history:
         {history}
 
-        QUERY:
+        query:
         {query}
         """),
     ]
