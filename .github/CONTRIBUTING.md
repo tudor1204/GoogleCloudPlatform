@@ -10,27 +10,38 @@
 1. Create a [pull request (PR)](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/compare).
 
 Note that:
-- The PR reviewer, in most cases, will not be looking at the correctness of the code. Rather, they
-  will only be focusing on the PR structure and that it follows samples requirements.
+- The PR reviewer may not be looking at the correctness of the code. They are
+  generally focusing on the PR structure and that it follows samples requirements.
 - You are responsible for making prompt fixes to any issues arising with your samples. If a sample
   goes out-of-date or breaks, it may be deprecated, depending on business needs.
 
 ## Samples requirements
 
 All new code samples require the following:
-- All files for a sample need to be in **one directory** `/<topic>/<sample-title>/` (e.g. "/databases/mysql-on-gke/").
-  - Use one of the top-level topics that already exist, if possible.
-- An entry in the **[CODEOWNERS file](/.github/CODEOWNERS)** listing the samples maintainers.
-- A short **`README.md` file** with a link pointing to the tutorial or content using the sample.
+- **Directory** for all files of the sample, looking like `/<topic>/<sample-title>/` (e.g. "/databases/mysql-on-gke/").
+  - Use one of the pre-existing top-level topic directories, if possible.
+- **Readme file** with a link pointing to the tutorial or content using the sample.
   [[Template](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/new-samples-templates/README.md)]
   - There should only be one source of truth for sample instructions (i.e. don't duplicate
     instructions in the README that are or will be made available elsewhere).
-- A **GitHub Action workflow** that tests the sample code. At minimum, this should
+- **GitHub Action workflow** that tests the sample code. At minimum, this should
   dry-run any container images or Terraform scripts and pass without any errors.
   [[Template](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/new-samples-templates/workflow.yml)]
   - Each container image should build successfully (e.g. `docker build...`).
   - Each Terraform script should validate successfully (e.g. `terraform validate...`).
   - If there are any other quick tests that can be performed, they should also be added here.
+- **Dependencies** using up-to-date versions.
+  - Note that we have automation in place to update these versions on a weekly-basis.
+- **License headers** on all source code and manifest files.
+  [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/new-samples-templates/cloudbuild.yaml#L1-L13)]
+- **Region tags** surrounding any file or snippets of code that will be embeded in a tutorial.
+  [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/ai-ml/llm-multiple-gpus/llm-service.yaml#L15-L28)]
+  - These surround code to be embeded and look like: `[START gke_topic_sample_title_file_name]` and
+    `[END gke_topic_sample_title_file_name]`.
+- **CODEOWNERS file** with an entry listing the samples maintainers.
+  [[CODEOWNERS](/.github/CODEOWNERS)]
+
+### Canonical container images
 - If the sample relies on canonical image artifacts, these can be hosted officially, which requires:
   - **Cloud Build configs** for all container images that pushes to the `google-samples` artifact registry.
   [[Template](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/new-samples-templates/cloudbuild.yaml)]
@@ -40,14 +51,6 @@ All new code samples require the following:
       `google-samples` project, you need to run `terraform init && terraform apply`
       while in that project (a repository admin will do this for you). [[docs](/.github/terraform/README.md)]
     - The images will be of the form `us-docker.pkg.dev/google-samples/containers/gke<image_name>:latest`
-- **Dependencies** using up-to-date versions.
-  - Note that we have automation in place to update these versions on a weekly-basis.
-- **License headers** on all source code and manifest files.
-  [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/new-samples-templates/cloudbuild.yaml#L1-L13)]
-- **Region tags** surrounding any file or snippets of code that will be embeded in a tutorial.
-  [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/ai-ml/llm-multiple-gpus/llm-service.yaml#L15-L28)]
-  - These surround code to be embeded and look like: `[START gke_topic_sample_title_file_name]` and
-    `[END gke_topic_sample_title_file_name]`.
 
 ## Contributor License Agreement (CLA)
 
