@@ -18,9 +18,9 @@ Note that:
 ## Samples requirements
 
 All new code samples require the following:
-- **Directory** for all files of the sample, looking like `/<topic>/<sample-title>/` (e.g. "/databases/mysql-on-gke/").
+- **Directory** for all files of the sample (e.g. `/databases/mysql-on-gke/**`).
   - Use one of the pre-existing top-level topic directories, if possible.
-- **Readme file** with a link pointing to the tutorial or content using the sample.
+- **README file** with a link pointing to the tutorial or content using the sample.
   [[Template](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/new-samples-templates/README.md)]
   - There should only be one source of truth for sample instructions (i.e. don't duplicate
     instructions in the README that are or will be made available elsewhere).
@@ -49,7 +49,7 @@ All new code samples require the following:
   [[Example](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/terraform/google-cloud-build-triggers.tf#L194-L207)]
     - Note that in order for the Cloud Build configs to be applied to the
       `google-samples` project, you need to run `terraform init && terraform apply`
-      while in that project (a repository admin will do this for you). [[docs](/.github/terraform/README.md)]
+      while in that project (a repository admin will do this for you). [[Docs](/.github/terraform/README.md)]
     - The images will be of the form `us-docker.pkg.dev/google-samples/containers/gke<image_name>:latest`
 
 ## Contributor License Agreement (CLA)
