@@ -59,12 +59,12 @@ spec:
         imagePullPolicy: IfNotPresent
         resources:
           requests:
-            ephemeral-storage: "100G"
-            memory: "100G"
+            ephemeral-storage: "40Gi"
+            memory: "40Gi"
             nvidia.com/gpu: 1
           limits:
-            ephemeral-storage: "100G"
-            memory: "100G"
+            ephemeral-storage: "40Gi"
+            memory: "40Gi"
             nvidia.com/gpu: 1
         command:
         - /scripts/entrypoint.sh
