@@ -41,10 +41,10 @@ spec:
         - name: APIKEY
           valueFrom:
             secretKeyRef:
-              name: qdrant-apikey
+              name: qdrant-database-apikey
               key: api-key
         - name: QDRANT_URL
-          value: http://qdrant:6333
+          value: http://qdrant-database:6333
         - name: STREAMLIT_SERVER_PORT
           value: "80"
         - name: COLLECTION_NAME

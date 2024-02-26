@@ -1,6 +1,6 @@
 FROM python:3.12-slim-bookworm
 
-ENV QDRANT_URL http://qdrant:6333
+ENV QDRANT_URL http://qdrant-database:6333
 ENV COLLECTION_NAME training-docs
 RUN apt update && \
     apt install -y --no-install-recommends gcc libc6-dev && \
