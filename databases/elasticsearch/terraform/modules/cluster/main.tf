@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_elasticsearch_standard_private_regional_cluster]
+# [START gke_databases_elasticsearch_standard_private_regional_cluster]
 module "elasticsearch_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
   version                  = "~> 29.0"
@@ -48,5 +48,5 @@ module "elasticsearch_cluster" {
   node_pools_taints = var.node_pools_taints
   gce_pd_csi_driver = true
 }
-# [END gke_elasticsearch_standard_private_regional_cluster]
+# [END gke_databases_elasticsearch_standard_private_regional_cluster]
 

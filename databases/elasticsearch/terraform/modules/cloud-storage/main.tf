@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_qdrant_cloud_storage_bucket]
+# [START gke_databases_elasticsearch_cloud_storage_bucket]
 module "cloud-storage" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 5.0"
@@ -82,5 +82,4 @@ output "service_account_eventarc_name" {
   value = module.service-account-eventarc.email
 }
 
-# [END gke_qdrant_cloud_storage_bucket]
-
+# [END gke_databases_elasticsearch_cloud_storage_bucket]
