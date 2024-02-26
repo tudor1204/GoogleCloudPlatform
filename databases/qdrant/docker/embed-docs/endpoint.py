@@ -56,7 +56,7 @@ def kube_create_job_object(name, container_image, bucket_name, f_name, namespace
         client.V1EnvVar(name="COLLECTION_NAME", value="training-docs"), 
         client.V1EnvVar(name="FILE_NAME", value=f_name), 
         client.V1EnvVar(name="BUCKET_NAME", value=bucket_name),
-        client.V1EnvVar(name="APIKEY", value_from=client.V1EnvVarSource(secret_key_ref=client.V1SecretKeySelector(key="api-key", name="qdrant-apikey"))), 
+        client.V1EnvVar(name="APIKEY", value_from=client.V1EnvVarSource(secret_key_ref=client.V1SecretKeySelector(key="api-key", name="qdrant-database-apikey"))), 
     ]
     
     container = client.V1Container(name=container_name, image=container_image, env=env_list)

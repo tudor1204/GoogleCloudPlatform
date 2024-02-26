@@ -21,7 +21,7 @@ spec:
   selector:
     matchLabels:
       app: qdrant
-      app.kubernetes.io/instance: qdrant
+      app.kubernetes.io/instance: qdrant-database
   endpoints:
   - port: 80
     interval: 30s
