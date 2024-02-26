@@ -51,9 +51,9 @@ output "network_name" {
 output "subnet_name" {
   value = module.gcp-network.subnets_names[0]
 }
-# [END gke_elasticsearch_vpc_multi_region_network]
+# [END gke_databases_elasticsearch_vpc_multi_region_network]
 
-# [START gke_elasticsearch_cloudnat_simple_create]
+# [START gke_databases_elasticsearch_cloudnat_simple_create]
 module "cloud_router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 6.0"
