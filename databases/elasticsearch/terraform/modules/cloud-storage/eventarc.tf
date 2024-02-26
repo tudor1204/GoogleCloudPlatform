@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_elasticsearch_cloud_storage_bucket_eventarc]
+# [START gke_databases_elasticsearch_cloud_storage_bucket_eventarc]
 
 resource "google_eventarc_trigger" "trigger" {
   name            = "${var.cluster_prefix}-storage-trigger"
@@ -75,5 +75,5 @@ output "service_account_eventarc_name" {
   value = module.service-account-eventarc.email
 }
 
-# [END gke_elasticsearch_cloud_storage_bucket_eventarc]
+# [END gke_databases_elasticsearch_cloud_storage_bucket_eventarc]
 

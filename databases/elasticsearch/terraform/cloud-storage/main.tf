@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_elasticsearch_cloud_storage_bucket]
+# [START gke_databases_elasticsearch_cloud_storage_bucket]
 module "cloud_storage" {
   source         = "../modules/cloud-storage"
   project_id     = var.project_id
@@ -36,5 +36,5 @@ output "service_account_eventarc_name" {
 }
 
 
-# [END gke_elasticsearch_cloud_storage_bucket]
+# [END gke_databases_elasticsearch_cloud_storage_bucket]
 
