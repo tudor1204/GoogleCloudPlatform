@@ -5,11 +5,11 @@ on:
       - main
     paths:
       - '.github/workflows/ai-ml-gke-ray-ci.yml'
-      - 'ai-ml/gke-ray/gke-platform/**'
+      - 'ai-ml/gke-ray/**'
   pull_request:
     paths:
       - '.github/workflows/ai-ml-gke-ray-ci.yml'
-      - 'ai-ml/gke-ray/gke-platform/**'
+      - 'ai-ml/gke-ray/**'
 jobs:
   job:
     runs-on: ubuntu-22.04
