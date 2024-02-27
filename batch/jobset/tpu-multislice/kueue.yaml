@@ -1,0 +1,32 @@
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: "vlp-24"
+spec:
+  nodeLabels:
+    cloud.google.com/gke-tpu-accelerator: tpu-v5-lite-podslice
+    cloud.google.com/gke-tpu-topology: 2x4
+---
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ClusterQueue
+metadata:
+  name: "cluster-queue"
+spec:
+  namespaceSelector: {}
+  queueingStrategy: BestEffortFIFO
+  resourceGroups:
+  - coveredResources: ["google.com/tpu"]
+    flavors:
+    - name: "vlp-24"
+      resources:
+      - name: "google.com/tpu"
+        nominalQuota: 24
+
+---
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: LocalQueue
+metadata:
+  namespace: default
+  name: multislice-queue
+spec:
+  clusterQueue: cluster-queue
