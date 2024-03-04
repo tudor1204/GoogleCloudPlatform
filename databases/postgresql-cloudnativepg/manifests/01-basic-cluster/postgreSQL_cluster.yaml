@@ -20,7 +20,7 @@ metadata:
   name: gke-pg-cluster
 spec:
   description: "Standard GKE PostgreSQL cluster"
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.0
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
   instances: 3
   startDelay: 300
   primaryUpdateStrategy: unsupervised
