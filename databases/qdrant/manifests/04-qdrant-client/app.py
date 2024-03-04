@@ -1,3 +1,18 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# [START qdrant_sample_app]
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 import os
@@ -6,7 +21,7 @@ import csv
 
 
 def main(query_string):
-    # Connect to Qdrant
+# [START qdrant_create_collection]
     qdrant = QdrantClient(
         url="http://qdrant-database:6333", api_key=os.getenv("APIKEY"))
 
@@ -30,7 +45,8 @@ def main(query_string):
 
     # Add my_books to the collection 
     qdrant.add(collection_name="my_books", documents=documents, metadata=metadata, ids=ids, parallel=2)
-
+# [END qdrant_create_collection]
+# [START qdrant_query_collection]
     # Query the collection
     results = qdrant.query(
         collection_name="my_books",
@@ -41,7 +57,7 @@ def main(query_string):
         print("Title:", result.metadata["title"], "\nAuthor:", result.metadata["author"])
         print("Description:", result.metadata["document"], "Published:", result.metadata["publishDate"], "\nScore:", result.score)
         print("-----")
-
+# [END qdrant_query_collection]
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         query_string = " ".join(sys.argv[1:])
@@ -49,3 +65,4 @@ if __name__ == "__main__":
         main(query_string)
     else:
         print("Please provide a query string as an argument.")
+# [END qdrant_sample_app]
