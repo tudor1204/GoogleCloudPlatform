@@ -19,9 +19,8 @@ import os
 import sys
 import csv
 
-
 def main(query_string):
-# [START qdrant_create_collection]
+
     qdrant = QdrantClient(
         url="http://qdrant-database:6333", api_key=os.getenv("APIKEY"))
 
@@ -45,8 +44,7 @@ def main(query_string):
 
     # Add my_books to the collection 
     qdrant.add(collection_name="my_books", documents=documents, metadata=metadata, ids=ids, parallel=2)
-# [END qdrant_create_collection]
-# [START qdrant_query_collection]
+
     # Query the collection
     results = qdrant.query(
         collection_name="my_books",
@@ -57,7 +55,7 @@ def main(query_string):
         print("Title:", result.metadata["title"], "\nAuthor:", result.metadata["author"])
         print("Description:", result.metadata["document"], "Published:", result.metadata["publishDate"], "\nScore:", result.score)
         print("-----")
-# [END qdrant_query_collection]
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         query_string = " ".join(sys.argv[1:])
