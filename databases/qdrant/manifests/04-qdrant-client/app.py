@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START qdrant_sample_app]
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 import os
@@ -63,4 +62,3 @@ if __name__ == "__main__":
         main(query_string)
     else:
         print("Please provide a query string as an argument.")
-# [END qdrant_sample_app]
