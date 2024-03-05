@@ -69,8 +69,8 @@ metadata:
   labels: &labels
     app: postgres-chatbot
 spec:
-  type: ClusterIP
-  # type: LoadBalancer
+  # type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 80
   selector: *labels
