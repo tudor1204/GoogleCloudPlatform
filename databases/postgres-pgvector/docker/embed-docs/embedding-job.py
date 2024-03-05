@@ -33,7 +33,6 @@ documents = loader.load_and_split(text_splitter)
 
 embeddings = VertexAIEmbeddings("textembedding-gecko@001")
 
-
 CONNECTION_STRING = PGVector.connection_string_from_db_params(
     driver="psycopg2",
     host=os.environ.get("POSTGRES_HOST"),
@@ -42,7 +41,7 @@ CONNECTION_STRING = PGVector.connection_string_from_db_params(
     user=os.environ.get("USERNAME"),
     password=os.environ.get("PASSWORD"),
 )
-COLLECTION_NAME = os.environ.get("COLLECTION_NAME"),
+COLLECTION_NAME = os.environ.get("COLLECTION_NAME")
 
 db = PGVector.from_documents(
     embedding=embeddings,
