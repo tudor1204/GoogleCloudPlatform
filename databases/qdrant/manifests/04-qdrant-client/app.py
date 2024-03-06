@@ -14,23 +14,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_databases_quadrant_manifests_04_imports]
+# [START gke_databases_qdrant_manifests_04_imports]
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 import os
 import sys
 import csv
-# [END gke_databases_quadrant_manifests_04_imports]
+# [END gke_databases_qdrant_manifests_04_imports]
 
 def main(query_string):
-# [START gke_databases_quadrant_manifests_04_create_client]
+# [START gke_databases_qdrant_manifests_04_create_client]
     qdrant = QdrantClient(
         url="http://qdrant-database:6333", api_key=os.getenv("APIKEY"))
-# [END gke_databases_quadrant_manifests_04_create_client]
+# [END gke_databases_qdrant_manifests_04_create_client]
 
-# [START gke_databases_quadrant_manifests_04_create_collection]
+# [START gke_databases_qdrant_manifests_04_create_collection]
     books = [*csv.DictReader(open('/usr/local/dataset/dataset.csv'))]
-# [END gke_databases_quadrant_manifests_04_create_collection]
+# [END gke_databases_qdrant_manifests_04_create_collection]
 
 # [START gke_databases_quadrant_manifests_04_prepare_doc]
     documents: list[dict[str, any]] = []
