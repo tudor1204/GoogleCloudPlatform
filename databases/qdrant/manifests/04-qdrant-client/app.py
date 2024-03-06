@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 # [START imports]
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
@@ -18,6 +21,7 @@ import os
 import sys
 import csv
 # [END imports]
+
 def main(query_string):
 # [START create_client]
     qdrant = QdrantClient(
