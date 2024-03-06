@@ -22,11 +22,11 @@ def main(query_string):
 # [START create_client]
     qdrant = QdrantClient(
         url="http://qdrant-database:6333", api_key=os.getenv("APIKEY"))
-# [END reate_client]
+# [END create_client]
 
 # [START create_collection]
     books = [*csv.DictReader(open('/usr/local/dataset/dataset.csv'))]
-# [END collection]
+# [END create_collection]
 
 # [START prepare_doc]
     documents: list[dict[str, any]] = []
