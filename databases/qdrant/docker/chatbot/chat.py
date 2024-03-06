@@ -77,7 +77,7 @@ if "memory" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
-# [END gke_databases_qdrant_docker_chat_session]
+# [END gke_databases_qdrant_docker_chat_history]
 if chat_input := st.chat_input():
     with st.chat_message("human"):
         st.write(chat_input)
