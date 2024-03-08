@@ -174,7 +174,7 @@ spec:
             - name: EVENTS_SERVER_PORT
               value: "8090"
             - name: FLOWS_API_ADDR
-              value: "hubble-relay.hubble-ui.svc:443"
+              value: "hubble-relay.kube-system.svc:443"
             - name: TLS_TO_RELAY_ENABLED
               value: "true"
             - name: TLS_RELAY_SERVER_NAME
