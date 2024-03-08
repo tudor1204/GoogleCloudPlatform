@@ -24,7 +24,7 @@ spec:
     resourceKind: StatefulSet
     selector:
       matchLabels:
-        app.kubernetes.io/instance=qdrant-database
+        app.kubernetes.io/instance: "qdrant-database"
   policy:
     storageSettings:
       requireRegionalStorage: true
