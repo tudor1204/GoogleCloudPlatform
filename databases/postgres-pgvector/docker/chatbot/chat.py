@@ -20,6 +20,7 @@ from langchain_community.vectorstores.pgvector import PGVector
 import streamlit as st
 import os
 
+# [START gke_databases_postgres_pgvector_docker_chat_model]
 vertexAI = ChatVertexAI(model_name="gemini-pro", streaming=True, convert_system_message_to_human=True)
 prompt_template = ChatPromptTemplate.from_messages(
     [
@@ -46,7 +47,9 @@ prompt_template = ChatPromptTemplate.from_messages(
 )
 
 embedding_model = VertexAIEmbeddings("textembedding-gecko@001")
+# [END gke_databases_postgres_pgvector_docker_chat_model]
 
+# [START gke_databases_postgres_pgvector_docker_chat_client]
 CONNECTION_STRING = PGVector.connection_string_from_db_params(
     driver="psycopg2",
     host=os.environ.get("POSTGRES_HOST"),
@@ -62,6 +65,7 @@ postgres_vector_search = PGVector(
     connection_string=CONNECTION_STRING,
     embedding_function=embedding_model,
 )
+# [END gke_databases_postgres_pgvector_docker_chat_client]
 
 def format_docs(docs):
     return "\n\n".join([d.page_content for d in docs])
@@ -70,6 +74,7 @@ st.title("🤖 Chatbot")
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "ai", "content": "How can I help you?"}]
 
+# [START gke_databases_postgres_pgvector_docker_chat_session]
 if "memory" not in st.session_state:
     st.session_state["memory"] = ConversationBufferWindowMemory(
         memory_key="history",
@@ -77,10 +82,13 @@ if "memory" not in st.session_state:
         human_prefix="User",
         k=3,
     )
+# [END gke_databases_postgres_pgvector_docker_chat_session]
 
+# [START gke_databases_postgres_pgvector_docker_chat_history]
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
+# [END gke_databases_postgres_pgvector_docker_chat_history]
 
 if chat_input := st.chat_input():
     with st.chat_message("human"):
