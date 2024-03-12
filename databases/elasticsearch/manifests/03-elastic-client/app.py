@@ -8,7 +8,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_databases_qdrant_manifests_03_imports]
+# [START gke_databases_elasticsearch_manifests_03_imports]
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 import os
@@ -16,7 +16,7 @@ import csv
 from fastembed import TextEmbedding
 from typing import List
 import numpy as np
-# [END gke_databases_qdrant_manifests_03_imports]
+# [END gke_databases_elasticsearch_manifests_03_imports]
 
 def main(query_string):
 
@@ -29,12 +29,12 @@ def main(query_string):
 # [END gke_databases_elasticsearch_manifests_03_create_client]
 
     # Create a collection
-# [START gke_databases_elasticsearch_manifests_04_create_collection]
+# [START gke_databases_elasticsearch_manifests_03_create_collection]
     books = [*csv.DictReader(open('/usr/local/dataset/dataset.csv'))]
     descriptions = [doc["description"] for doc in books]
     embedding_model = TextEmbedding(model_name="BAAI/bge-small-en")
     embeddings: List[np.ndarray] = list(embedding_model.embed(descriptions))
-# [END gke_databases_qdrant_manifests_03_create_collection]
+# [END gke_databases_elasticsearch_manifests_03_create_collection]
 
 # [START gke_databases_elasticsearch_manifests_03_create_schema]
     index_scheme = {
@@ -68,7 +68,7 @@ def main(query_string):
     }
     }
     client.indices.create(index="books", body=index_scheme)
-# [END gke_databases_qdrant_manifests_03_create_schema]
+# [END gke_databases_elasticsearch_manifests_03_create_schema]
 
 # [START gke_databases_elasticsearch_manifests_03_prepare_doc]
     documents: list[dict[str, any]] = []
@@ -87,7 +87,7 @@ def main(query_string):
 # [END gke_databases_elasticsearch_manifests_03_add_to_collection]
 
     # Query the collection
-# [START gke_databases_elasticsearch_manifests_04_define_query_function]
+# [START gke_databases_elasticsearch_manifests_03_define_query_function]
     def handle_query(query, limit):
         query_vector = list(embedding_model.embed([query]))[0]
         script_query = {
@@ -113,9 +113,9 @@ def main(query_string):
             print("---------")
 # [END gke_databases_elasticsearch_manifests_03_define_query_function]
 
-# [START gke_databases_elasticsearch_manifests_04_query_collection]
+# [START gke_databases_elasticsearch_manifests_03_query_collection]
     handle_query("anti-utopia and totalitarian society", 2)
-# [END gke_databases_elasticsearch_manifests_04_query_collection]
+# [END gke_databases_elasticsearch_manifests_03_query_collection]
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         query_string = " ".join(sys.argv[1:])
