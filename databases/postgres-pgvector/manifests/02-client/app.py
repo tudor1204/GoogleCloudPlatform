@@ -16,6 +16,7 @@
 from pgvector.psycopg import register_vector
 import psycopg
 import os
+import sys
 import csv
 from fastembed import TextEmbedding
 from typing import List
