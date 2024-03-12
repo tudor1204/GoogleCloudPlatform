@@ -24,14 +24,14 @@ import numpy as np
 # [END gke_databases_postgres_pgvector_manifests_02_imports]
 
 def main(query_string):
-# [START gke_databases_postgres_pgvector_manifests_02_create connection]
+# [START gke_databases_postgres_pgvector_manifests_02_create_connection]
     conn = psycopg.connect(
         dbname="app",
         host="gke-pg-cluster-rw.pg-ns",
         user=os.environ.get("CLIENTUSERNAME"),
         password=os.environ.get("CLIENTPASSWORD"),
         autocommit=True)
-# [END gke_databases_postgres_pgvector_manifests_02_create connection]
+# [END gke_databases_postgres_pgvector_manifests_02_create_connection]
 
 # [START gke_databases_postgres_pgvector_manifests_02_create_table]
     register_vector(conn)
