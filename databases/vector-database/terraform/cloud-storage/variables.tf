@@ -24,3 +24,7 @@ variable "cluster_prefix" {
   description = "The prefix of existing GKE cluster"
 }
 
+variable "db_namespace" {
+  description = "The namespace of the vector database"
+}
+

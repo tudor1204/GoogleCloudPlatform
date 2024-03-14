@@ -18,6 +18,7 @@ module "cloud_storage" {
   project_id     = var.project_id
   region         = var.region
   cluster_prefix = var.cluster_prefix
+  db_namespace   = var.db_namespace
 }
 
 output "bucket_name" {

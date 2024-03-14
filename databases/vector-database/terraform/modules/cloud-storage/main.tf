@@ -44,7 +44,7 @@ module "service-account-bucket" {
 
   project_id      = var.project_id
   names           = ["${var.cluster_prefix}-bucket-access"]
-  description     = "Service account to access the bucket with Qdrant training documents"
+  description     = "Service account to access the bucket with training documents"
 }
 
 module "project-iam-bindings-bucket" {
@@ -56,7 +56,7 @@ module "project-iam-bindings-bucket" {
 
   bindings = {
     "roles/aiplatform.user"          = ["serviceAccount:${var.cluster_prefix}-bucket-access@${var.project_id}.iam.gserviceaccount.com"] 
-    "roles/iam.workloadIdentityUser" = ["serviceAccount:${var.project_id}.svc.id.goog[qdrant/embed-docs-sa]"] 
+    "roles/iam.workloadIdentityUser" = ["serviceAccount:${var.project_id}.svc.id.goog[${var.db_namespace}/embed-docs-sa]"] 
   } 
 
   depends_on = [module.service-account-bucket]
