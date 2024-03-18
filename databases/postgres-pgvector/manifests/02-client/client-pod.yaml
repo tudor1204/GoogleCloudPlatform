@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_databases_postgresql_pgvector_02_pg_client]
+# [START gke_databases_postgres_pgvector_02_pg_client]
 apiVersion: v1
 kind: Pod
 metadata:
@@ -55,4 +55,4 @@ spec:
   - name: script-volume
     configMap:
       name: demo-app
-# [END gke_databases_postgresql_pgvector_02_pg_client]
+# [END gke_databases_postgres_pgvector_02_pg_client]
