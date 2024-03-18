@@ -39,3 +39,17 @@ jobs:
           cd databases/elasticsearch/terraform/gke-autopilot
           terraform init
           terraform validate
+      - name: Validate Cloud Storage module TF for Elasticsearch
+        run: |
+          cd databases/elasticsearch/terraform/cloud-storage
+          terraform init
+          terraform validate
+      - name: Build chatbot app container
+        run: |
+          cd databases/elasticsearch/docker/chatbot
+          docker build --tag chatbot:1.0 .
+      - name: Build docs embedder container
+        run: |
+          cd databases/elasticsearch/docker/embed-docs
+          docker build --tag embed-docs:1.0 .
+
