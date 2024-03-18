@@ -29,14 +29,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Validate GKE Standard TF for Pgvector
+      - name: Validate Cloud Storage module TF for Pgvector
         run: |
-          cd databases/postgres-pgvector/terraform/gke-standard 
-          terraform init
-          terraform validate
-      - name: Validate GKE Autopilot TF for Pgvector
-        run: |
-          cd databases/postgres-pgvector/terraform/gke-autopilot
+          cd databases/postgres-pgvector/terraform/cloud-storage
           terraform init
           terraform validate
       - name: Build chatbot app container
@@ -47,3 +42,4 @@ jobs:
         run: |
           cd databases/postgres-pgvector/docker/embed-docs
           docker build --tag embed-docs:1.0 .
+
