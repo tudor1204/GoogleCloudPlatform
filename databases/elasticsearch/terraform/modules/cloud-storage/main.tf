@@ -71,4 +71,3 @@ output "service_account_bucket_name" {
 }
 
 # [END gke_databases_elasticsearch_cloud_storage_bucket]
-
