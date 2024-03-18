@@ -12,44 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: databases-elasticsearch.yml
+name: databases-pgvector-ci.yml
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/databases-elasticsearch.yml'
-      - 'databases/elasticsearch/**'
+      - '.github/workflows/databases-pgvector-ci.yml'
+      - 'databases/postgres-pgvector/**'
   pull_request:
     paths:
-      - '.github/workflows/databases-elasticsearch.yml'
-      - 'databases/elasticsearch/**'
+      - '.github/workflows/databases-pgvector-ci.yml'
+      - 'databases/postgres-pgvector/**'
 jobs:
   job:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Validate GKE Standard TF for Elasticsearch
+      - name: Validate Cloud Storage module TF for Pgvector
         run: |
-          cd databases/elasticsearch/terraform/gke-standard 
-          terraform init
-          terraform validate
-      - name: Validate GKE Autopilot TF for Elasticsearch
-        run: |
-          cd databases/elasticsearch/terraform/gke-autopilot
-          terraform init
-          terraform validate
-      - name: Validate Cloud Storage module TF for Elasticsearch
-        run: |
-          cd databases/elasticsearch/terraform/cloud-storage
+          cd databases/postgres-pgvector/terraform/cloud-storage
           terraform init
           terraform validate
       - name: Build chatbot app container
         run: |
-          cd databases/elasticsearch/docker/chatbot
+          cd databases/postgres-pgvector/docker/chatbot
           docker build --tag chatbot:1.0 .
       - name: Build docs embedder container
         run: |
-          cd databases/elasticsearch/docker/embed-docs
+          cd databases/postgres-pgvector/docker/embed-docs
           docker build --tag embed-docs:1.0 .
 
