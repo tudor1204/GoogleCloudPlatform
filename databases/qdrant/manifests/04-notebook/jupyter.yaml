@@ -24,8 +24,8 @@ spec:
   ports:
   - port: 8888
   selector: *labels
-  # type: LoadBalancer
-  type: ClusterIP
+  type: LoadBalancer
+  # type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment

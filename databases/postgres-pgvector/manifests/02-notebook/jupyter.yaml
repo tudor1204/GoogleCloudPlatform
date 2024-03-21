@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_databases_elasticsearch_03_notebook]
+# [START gke_databases_postgres_pgvector_02_notebook]
 ---
 apiVersion: v1
 kind: Service
@@ -53,18 +53,21 @@ spec:
         ports:
         - containerPort: 8888
         env:
-        - name: PW
+        - name: CLIENTPASSWORD
           valueFrom:
             secretKeyRef:
-              name: elasticsearch-ha-es-elastic-user
-              key: elastic
+              name: gke-pg-cluster-app
+              key: password
+        - name: CLIENTUSERNAME
+          valueFrom:
+            secretKeyRef:
+              name: gke-pg-cluster-app
+              key: username
         volumeMounts:
         - name: books-dataset
           mountPath: /usr/local/dataset
         - name: notebook
-          mountPath: /tf
-        - name: elastic-cert
-          mountPath: /usr/local/cert
+          mountPath: /tfnew
       volumes:
       - name: books-dataset
         configMap:
@@ -72,7 +75,4 @@ spec:
       - name: notebook
         configMap:
           name: notebook
-      - name: elastic-cert
-        secret:
-          secretName: elasticsearch-ha-es-http-certs-public
- # [END gke_databases_elasticsearch_03_notebook]
+ # [END gke_databases_postgres_pgvector_02_notebook]
