@@ -67,7 +67,7 @@ spec:
         - name: books-dataset
           mountPath: /usr/local/dataset
         - name: notebook
-          mountPath: /tfnew
+          mountPath: /tf
       volumes:
       - name: books-dataset
         configMap:
