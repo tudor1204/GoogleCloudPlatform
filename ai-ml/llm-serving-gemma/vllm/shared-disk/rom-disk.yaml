@@ -1,0 +1,66 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rom-disk
+spec:
+  storageClassName: model-pd
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadOnlyMany
+  claimRef:
+    namespace: default
+    name: rom-disk
+  csi:
+    driver: pd.csi.storage.gke.io
+    volumeHandle: <VOLUME_ID>
+    fsType: ext4
+    readOnly: true
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rom-disk
+spec:
+  storageClassName: "model-pd"
+  volumeName: rom-disk
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 30Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-reader 
+  labels: &labels
+    app: data-reader
+spec:
+  replicas: 3
+  selector:
+    matchLabels: *labels
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+      - name: pod-demo
+        image: docker.io/bash:5.2.21
+        command: ["sleep", "3600"]
+        resources:
+          limits:
+            cpu: 100m
+            memory: 32Mi
+        volumeMounts:
+        - mountPath: /demo
+          name: demo-volume
+          readOnly: true
+      volumes:
+      - name: demo-volume
+        persistentVolumeClaim:
+          claimName: rom-disk
+          readOnly: true
+
+

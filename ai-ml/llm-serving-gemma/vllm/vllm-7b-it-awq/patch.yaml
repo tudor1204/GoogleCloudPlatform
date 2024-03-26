@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-gemma-deployment
+spec:
+  template:
+    spec:
+      containers:
+      - name: inference-server
+        env:
+        - name: MODEL_ID
+          value: TechxGenus/gemma-7b-it-AWQ
+
