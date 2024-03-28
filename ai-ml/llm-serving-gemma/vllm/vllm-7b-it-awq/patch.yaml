@@ -7,6 +7,10 @@ spec:
     spec:
       containers:
       - name: inference-server
+        args:
+        - --model=$(MODEL_ID)
+        - --tensor-parallel-size=2
+        - --quantization=awq
         env:
         - name: MODEL_ID
           value: TechxGenus/gemma-7b-it-AWQ

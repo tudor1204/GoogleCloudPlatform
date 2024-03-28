@@ -10,7 +10,7 @@ spec:
         args:
         - --model=$(MODEL_ID)
         - --tensor-parallel-size=2
-        - --quantization awq
+        - --quantization=awq
         env:
         - name: MODEL_ID
           value: TechxGenus/gemma-7b-AWQ

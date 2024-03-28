@@ -7,7 +7,11 @@ spec:
     spec:
       containers:
       - name: inference-server
+        args:
+        - --model=$(MODEL_ID)
+        - --tensor-parallel-size=1
+        - --quantization awq
         env:
         - name: MODEL_ID
-          value: unsloth/gemma-7b-it-bnb-4bit
+          value: TechxGenus/gemma-2b-it-AWQ
 
