@@ -4,12 +4,15 @@ metadata:
   name: vllm-gemma-deployment
 spec:
   template:
+    metadata:
+      labels:
+        ai.gke.io/model: gemma-7b-gptq
     spec:
       containers:
       - name: inference-server
         args:
         - --model=$(MODEL_ID)
-        - --tensor-parallel-size=1
+        - --tensor-parallel-size=2
         - --quantization=gptq
         env:
         - name: MODEL_ID

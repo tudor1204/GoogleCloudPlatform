@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
- - ../vllm-7b-it.yaml
+ - ../vllm-7b.yaml
 patches:
   - path: patch.yaml
     target:

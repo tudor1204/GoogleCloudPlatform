@@ -4,6 +4,9 @@ metadata:
   name: vllm-gemma-deployment
 spec:
   template:
+    metadata:
+      labels:
+        ai.gke.io/model: gemma-7b-it-awq
     spec:
       containers:
       - name: inference-server
