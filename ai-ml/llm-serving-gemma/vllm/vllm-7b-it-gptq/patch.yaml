@@ -9,5 +9,5 @@ spec:
       - name: inference-server
         env:
         - name: MODEL_ID
-          value: unsloth/gemma-7b-it-bnb-4bit
+          value: TechxGenus/gemma-7b-it-GPTQ
 
