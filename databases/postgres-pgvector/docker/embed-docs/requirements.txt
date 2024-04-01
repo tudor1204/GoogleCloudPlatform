@@ -1,7 +1,7 @@
-google-cloud-storage==2.15.0
+google-cloud-storage==2.16.0
 google-cloud-aiplatform==1.44.0
-langchain==0.1.12
-langchain-community==0.0.28
+langchain==0.1.13
+langchain-community==0.0.29
 langchain-google-vertexai==0.1.1
 pgvector==0.2.5
 psycopg2-binary==2.9.9
