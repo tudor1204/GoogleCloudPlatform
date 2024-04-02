@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vllm-gemma-deployment
+  name: tgi-gemma-deployment
 spec:
   template:
     metadata:
@@ -11,11 +11,10 @@ spec:
       containers:
       - name: inference-server
         args:
-        - --model=$(MODEL_ID)
-        - --tensor-parallel-size=1
-        - --quantization=gptq
+        - --model-id=$(MODEL_ID)
+        - --num-shard=1
+        - --quantize=gptq
         env:
         - name: MODEL_ID
-          #value: TechxGenus/gemma-2b-GPTQ
           value: TheBloke/Llama-2-7B-GPTQ
 
