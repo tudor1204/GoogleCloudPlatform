@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tgi-gemma-deployment
+spec:
+  template:
+    metadata:
+      labels:
+        ai.gke.io/model: llama-2-7b-chat-gptq
+    spec:
+      containers:
+      - name: inference-server
+        args:
+        - --model-id=$(MODEL_ID)
+        - --num-shard=1
+        - --quantize=gptq
+        env:
+        - name: MODEL_ID
+          value: dganochenko/Llama-2-7B-Chat-GPTQ
+
+

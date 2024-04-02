@@ -6,16 +6,12 @@ spec:
   template:
     metadata:
       labels:
-        ai.gke.io/model: gemma-2b-awq
+        ai.gke.io/model: gemma-2b-bitsandbytes
     spec:
       containers:
       - name: inference-server
         args:
         - --model-id=$(MODEL_ID)
         - --num-shard=1
-        - --quantize=awq
-        env:
-        - name: MODEL_ID
-          #value: TechxGenus/gemma-2b-AWQ
-          value: TheBloke/Llama-2-7B-AWQ
+        - --quantize=bitsandbytes
 

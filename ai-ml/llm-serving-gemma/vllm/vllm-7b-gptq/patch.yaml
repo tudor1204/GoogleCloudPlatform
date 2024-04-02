@@ -6,15 +6,15 @@ spec:
   template:
     metadata:
       labels:
-        ai.gke.io/model: gemma-7b-gptq
+        ai.gke.io/model: llama-2-7b-gptq
     spec:
       containers:
       - name: inference-server
         args:
         - --model=$(MODEL_ID)
-        - --tensor-parallel-size=2
+        - --tensor-parallel-size=1
         - --quantization=gptq
         env:
         - name: MODEL_ID
-          value: TechxGenus/gemma-7b-GPTQ
+          value: dganochenko/Llama-2-7B-GPTQ
 

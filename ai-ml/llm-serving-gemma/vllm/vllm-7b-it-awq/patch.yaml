@@ -12,9 +12,11 @@ spec:
       - name: inference-server
         args:
         - --model=$(MODEL_ID)
-        - --tensor-parallel-size=2
+        - --tensor-parallel-size=1
+        - --max-model-len=1000
+        - --kv-cache-dtype=fp8_e5m2
         - --quantization=awq
         env:
         - name: MODEL_ID
-          value: TechxGenus/gemma-7b-it-AWQ
+          value: dganochenko/gemma-7b-it-AWQ
 

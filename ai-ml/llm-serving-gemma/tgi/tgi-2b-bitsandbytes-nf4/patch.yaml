@@ -6,16 +6,12 @@ spec:
   template:
     metadata:
       labels:
-        ai.gke.io/model: gemma-2b-it-gptq
+        ai.gke.io/model: gemma-2b-bitsandbytes-nf4
     spec:
       containers:
       - name: inference-server
         args:
         - --model-id=$(MODEL_ID)
         - --num-shard=1
-        - --quantize=gptq
-        env:
-        - name: MODEL_ID
-          value: TheBloke/Llama-2-7B-Chat-GPTQ
-
+        - --quantize=bitsandbytes-nf4
 

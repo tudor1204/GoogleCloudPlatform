@@ -16,5 +16,5 @@ spec:
         - --quantization=awq
         env:
         - name: MODEL_ID
-          value: TechxGenus/gemma-2b-it-AWQ
+          value: dganochenko/gemma-2b-it-AWQ
 

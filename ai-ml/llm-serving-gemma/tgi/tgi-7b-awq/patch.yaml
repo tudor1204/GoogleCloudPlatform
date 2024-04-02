@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vllm-gemma-deployment
+  name: tgi-gemma-deployment
 spec:
   template:
     metadata:
       labels:
-        ai.gke.io/model: gemma-2b-awq
+        ai.gke.io/model: llama-2-7b-awq
     spec:
       containers:
       - name: inference-server
         args:
-        - --model=$(MODEL_ID)
-        - --tensor-parallel-size=1
-        - --quantization=awq
+        - --model-id=$(MODEL_ID)
+        - --num-shard=1
+        - --quantize=awq
         env:
         - name: MODEL_ID
-          value: dganochenko/gemma-2b-AWQ
+          value: dganochenko/Llama-2-7B-AWQ
 
