@@ -23,7 +23,7 @@ spec:
     resourceKind: StatefulSet
   policy:
     storageSettings:
-      requireRegionalStorage: true
+      requireRegionalStorage: false
     failoverSettings:
       forceDeleteStrategy: AfterNodeUnreachable
       afterNodeUnreachable:
