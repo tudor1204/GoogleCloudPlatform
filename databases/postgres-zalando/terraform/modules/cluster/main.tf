@@ -15,7 +15,7 @@
 # [START gke_postgres_zalando_standard_private_regional_cluster]
 module "postgres_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version                  = "~> 29.0"
+  version                  = "~> 30.2"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
   regional                 = true
@@ -28,6 +28,8 @@ module "postgres_cluster" {
   enable_private_endpoint  = false
   enable_private_nodes     = true
   master_ipv4_cidr_block   = "172.16.0.0/28"
+  kubernetes_version       = "latest"
+  release_channel          = "RAPID"
   network_policy           = true
   logging_enabled_components = ["SYSTEM_COMPONENTS","WORKLOADS"]
   monitoring_enabled_components = ["SYSTEM_COMPONENTS"]

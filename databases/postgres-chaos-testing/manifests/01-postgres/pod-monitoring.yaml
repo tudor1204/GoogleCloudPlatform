@@ -12,20 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_databases_postgres_chaos_testing_01_postgres_ha_app]
-kind: HighAvailabilityApplication
-apiVersion: ha.gke.io/v1
+# [START gke_databases_postgres_chaos_testing_01_postgres_monitoring]
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
 metadata:
   name: my-cluster
-  namespace: postgres
 spec:
-  resourceSelection:
-    resourceKind: StatefulSet
-  policy:
-    storageSettings:
-      requireRegionalStorage: true
-    failoverSettings:
-      forceDeleteStrategy: AfterNodeUnreachable
-      afterNodeUnreachable:
-        afterNodeUnreachableSeconds: 20
-# [END ke_databases_postgres_chaos_testing_01_postgres_ha_app]
+  selector:
+    matchLabels:
+      application: spilo
+      cluster-name: my-cluster
+  endpoints:
+  - port: 9187
+    interval: 30s
+    path: /metrics
+# [END gke_databases_postgres_chaos_testing_01_postgres_monitoring]

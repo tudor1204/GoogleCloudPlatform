@@ -30,6 +30,8 @@ module "postgres_cluster" {
   master_ipv4_cidr_block   = "172.16.0.0/28"
   enable_cost_allocation = true
   deletion_protection = false
+  kubernetes_version       = "latest"
+  release_channel          = "RAPID"
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"
