@@ -1,9 +1,9 @@
 google-cloud-storage==2.16.0
-google-cloud-aiplatform==1.44.0
-langchain==0.1.13
-langchain-community==0.0.29
-langchain-google-vertexai==0.1.1
-elasticsearch==8.12.1
+google-cloud-aiplatform==1.46.0
+langchain==0.1.14
+langchain-community==0.0.30
+langchain-google-vertexai==0.1.2
+elasticsearch==8.13.0
 pypdf==3.17.4
 click==8.1.7
 Flask==2.3.3
