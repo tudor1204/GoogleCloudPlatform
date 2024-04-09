@@ -24,11 +24,19 @@ spec:
     spec:
       containers:
       - name: inference-server
+        resources:
+          requests:
+            cpu: "2"
+            memory: "25Gi"
+            ephemeral-storage: "25Gi"
+            nvidia.com/gpu: 1
+          limits:
+            cpu: "2"
+            memory: "25Gi"
+            ephemeral-storage: "25Gi"
+            nvidia.com/gpu: 1
         args:
         - --model=$(MODEL_ID)
         - --tensor-parallel-size=1
         - --max-model-len=600
-        env:
-        - name: MODEL_ID
-          value: google/gemma-7b
 
