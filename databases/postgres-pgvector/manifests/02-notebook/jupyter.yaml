@@ -56,12 +56,12 @@ spec:
         - name: CLIENTPASSWORD
           valueFrom:
             secretKeyRef:
-              name: gke-pg-cluster-app
+              name: gke-pg-cluster-superuser
               key: password
         - name: CLIENTUSERNAME
           valueFrom:
             secretKeyRef:
-              name: gke-pg-cluster-app
+              name: gke-pg-cluster-superuser
               key: username
         volumeMounts:
         - name: books-dataset
