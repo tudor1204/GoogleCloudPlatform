@@ -14,21 +14,16 @@
 
 # [START gke_databases_elasticsearch_01_regional_pd_ha_app]
 kind: HighAvailabilityApplication
-apiVersion: ha.gke.io/v1alpha1
+apiVersion: ha.gke.io/v1
 metadata:
-  name: elasticsearch-ha-app
+  name: elasticsearch-ha-es-main
   namespace: elastic
 spec:
   resourceSelection:
-    type: "Selector"
     resourceKind: StatefulSet
-    selector:
-      matchLabels:
-        app.kubernetes.io/name: elasticsearch
-
   policy:
     storageSettings:
-      requireRegionalStorage: true
+      requireRegionalStorage: false
     failoverSettings:
       forceDeleteStrategy: AfterNodeUnreachable
       afterNodeUnreachable:
