@@ -31,9 +31,10 @@ module "elasticsearch_cluster" {
   network_policy           = true
   logging_enabled_components = ["SYSTEM_COMPONENTS","WORKLOADS"]
   monitoring_enabled_components = ["SYSTEM_COMPONENTS"]
-  enable_cost_allocation = true
-  deletion_protection = false
-  initial_node_count = 1
+  enable_cost_allocation   = true
+  deletion_protection      = false
+  initial_node_count       = 1
+  kubernetes_version       = "1.28"
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"
