@@ -28,4 +28,4 @@ spec:
       forceDeleteStrategy: AfterNodeUnreachable
       afterNodeUnreachable:
         afterNodeUnreachableSeconds: 20
-# [END ke_databases_postgres_chaos_testing_01_postgres_ha_app]
+# [END gke_databases_postgres_chaos_testing_01_postgres_ha_app]

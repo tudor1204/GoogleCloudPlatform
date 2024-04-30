@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_databases_postgres_chaos_testing_06_pod_cpu_hog_experiment]
+# [START gke_databases_postgres_chaos_testing_06_pod_memory_hog_experiment]
 apiVersion: litmuschaos.io/v1alpha1
 description:
   message: |
