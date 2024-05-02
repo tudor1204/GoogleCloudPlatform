@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: model-clone-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: model-clone-container
+        image: alpine/git
+        resources:
+          requests:
+            memory: "16Gi"
+            cpu: 4
+          limits:
+            memory: "24Gi"
+            cpu: 8
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-secrets
+              key: hf_api_token
+        - name: HUGGING_FACE_HUB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: hf-secrets
+              key: hf_username
+        command: ["/bin/sh", "-c"]
+        args: ["cd /model/ && git lfs install && git clone https://$HUGGING_FACE_HUB_USERNAME:$HUGGING_FACE_HUB_TOKEN@huggingface.co/google/gemma-2b-it && exit 0"]
+        volumeMounts:
+        - name: model-volume
+          mountPath: "/model"
+      volumes:
+      - name: model-volume
+        persistentVolumeClaim:
+          claimName: model-fileserver-claim
+      restartPolicy: Never
