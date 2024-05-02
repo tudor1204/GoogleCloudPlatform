@@ -256,6 +256,65 @@
             }
           }
         }
+      },
+      {
+        "yPos": 47,
+        "width": 22,
+        "height": 14,
+        "widget": {
+          "title": "Memory usage by Pod",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
+            "dataSets": [
+              {
+                "plotType": "LINE",
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "timeSeriesQueryLanguage": "fetch k8s_container\n| metric 'kubernetes.io/container/memory/used_bytes'\n| filter\n    (resource.cluster_name =~'${Cluster.value}'\n     && resource.namespace_name == 'postgres')\n    && (metric.memory_type == 'non-evictable')\n| group_by 1m, [value_used_bytes_mean: mean(value.used_bytes)]\n| every 1m\n| group_by [resource.namespace_name, resource.pod_name],\n    [value_used_bytes_mean_aggregate: aggregate(value_used_bytes_mean)]",
+                  "unitOverride": ""
+                }
+              }
+            ],
+            "thresholds": [],
+            "timeshiftDuration": "0s",
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
+          }
+        }
+      },
+      {
+        "xPos": 22,
+        "yPos": 47,
+        "width": 25,
+        "height": 14,
+        "widget": {
+          "title": "Memory Util % per Node",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
+            "dataSets": [
+              {
+                "plotType": "LINE",
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "timeSeriesQueryLanguage": "fetch k8s_node\n| metric 'kubernetes.io/node/memory/allocatable_utilization'\n| filter (resource.cluster_name=~'${Cluster.value}')\n| group_by 1m,\n    [value_allocatable_utilization_mean: mean(value.allocatable_utilization)]\n| every 1m\n| group_by [resource.node_name],\n    [value_allocatable_utilization_mean_aggregate:\n       aggregate(value_allocatable_utilization_mean)]\n| scale '%'\n| top 50",
+                  "unitOverride": ""
+                }
+              }
+            ],
+            "thresholds": [],
+            "timeshiftDuration": "0s",
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
+          }
+        }
       }
     ]
   },
