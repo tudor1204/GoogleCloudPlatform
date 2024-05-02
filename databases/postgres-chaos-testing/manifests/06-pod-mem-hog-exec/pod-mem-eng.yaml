@@ -16,7 +16,7 @@
 apiVersion: litmuschaos.io/v1alpha1
 kind: ChaosEngine
 metadata:
-  name: nginx-chaos
+  name: pod-memory-chaos
   namespace: postgres
 spec:
   # It can be active/stop
