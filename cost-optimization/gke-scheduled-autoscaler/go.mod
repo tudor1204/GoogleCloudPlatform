@@ -4,13 +4,13 @@ go 1.21
 
 require (
 	cloud.google.com/go/compute/metadata v0.3.0
-	golang.org/x/oauth2 v0.19.0
-	google.golang.org/api v0.175.0
+	golang.org/x/oauth2 v0.20.0
+	google.golang.org/api v0.176.1
 )
 
 require (
-	cloud.google.com/go/auth v0.2.2 // indirect
-	cloud.google.com/go/auth/oauth2adapt v0.2.1 // indirect
+	cloud.google.com/go/auth v0.3.0 // indirect
+	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
 	cloud.google.com/go/compute v1.24.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
