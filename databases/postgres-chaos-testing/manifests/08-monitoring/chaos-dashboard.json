@@ -17,12 +17,14 @@
       "templateVariable": "Namespace"
     }
   ],
+  "category": "CUSTOM",
   "mosaicLayout": {
     "columns": 48,
     "tiles": [
       {
         "xPos": 15,
-        "width": 15,
+        "yPos": 0,
+        "width": 16,
         "height": 17,
         "widget": {
           "title": "Failed experiments",
@@ -52,8 +54,9 @@
         }
       },
       {
-        "xPos": 30,
-        "width": 17,
+        "xPos": 31,
+        "yPos": 0,
+        "width": 16,
         "height": 17,
         "widget": {
           "title": "Passed experiments",
@@ -83,6 +86,7 @@
         }
       },
       {
+        "xPos": 0,
         "yPos": 17,
         "width": 22,
         "height": 16,
@@ -146,6 +150,7 @@
         }
       },
       {
+        "xPos": 0,
         "yPos": 33,
         "width": 22,
         "height": 14,
@@ -228,19 +233,18 @@
         }
       },
       {
+        "xPos": 0,
+        "yPos": 0,
         "width": 15,
         "height": 17,
         "widget": {
-          "title": "Running experiments",
+          "title": "Number of experiments",
           "xyChart": {
             "chartOptions": {
               "mode": "COLOR"
             },
             "dataSets": [
               {
-                "breakdowns": [],
-                "dimensions": [],
-                "measures": [],
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
@@ -258,6 +262,7 @@
         }
       },
       {
+        "xPos": 0,
         "yPos": 47,
         "width": 22,
         "height": 14,
@@ -269,6 +274,9 @@
             },
             "dataSets": [
               {
+                "breakdowns": [],
+                "dimensions": [],
+                "measures": [],
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
@@ -299,6 +307,9 @@
             },
             "dataSets": [
               {
+                "breakdowns": [],
+                "dimensions": [],
+                "measures": [],
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
@@ -315,9 +326,136 @@
             }
           }
         }
+      },
+      {
+        "xPos": 22,
+        "yPos": 61,
+        "width": 8,
+        "height": 8,
+        "widget": {
+          "title": "Postgres availability [5m] %",
+          "scorecard": {
+            "gaugeView": {
+              "lowerBound": 0,
+              "upperBound": 100
+            },
+            "thresholds": [
+              {
+                "color": "YELLOW",
+                "direction": "BELOW",
+                "label": "",
+                "value": 90
+              },
+              {
+                "color": "RED",
+                "direction": "BELOW",
+                "label": "",
+                "value": 66
+              }
+            ],
+            "timeSeriesQuery": {
+              "prometheusQuery": "sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\",metadata_system_ready_status=\"True\"}[5m])) / sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\"}[5m])) * 100",
+              "unitOverride": ""
+            }
+          }
+        }
+      },
+      {
+        "xPos": 30,
+        "yPos": 61,
+        "width": 8,
+        "height": 8,
+        "widget": {
+          "title": "Postgres availability [15m] %",
+          "scorecard": {
+            "gaugeView": {
+              "lowerBound": 0,
+              "upperBound": 100
+            },
+            "thresholds": [
+              {
+                "color": "YELLOW",
+                "direction": "BELOW",
+                "label": "",
+                "value": 90
+              },
+              {
+                "color": "RED",
+                "direction": "BELOW",
+                "label": "",
+                "value": 66
+              }
+            ],
+            "timeSeriesQuery": {
+              "prometheusQuery": "sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\",metadata_system_ready_status=\"True\"}[15m])) / sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\"}[15m])) * 100",
+              "unitOverride": ""
+            }
+          }
+        }
+      },
+      {
+        "xPos": 38,
+        "yPos": 61,
+        "width": 9,
+        "height": 8,
+        "widget": {
+          "title": "Postgres availability [1d] %",
+          "scorecard": {
+            "gaugeView": {
+              "lowerBound": 0,
+              "upperBound": 100
+            },
+            "thresholds": [
+              {
+                "color": "YELLOW",
+                "direction": "BELOW",
+                "label": "",
+                "value": 90
+              },
+              {
+                "color": "RED",
+                "direction": "BELOW",
+                "label": "",
+                "value": 66
+              }
+            ],
+            "timeSeriesQuery": {
+              "prometheusQuery": "sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\",metadata_system_ready_status=\"True\"}[1d])) / sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\"}[1d])) * 100",
+              "unitOverride": ""
+            }
+          }
+        }
+      },
+      {
+        "xPos": 0,
+        "yPos": 61,
+        "width": 22,
+        "height": 8,
+        "widget": {
+          "title": "Postgres cluster healthy pods %",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
+            "dataSets": [
+              {
+                "plotType": "LINE",
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "prometheusQuery": "count(rate(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\",metadata_system_ready_status=\"True\"}[10s])) / max(count(rate(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\"}[${__interval}]))) * 100",
+                  "unitOverride": ""
+                }
+              }
+            ],
+            "thresholds": [],
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
+          }
+        }
       }
     ]
   },
-  "labels": {},
-  "category": "CUSTOM"
+  "labels": {}
 }
