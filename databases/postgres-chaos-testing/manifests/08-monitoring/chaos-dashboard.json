@@ -245,6 +245,9 @@
             },
             "dataSets": [
               {
+                "breakdowns": [],
+                "dimensions": [],
+                "measures": [],
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
@@ -333,39 +336,6 @@
         "width": 8,
         "height": 8,
         "widget": {
-          "title": "Postgres availability [5m] %",
-          "scorecard": {
-            "gaugeView": {
-              "lowerBound": 0,
-              "upperBound": 100
-            },
-            "thresholds": [
-              {
-                "color": "YELLOW",
-                "direction": "BELOW",
-                "label": "",
-                "value": 90
-              },
-              {
-                "color": "RED",
-                "direction": "BELOW",
-                "label": "",
-                "value": 66
-              }
-            ],
-            "timeSeriesQuery": {
-              "prometheusQuery": "sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\",metadata_system_ready_status=\"True\"}[5m])) / sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\"}[5m])) * 100",
-              "unitOverride": ""
-            }
-          }
-        }
-      },
-      {
-        "xPos": 30,
-        "yPos": 61,
-        "width": 8,
-        "height": 8,
-        "widget": {
           "title": "Postgres availability [15m] %",
           "scorecard": {
             "gaugeView": {
@@ -387,19 +357,19 @@
               }
             ],
             "timeSeriesQuery": {
-              "prometheusQuery": "sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\",metadata_system_ready_status=\"True\"}[15m])) / sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\"}[15m])) * 100",
+              "prometheusQuery": "avg(avg_over_time(pg_up{${Cluster}}[15m])) * 100",
               "unitOverride": ""
             }
           }
         }
       },
       {
-        "xPos": 38,
+        "xPos": 30,
         "yPos": 61,
-        "width": 9,
+        "width": 8,
         "height": 8,
         "widget": {
-          "title": "Postgres availability [1d] %",
+          "title": "Postgres availability [30m] %",
           "scorecard": {
             "gaugeView": {
               "lowerBound": 0,
@@ -420,7 +390,40 @@
               }
             ],
             "timeSeriesQuery": {
-              "prometheusQuery": "sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\",metadata_system_ready_status=\"True\"}[1d])) / sum(count_over_time(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\"}[1d])) * 100",
+              "prometheusQuery": "avg(avg_over_time(pg_up{${Cluster}}[30m])) * 100",
+              "unitOverride": ""
+            }
+          }
+        }
+      },
+      {
+        "xPos": 38,
+        "yPos": 61,
+        "width": 9,
+        "height": 8,
+        "widget": {
+          "title": "Postgres availability total %",
+          "scorecard": {
+            "gaugeView": {
+              "lowerBound": 0,
+              "upperBound": 100
+            },
+            "thresholds": [
+              {
+                "color": "YELLOW",
+                "direction": "BELOW",
+                "label": "",
+                "value": 90
+              },
+              {
+                "color": "RED",
+                "direction": "BELOW",
+                "label": "",
+                "value": 66
+              }
+            ],
+            "timeSeriesQuery": {
+              "prometheusQuery": "avg(avg_over_time(pg_up{${Cluster}}[1d])) * 100",
               "unitOverride": ""
             }
           }
@@ -432,7 +435,7 @@
         "width": 22,
         "height": 8,
         "widget": {
-          "title": "Postgres cluster healthy pods %",
+          "title": "Postgres workload availability",
           "xyChart": {
             "chartOptions": {
               "mode": "COLOR"
@@ -443,7 +446,7 @@
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
                   "prometheusQuery": "count(rate(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\",metadata_system_ready_status=\"True\"}[10s])) / max(count(rate(kubernetes_io:pod_network_received_bytes_count{cluster_name=~\"${Cluster.value}\",monitored_resource=\"k8s_pod\",namespace_name=\"postgres\",metadata_user_application=\"spilo\"}[${__interval}]))) * 100",
-                  "unitOverride": ""
+                  "unitOverride": "%"
                 }
               }
             ],
