@@ -357,7 +357,7 @@
               }
             ],
             "timeSeriesQuery": {
-              "prometheusQuery": "avg(avg_over_time(pg_up{${Cluster}}[15m])) * 100",
+              "prometheusQuery": "min(avg_over_time(pg_up{${Cluster}}[15m])) * 100",
               "unitOverride": ""
             }
           }
@@ -390,7 +390,7 @@
               }
             ],
             "timeSeriesQuery": {
-              "prometheusQuery": "avg(avg_over_time(pg_up{${Cluster}}[30m])) * 100",
+              "prometheusQuery": "min(avg_over_time(pg_up{${Cluster}}[30m])) * 100",
               "unitOverride": ""
             }
           }
@@ -423,7 +423,7 @@
               }
             ],
             "timeSeriesQuery": {
-              "prometheusQuery": "avg(avg_over_time(pg_up{${Cluster}}[1d])) * 100",
+              "prometheusQuery": "min(avg_over_time(pg_up{${Cluster}}[1d])) * 100",
               "unitOverride": ""
             }
           }

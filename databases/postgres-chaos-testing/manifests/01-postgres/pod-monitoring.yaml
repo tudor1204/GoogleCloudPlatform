@@ -24,6 +24,6 @@ spec:
       cluster-name: my-cluster
   endpoints:
   - port: 9187
-    interval: 30s
+    interval: 5s
     path: /metrics
 # [END gke_databases_postgres_chaos_testing_01_postgres_monitoring]
