@@ -49,7 +49,7 @@ spec:
         - --num-shard=1
         env:
         - name: MODEL_ID
-          value: google/gemma-2b
+          value: google/codegemma-1.1-2b
         - name: PORT
           value: "8000"
         - name: HUGGING_FACE_HUB_TOKEN
