@@ -62,6 +62,22 @@ module "project-iam-bindings-bucket" {
   depends_on = [module.service-account-bucket]
 }
 
+data "google_storage_project_service_account" "gcs_account" {
+  project      = var.project_id
+}
+
+module "project-iam-bindings-cloud-storage" {
+  source     = "terraform-google-modules/iam/google//modules/projects_iam"
+  version    = "~> 7.0"
+
+  projects   = ["${var.project_id}"]
+  mode       = "additive"
+
+  bindings = {
+    "roles/pubsub.publisher"          = ["serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"] 
+  } 
+}
+
 output "bucket_name" {
   value = module.cloud-storage.name
 }
