@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements.in
 #
-joblib==1.4.0
+joblib==1.4.2
     # via scikit-learn
 numpy==1.26.4
     # via
