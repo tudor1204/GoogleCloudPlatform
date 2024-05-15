@@ -31,13 +31,13 @@ spec:
     spec:
       containers:
       - name: gradio
-        image: us-docker.pkg.dev/google-samples/containers/gke/gradio-app:v1.0.0
+        image: us-docker.pkg.dev/google-samples/containers/gke/gradio-app:v1.0.3
         resources:
           requests:
-            cpu: "512m"
+            cpu: "250m"
             memory: "512Mi"
           limits:
-            cpu: "1"
+            cpu: "500m"
             memory: "512Mi"
         env:
         - name: CONTEXT_PATH
