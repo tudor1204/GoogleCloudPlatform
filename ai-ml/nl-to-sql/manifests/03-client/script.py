@@ -17,7 +17,10 @@ db_schema_formatted=tabulate(db_schema.fetchall(), headers=colnames, tablefmt='p
 
 llm = HuggingFaceTextGenInference(
     inference_server_url=os.environ.get("LLM_ENDPOINT"),
-    temperature=0.9,
+    temperature=0.5,
+    top_k=10,
+    top_p=0.5,
+    repetition_penalty=1.03,
 )
 
 sql_prompt_template = PromptTemplate.from_template("""
@@ -39,8 +42,13 @@ User query: {query}
 Postgresql reply:
 {postgres_reply}
 
-Please prepare and return the answer, based on the user question and Postgresql reply. It should be easy to understand your answer. Don't add any introductory words, start answering right away. Keep your answer to a one or two sentences (if possible) that specifically answers the user's question. If not - try to keep the answer short, summarizing the returned data.
-If you do not know the answer or Postgres reply is empty, response with "I don't know".
+Base your answer on the provided user query and Postgresql reply.
+Generate a draft response using the selected information.
+It should be easy to understand your answer. Don't add any introductory words, start answering right away. 
+Keep your answer to a one or two sentences (if possible) that specifically answers the user's question. If not - try to keep the answer short, summarising the returned data.
+Generate your final response after adjusting it to increase accuracy and relevance.
+Now only show your final response!
+If you do not know the answer or context is not relevant, response with "I don't know".
 <|eot_id|><|start_header_id|>assistant<|end_header_id|>
 """)
 
@@ -52,13 +60,18 @@ def handle_query(query):
         print("Unable to process query: ", query)
         return "Try another query"
     colnames = [desc[0] for desc in postgres_reply.description]
-    postgres_reply_formatted=tabulate(postgres_reply.fetchall(), headers=colnames, tablefmt='psql')
+    postgres_reply_data = postgres_reply.fetchall()
+    if postgres_reply_data == []:
+        return "Received empty SQL answer, try another query"
+    postgres_reply_formatted=tabulate(postgres_reply_data, headers=colnames, tablefmt='psql')
     # debug section
-    # print(sql_query)
-    # print(postgres_reply_formatted)
+    print(sql_query)
+    print(postgres_reply_formatted)
     # end of debug section
     return llm.invoke(final_prompt_template.format(db_schema=db_schema_formatted, query=query, postgres_reply=postgres_reply_formatted))
 
 print(handle_query("Please calculate the total sum of all John transactions."))
 print(handle_query("Which woman spent more money in 2023 and how much?"))
 print(handle_query("Who let the dogs out?"))
+print(handle_query("Who bought more electronics in last month?"))
+print(handle_query("Who bought more electronics in 10 last months?"))
