@@ -65,8 +65,8 @@ def handle_query(query):
         return "Received empty SQL answer, try another query"
     postgres_reply_formatted=tabulate(postgres_reply_data, headers=colnames, tablefmt='psql')
     # debug section
-    print(sql_query)
-    print(postgres_reply_formatted)
+    # print(sql_query)
+    # print(postgres_reply_formatted)
     # end of debug section
     return llm.invoke(final_prompt_template.format(db_schema=db_schema_formatted, query=query, postgres_reply=postgres_reply_formatted))
 
