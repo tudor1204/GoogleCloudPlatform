@@ -26,16 +26,6 @@ spec:
     command: [ "/bin/bash", "-c", "--" ]
     args: [ "while true; do sleep 30; done;" ]
     env:
-    - name: CLIENTPASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: myuser.my-cluster.credentials.postgresql.acid.zalan.do
-          key: password
-    - name: CLIENTUSERNAME
-      valueFrom:
-        secretKeyRef:
-          name: myuser.my-cluster.credentials.postgresql.acid.zalan.do
-          key: username
     - name: OWNERPASSWORD
       valueFrom:
         secretKeyRef:
@@ -46,4 +36,10 @@ spec:
         secretKeyRef:
           name: mydatabaseowner.my-cluster.credentials.postgresql.acid.zalan.do
           key: username
+    - name: POSTGRES_URL
+      value: my-cluster.postgres
+    - name: DATABASE_NAME
+      value: mydatabase
+    - name: LLM_ENDPOINT
+      value: http://llm-service.llm:8000
 
