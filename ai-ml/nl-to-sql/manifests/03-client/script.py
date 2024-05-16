@@ -45,7 +45,7 @@ Postgresql reply:
 Base your answer on the provided user query and Postgresql reply.
 Generate a draft response using the selected information.
 It should be easy to understand your answer. Don't add any introductory words, start answering right away. 
-Keep your answer to a one or two sentences (if possible) that specifically answers the user's question. If not - try to keep the answer short, summarising the returned data.
+Keep your answer to a one or two sentences (if possible) that specifically answers the user's question. If not - try to keep the answer short, summarizing the returned data.
 Generate your final response after adjusting it to increase accuracy and relevance.
 Now only show your final response!
 If you do not know the answer or context is not relevant, response with "I don't know".
