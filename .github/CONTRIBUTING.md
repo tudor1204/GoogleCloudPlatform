@@ -24,6 +24,7 @@ All new code samples require the following:
   [[Template](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/new-samples-templates/README.md)]
   - There should only be one source of truth for sample instructions (i.e. don't duplicate
     instructions in the README that are or will be made available elsewhere).
+- **Code** that has been tested end-to-end and follows the [Google style guides](https://google.github.io/styleguide/).
 - **GitHub Action workflow** that tests the sample code. At minimum, this should
   dry-run any container images or Terraform scripts and pass without any errors.
   [[Template](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/main/.github/new-samples-templates/workflow.yml)]
