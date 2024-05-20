@@ -47,10 +47,9 @@ spec:
     value: "postgres-operator"
     effect: NoSchedule
   nodeAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-    - weight: 1
-      preference:
-        matchExpressions:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
         - key: "app.stateful/component"
           operator: In
           values:

@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: upload-dataset
+spec:
+  ttlSecondsAfterFinished: 120
+  template:
+    spec:
+      containers:
+      - name: psql
+        image: postgres:15.7
+        command: [ "/bin/bash", "-c" ]
+        args: [ "/usr/local/dataset/dataset.sh" ]
+        env:
+        - name: OWNERPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mydatabaseowner.my-cluster.credentials.postgresql.acid.zalan.do
+              key: password
+        - name: OWNERUSERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mydatabaseowner.my-cluster.credentials.postgresql.acid.zalan.do
+              key: username
+        - name: POSTGRES_URL
+          value: my-cluster.postgres
+        - name: DATABASE_NAME
+          value: mydatabase
+        volumeMounts:
+        - name: customers-dataset
+          mountPath: /usr/local/dataset
+      volumes:
+      - name: customers-dataset
+        configMap:
+          name: customers-dataset
+          defaultMode: 0500
+      restartPolicy: Never
