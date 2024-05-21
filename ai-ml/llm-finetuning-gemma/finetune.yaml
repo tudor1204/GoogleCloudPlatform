@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_aiml_llm_finetune_gemma_single_node_yaml]
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -35,7 +36,7 @@ spec:
         - name: MODEL_NAME
           value: "google/gemma-2b"
         - name: NEW_MODEL
-          value: "gemma-2b-sql-kubecon-eu-2024"
+          value: "gemma-2b-sql-finetuned"
         - name: LORA_R
           value: "8"
         - name: LORA_ALPHA
@@ -67,3 +68,4 @@ spec:
       nodeSelector:
         cloud.google.com/gke-accelerator: nvidia-l4
       restartPolicy: OnFailure
+# [END gke_aiml_llm_finetune_gemma_single_node_yaml]
