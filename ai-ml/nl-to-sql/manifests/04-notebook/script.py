@@ -64,7 +64,7 @@ def postgres_query(query):
     return postgres_reply_formatted
 
 
-def handle_query(query):
+def llm_query(query):
     sql_prompt_value=sql_prompt_template.format(db_schema=db_schema_formatted, query=query)
     sql_query=llm.invoke(sql_prompt_value)
     # print(sql_query)
@@ -76,9 +76,9 @@ def handle_query(query):
     return llm.invoke(final_prompt_value)
 
 
-print(handle_query("Please calculate the total sum of all John transactions."))
-print(handle_query("Which woman spent more money in 2023 and how much?"))
-print(handle_query("Who let the dogs out?"))
-print(handle_query("Who bought more electronics in last month?"))
-print(handle_query("Who bought more electronics in 10 last months?"))
-print(handle_query("Give me top 3 buyers of clothing. How much money each person spent?"))
+print(llm_query("Please calculate the total sum of all John transactions."))
+print(llm_query("Which woman spent more money in 2023 and how much?"))
+print(llm_query("Who let the dogs out?"))
+print(llm_query("Who bought more electronics in last month?"))
+print(llm_query("Who bought more electronics in 10 last months?"))
+print(llm_query("Give me top 3 buyers of clothing. How much money each person spent?"))
