@@ -26,7 +26,7 @@ spec:
     metadata:
       labels:
         app: tgi-runtime
-        ai.gke.io/model: gemma-2b-it
+        ai.gke.io/model: llama-3-8b
         ai.gke.io/inference-server: text-generation-inference
         examples.ai.gke.io/source: user-guide
     spec:
