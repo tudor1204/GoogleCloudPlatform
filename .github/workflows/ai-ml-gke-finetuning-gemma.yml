@@ -17,5 +17,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: build container for llm-finetuning-gemma tutorial
         run: |
-          cd ai-ml/llm-fineturning-gemma/
+          cd ai-ml/llm-finetuning-gemma/
           docker build --tag finetune .
