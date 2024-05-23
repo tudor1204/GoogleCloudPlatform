@@ -6,9 +6,9 @@ from langchain_core.prompts import PromptTemplate
 
 conn = psycopg.connect(
     dbname=os.environ.get("DATABASE_NAME"),
-    host=os.environ.get("POSTGRES_URL"),
-    user=os.environ.get("OWNERUSERNAME"),
-    password=os.environ.get("OWNERPASSWORD"),
+    host=os.environ.get("POSTGRES_ENDPOINT"),
+    user=os.environ.get("DBUSERNAME"),
+    password=os.environ.get("DBPASSWORD"),
     autocommit=True)
 
 db_schema = conn.execute("SELECT table_name, column_name as Columns, data_type as DataTypes FROM  information_schema.columns where table_name NOT LIKE 'pg_stat%' AND table_schema='public' order by table_name,column_name;")
