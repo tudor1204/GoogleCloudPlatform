@@ -29,7 +29,7 @@ spec:
         image: us-east1-docker.pkg.dev/PROJECT_ID/gke-llm/max-diffusion-web:latest
         env:
           - name: SERVER_URL
-            value: "http://CLusterIP:8000"
+            value: "http://ClusterIP:8000"
         resources:
           requests:
             memory: "128Mi"
