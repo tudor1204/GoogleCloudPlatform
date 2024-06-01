@@ -30,8 +30,8 @@ spec:
         cloud.google.com/gke-tpu-accelerator: tpu-v5-lite-podslice
         #cloud.google.com/gke-spot: "true"
       volumes:
-       - name: dshm
-         emptyDir:
+      - name: dshm
+        emptyDir:
               medium: Memory
       containers:
       - name: serve-stable-diffusion
