@@ -26,7 +26,7 @@ variable "region" {
 variable "node_location" {
   description = "Node location for GPU node pool - please check GPUs node availability in official documentation: https://cloud.google.com/compute/docs/regions-zones"
   type        = string
-  default     = "us-central1-a,us-central1-b"
+  default     = ""
   
 }
 variable "cluster_prefix" {

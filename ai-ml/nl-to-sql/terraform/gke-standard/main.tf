@@ -63,16 +63,6 @@ module "sqlgen_cluster" {
       "app.stateful/component" = "postgres"
     }
   }
-  node_pools_taints = {
-    all = []
-    postgres-pool = [
-      {
-        key    = "app.stateful/component"
-        value  = "postgres"
-        effect = "NO_SCHEDULE"
-      }
-    ]
-  }
 }
 
 output "kubectl_connection_command" {
