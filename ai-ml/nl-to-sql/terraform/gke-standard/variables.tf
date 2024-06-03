@@ -49,7 +49,7 @@ variable "node_disk_type" {
 
 variable "node_disk_size" {
   description = "The persistent disk size for node instances"
-  default     = 20
+  default     = 100
   type        = number
 }
 

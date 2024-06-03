@@ -44,17 +44,22 @@ module "sqlgen_cluster" {
       auto_repair     = true
     },
     {
-      name            = "gpu-pool"
-      disk_size_gb    = var.node_disk_size
-      disk_type       = "pd-balanced"
-      node_locations  = var.node_location
-      autoscaling     = true
-      min_count       = 0
-      max_count       = var.autoscaling_max_count
-      max_surge       = 1
-      max_unavailable = 0
-      machine_type    = "g2-standard-4"
-      auto_repair     = true
+      name                = "gpu-pool"
+      disk_size_gb        = var.node_disk_size
+      disk_type           = "pd-balanced"
+      node_locations      = var.node_location
+      autoscaling         = true
+      min_count           = 0
+      max_count           = var.autoscaling_max_count
+      max_surge           = 1
+      max_unavailable     = 0
+      machine_type        = "g2-standard-4"
+      auto_repair         = true
+      accelerator_count   = 1
+      accelerator_type    = "nvidia-l4"
+      gpu_driver_version  = "LATEST"
+      
+
     }
   ]
   node_pools_labels = {
@@ -62,6 +67,17 @@ module "sqlgen_cluster" {
     postgres-pool = {
       "app.stateful/component" = "postgres"
     }
+  }
+
+  node_pools_taints = {
+    all = []
+    postgres-pool = [
+      {
+        key    = "app.stateful/component"
+        value  = "postgres"
+        effect = "NO_SCHEDULE"
+      }
+    ]
   }
 }
 

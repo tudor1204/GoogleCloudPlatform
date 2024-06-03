@@ -37,12 +37,12 @@ spec:
           requests:
             cpu: "2"
             memory: "7Gi"
-            ephemeral-storage: "20Gi"
+            ephemeral-storage: "100Gi"
             nvidia.com/gpu: 1
           limits:
             cpu: "2"
             memory: "7Gi"
-            ephemeral-storage: "20Gi"
+            ephemeral-storage: "100Gi"
             nvidia.com/gpu: 1
         args:
         - --model-id=$(MODEL_ID)
@@ -65,6 +65,11 @@ spec:
       - name: dshm
         emptyDir:
           medium: Memory
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Equal"
+        value: "present"
+        effect: NoSchedule
       nodeSelector:
         cloud.google.com/gke-accelerator: nvidia-l4
 ---
