@@ -44,7 +44,7 @@ spec:
   tolerations:
   - key: "app.stateful/component"
     operator: "Equal"
-    value: "postgres-operator"
+    value: "postgres"
     effect: NoSchedule
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
@@ -53,7 +53,7 @@ spec:
         - key: "app.stateful/component"
           operator: In
           values:
-          - "postgres-operator"
+          - "postgres"
   resources:
     requests:
       cpu: "1"
