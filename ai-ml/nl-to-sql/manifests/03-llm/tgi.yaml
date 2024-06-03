@@ -37,12 +37,12 @@ spec:
           requests:
             cpu: "2"
             memory: "7Gi"
-            ephemeral-storage: "100Gi"
+            ephemeral-storage: "40Gi"
             nvidia.com/gpu: 1
           limits:
             cpu: "2"
             memory: "7Gi"
-            ephemeral-storage: "100Gi"
+            ephemeral-storage: "40Gi"
             nvidia.com/gpu: 1
         args:
         - --model-id=$(MODEL_ID)
