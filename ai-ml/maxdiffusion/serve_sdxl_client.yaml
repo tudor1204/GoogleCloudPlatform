@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# [START gke_ai_ml_maxdiffusion_webapp_deployment]
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -51,3 +52,4 @@ spec:
   ports:
   - port: 8080
     targetPort: 5000
+# [END gke_ai_ml_maxdiffusion_webapp_deployment]
