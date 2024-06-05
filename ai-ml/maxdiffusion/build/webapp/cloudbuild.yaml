@@ -14,7 +14,7 @@
 # [START gke_ai_ml_maxdiffusion_build_webapp_cloudbuild]
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/gke-llm/max-diffusion-web:latest', '.' ]
+  args: [ 'build', '-t', '$LOCATION-docker.pkg.dev/$PROJECT_ID/gke-llm/max-diffusion-web:latest', '.' ]
 images:
-- 'us-east1-docker.pkg.dev/$PROJECT_ID/gke-llm/max-diffusion-web:latest'
+- '$LOCATION-docker.pkg.dev/$PROJECT_ID/gke-llm/max-diffusion-web:latest'
 # [END gke_ai_ml_maxdiffusion_build_webapp_cloudbuild]

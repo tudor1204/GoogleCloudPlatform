@@ -36,7 +36,7 @@ spec:
               medium: Memory
       containers:
       - name: serve-stable-diffusion
-        image: us-east1-docker.pkg.dev/PROJECT_ID/gke-llm/max-diffusion:latest
+        image: REGION-docker.pkg.dev/PROJECT_ID/gke-llm/max-diffusion:latest
         env:
         - name: MODEL_NAME
           value: 'stable_diffusion'
