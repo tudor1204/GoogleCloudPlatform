@@ -23,9 +23,9 @@ import (
 	"time"
 
 	gce "cloud.google.com/go/compute/metadata"
+	monitoring "cloud.google.com/go/monitoring/apiv3"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	"google.golang.org/api/monitoring/v3"
 )
 
 var (

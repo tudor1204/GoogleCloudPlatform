@@ -25,10 +25,10 @@ import (
 	"strings"
 
 	gce "cloud.google.com/go/compute/metadata"
+	monitoring "cloud.google.com/go/monitoring/apiv3"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	monitoring "google.golang.org/api/monitoring/v3"
 )
 
 // SD Dummy Exporter is a testing utility that exports a metric of constant value to Stackdriver
