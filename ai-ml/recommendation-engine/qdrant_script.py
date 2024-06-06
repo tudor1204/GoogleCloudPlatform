@@ -52,7 +52,7 @@ def format_data(documents):
     return result
 
 #declare AI stuff
-embeddings = VertexAIEmbeddings("textembedding-gecko@001")
+embeddings = VertexAIEmbeddings("textembedding-gecko@latest")
 llm = VertexAI(model_name="gemini-pro")
 
 #qdrant part
