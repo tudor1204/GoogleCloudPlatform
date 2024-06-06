@@ -14,10 +14,10 @@ spec:
     args: [ "while true; do sleep 30; done;" ]
     resources:
       requests:
-        memory: "4500Mi"
+        memory: "1024Mi"
         cpu: "1"
       limits:
-        memory: "4500Mi"
+        memory: "1024Mi"
         cpu: "1"
     env:
     - name: QDRANT_APIKEY 
