@@ -2,7 +2,7 @@ google-cloud-storage==2.16.0
 google-cloud-aiplatform==1.53.0
 langchain==0.2.1
 langchain-community==0.2.1
-langchain-google-vertexai==0.1.5
+langchain-google-vertexai==1.0.5
 elasticsearch==8.13.2
 pypdf==3.17.4
 click==8.1.7
