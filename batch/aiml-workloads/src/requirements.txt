@@ -19,9 +19,9 @@ pytz==2024.1
     # via pandas
 redis==5.0.4
     # via -r requirements.in
-scikit-learn==1.4.2
+scikit-learn==1.5.0
     # via -r requirements.in
-scipy==1.13.0
+scipy==1.13.1
     # via scikit-learn
 six==1.16.0
     # via python-dateutil
