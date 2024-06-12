@@ -43,7 +43,7 @@ spec:
 # [END container_custom_metrics_prometheus_deployment]
 # [END gke_prometheus_to_sd_gmp_custom_metrics_prometheus_sd_gmp_deployment_custom_metric_prometheus_sd_gmp]
 ---
-# [START gke_prometheus_to_sd_gmp_custom_metrics_prometheus_sd_gmp_pod_monitoring_prometheus-to-prometheus]
+# [START gke_prometheus_to_sd_gmp_custom_metrics_prometheus_sd_gmp_pod_monitoring_custom_metric_prometheus_sd_gmp]
 apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
@@ -56,4 +56,4 @@ spec:
   - port: 8080
     path: /metrics
     interval: 60s
-# [END gke_prometheus_to_sd_gmp_custom_metrics_prometheus_sd_gmp_pod_monitoring_prometheus-to-prometheus]
+# [END gke_prometheus_to_sd_gmp_custom_metrics_prometheus_sd_gmp_pod_monitoring_custom_metric_prometheus_sd_gmp]
