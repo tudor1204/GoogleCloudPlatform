@@ -1,4 +1,4 @@
-module prometheus-to-sd
+module prometheus-to-sd-gmp
 
 go 1.21
 
