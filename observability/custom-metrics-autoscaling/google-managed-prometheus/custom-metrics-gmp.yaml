@@ -55,5 +55,5 @@ spec:
   endpoints:
   - port: 8080
     path: /metrics
-    interval: 60s
+    interval: 15s
 # [END gke_google_managed_prometheus_custom_metrics_gmp_pod_monitoring_custom_metrics_gmp]
