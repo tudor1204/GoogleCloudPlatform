@@ -1,4 +1,4 @@
-module prometheus-to-sd-gmp
+module google-managed-prometheus
 
 go 1.21
 

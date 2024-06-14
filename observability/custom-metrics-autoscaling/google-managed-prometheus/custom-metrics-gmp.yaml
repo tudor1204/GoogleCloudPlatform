@@ -12,24 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_prometheus_to_sd_gmp_custom_metrics_prometheus_sd_gmp_deployment_custom_metric_prometheus_sd_gmp]
+# [START gke_google_managed_prometheus_custom_metrics_gmp_deployment_custom_metrics_gmp]
 # [START container_custom_metrics_prometheus_deployment]
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: custom-metric-prometheus-sd-gmp
-  name: custom-metric-prometheus-sd-gmp
+    run: custom-metrics-gmp
+  name: custom-metrics-gmp
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: custom-metric-prometheus-sd-gmp
+      run: custom-metrics-gmp
   template:
     metadata:
       labels:
-        run: custom-metric-prometheus-sd-gmp
+        run: custom-metrics-gmp
     spec:
       containers:
       # sample container generating custom metrics
@@ -41,9 +41,9 @@ spec:
         - --metric-value=40
         - --port=8080
 # [END container_custom_metrics_prometheus_deployment]
-# [END gke_prometheus_to_sd_gmp_custom_metrics_prometheus_sd_gmp_deployment_custom_metric_prometheus_sd_gmp]
+# [END gke_google_managed_prometheus_custom_metrics_gmp_deployment_custom_metrics_gmp]
 ---
-# [START gke_prometheus_to_sd_gmp_custom_metrics_prometheus_sd_gmp_pod_monitoring_custom_metric_prometheus_sd_gmp]
+# [START gke_google_managed_prometheus_custom_metrics_gmp_pod_monitoring_custom_metrics_gmp]
 apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
@@ -51,9 +51,9 @@ metadata:
 spec:
   selector:
     matchLabels:
-      run: "custom-metric-prometheus-sd-gmp"
+      run: custom-metrics-gmp
   endpoints:
   - port: 8080
     path: /metrics
     interval: 60s
-# [END gke_prometheus_to_sd_gmp_custom_metrics_prometheus_sd_gmp_pod_monitoring_custom_metric_prometheus_sd_gmp]
+# [END gke_google_managed_prometheus_custom_metrics_gmp_pod_monitoring_custom_metrics_gmp]

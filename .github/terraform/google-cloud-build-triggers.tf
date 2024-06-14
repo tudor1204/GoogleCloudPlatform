@@ -87,11 +87,11 @@ resource "google_cloudbuild_trigger" "custom-metrics-direct-to-sd" {
     }
 }
 
-resource "google_cloudbuild_trigger" "custom-metrics-prometheus-to-sd-gmp" {
-    name = "kubernetes-engine-samples-custom-metrics-prometheus-to-sd-gmp"
+resource "google_cloudbuild_trigger" "custom-metrics-gmp" {
+    name = "kubernetes-engine-samples-custom-metrics-gmp"
     description = local.trigger_description
-    filename = "observability/custom-metrics-autoscaling/prometheus-to-sd-gmp/cloudbuild.yaml"
-    included_files = ["observability/custom-metrics-autoscaling/prometheus-to-sd-gmp/**"]
+    filename = "observability/custom-metrics-autoscaling/google-managed-prometheus/cloudbuild.yaml"
+    included_files = ["observability/custom-metrics-autoscaling/google-managed-prometheus/**"]
 
     github {
         owner = "GoogleCloudPlatform"
