@@ -10,6 +10,4 @@ RUN pip install -r requirements.txt
 RUN pip install git+https://github.com/google/maxdiffusion.git
 COPY main.py ./
 EXPOSE 8000
-#CMD ["gunicorn", "--bind", ":8000", "--workers", "1", "main:app","--timeout","600"]
-#CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 ENTRYPOINT ["python", "main.py"]
