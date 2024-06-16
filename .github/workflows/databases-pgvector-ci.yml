@@ -29,11 +29,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Validate Cloud Storage module TF for Pgvector
-        run: |
-          cd databases/postgres-pgvector/terraform/cloud-storage
-          terraform init
-          terraform validate
       - name: Build chatbot app container
         run: |
           cd databases/postgres-pgvector/docker/chatbot
