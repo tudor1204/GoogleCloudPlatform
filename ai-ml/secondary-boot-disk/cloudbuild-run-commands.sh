@@ -4,8 +4,7 @@ export PROJECT_ID=$(gcloud config get project) \
 && export IMAGE_NAME=gemma-2b-it-test-cropped-v2\
 && export MODEL_PATH=gemma-2b-it
 
-gcloud builds submit --config cloudbuild-disk.yaml \
-  --no-source
+gcloud builds submit --config cloudbuild-disk.yaml --no-source
 #  --service-account "projects/$PROJECT_ID/serviceAccounts/compute-default@or2-msq-go2-gkes-t1iylu.iam.gserviceaccount.com"
 
 gcloud builds submit \
@@ -17,10 +16,7 @@ gcloud builds submit \
 export PJCT_NMBR=$(gcloud projects list --filter="$PROJECT_ID" --format="value(PROJECT_NUMBER)")
 gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
     --member="serviceAccount:$PJCT_NMBR@cloudbuild.gserviceaccount.com" \
-    --role="roles/compute.instanceAdmin" \
-    --condition=None
-gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
-    --member="serviceAccount:$PJCT_NMBR@cloudbuild.gserviceaccount.com" \
+    --role="roles/compute.instanceAdmin.v1" \
     --role="roles/iam.serviceAccountUser" \
     --condition=None
 

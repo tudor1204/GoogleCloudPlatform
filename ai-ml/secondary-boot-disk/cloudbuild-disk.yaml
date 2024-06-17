@@ -12,10 +12,11 @@ steps:
     - --zone=us-central1-a
     - --gcs-path=gs://kfilatau-cloud-build-logs/
     - --disk-size-gb=100
-    - --service-account=compute-default@or2-msq-go2-gkes-t1iylu.iam.gserviceaccount.com
-    - --container-image=us-central1-docker.pkg.dev/or2-msq-go2-gkes-t1iylu/kfilatau-test-repo/gemma-2b-it-test-cropped
+    - --timeout=120m
+    - --container-image=us-central1-docker.pkg.dev/or2-msq-go2-gkes-t1iylu/kfilatau-test-repo/gemma-2b-it-test-cropped:latest
     - --image-pull-auth=ServiceAccountToken
 
+timeout: 7200s
 logsBucket: 'gs://kfilatau-cloud-build-logs'
 
 options:
