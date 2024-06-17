@@ -14,7 +14,7 @@ steps:
     - --disk-size-gb=100
     - --service-account=compute-default@or2-msq-go2-gkes-t1iylu.iam.gserviceaccount.com
     - --container-image=us-central1-docker.pkg.dev/or2-msq-go2-gkes-t1iylu/kfilatau-test-repo/gemma-2b-it-test-cropped
-
+    - --image-pull-auth=ServiceAccountToken
 
 logsBucket: 'gs://kfilatau-cloud-build-logs'
 
