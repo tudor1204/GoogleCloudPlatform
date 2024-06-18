@@ -78,4 +78,4 @@ spec:
     - protocol: TCP
       port: 8000
       targetPort: 8000
-# [END gke_ai_ml_llm_serving_gemma_vllm_2b_deployment]
+# [END gke_ai_ml_llm_serving_gemma_1_1_vllm_2b_deployment]
