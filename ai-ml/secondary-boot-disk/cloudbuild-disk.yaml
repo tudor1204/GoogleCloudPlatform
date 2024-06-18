@@ -7,17 +7,17 @@ steps:
   args:
     - 'run'
     - './cli'
-    - --project-name=or2-msq-go2-gkes-t1iylu
-    - --image-name=gemma-2b-it-test-cropped-image
-    - --zone=us-central1-a
-    - --gcs-path=gs://kfilatau-cloud-build-logs/
+    - --project-name=$PROJECT_ID
+    - --image-name=${_DISK_IMAGE}
+    - --zone=${_ZONE}
+    - --gcs-path=${_BUCKET_NAME}
     - --disk-size-gb=100
     - --timeout=120m
-    - --container-image=us-central1-docker.pkg.dev/or2-msq-go2-gkes-t1iylu/kfilatau-test-repo/gemma-2b-it-test-cropped:latest
+    - --container-image=${_CONTAINER_IMAGE}
     - --image-pull-auth=ServiceAccountToken
 
 timeout: 7200s
-logsBucket: 'gs://kfilatau-cloud-build-logs'
+#logsBucket: 'gs://kfilatau-cloud-build-logs'
 
-options:
-  logging: GCS_ONLY
+  #options:
+  #  logging: GCS_ONLY

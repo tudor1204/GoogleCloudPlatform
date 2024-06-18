@@ -4,7 +4,20 @@ export PROJECT_ID=$(gcloud config get project) \
 && export IMAGE_NAME=gemma-2b-it-test-cropped-v2\
 && export MODEL_PATH=gemma-2b-it
 
-gcloud builds submit --config cloudbuild-disk.yaml --no-source
+
+
+
+
+
+export DISK_IMAGE=gemma-2b-it-test-cropped-image
+export CONTAINER_IMAGE=us-central1-docker.pkg.dev/or2-msq-go2-gkes-t1iylu/kfilatau-test-repo/gemma-2b-it-test-cropped:latest
+export BUCKET_NAME=gs://kfilatau-cloud-build-logs/
+export ZONE=us-central1-a
+
+
+gcloud builds submit --config cloudbuild-disk.yaml --no-source \
+  --substitutions=_DISK_IMAGE=$DISK_IMAGE,_CONTAINER_IMAGE=$CONTAINER_IMAGE,_BUCKET_NAME=$BUCKET_NAME,_ZONE=$ZONE
+
 #  --service-account "projects/$PROJECT_ID/serviceAccounts/compute-default@or2-msq-go2-gkes-t1iylu.iam.gserviceaccount.com"
 
 gcloud builds submit \
