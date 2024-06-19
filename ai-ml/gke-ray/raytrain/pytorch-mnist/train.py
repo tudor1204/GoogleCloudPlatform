@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE: this file was inspired from https://github.com/ray-project/kuberay/blob/master/ray-operator/config/samples/pytorch-mnist/ray_train_pytorch_mnist.py
+
 import os
 from typing import Dict
 from filelock import FileLock

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START gke_ai_ml_gke_ray_raytrain_pytorch_mnist_raycluster]
 apiVersion: ray.io/v1
 kind: RayCluster
 metadata:
@@ -59,3 +60,4 @@ spec:
             requests:
               cpu: 2
               memory: "8Gi"
+# [END gke_ai_ml_gke_ray_raytrain_pytorch_mnist_raycluster]

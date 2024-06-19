@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE: this file was inspired from https://github.com/ray-project/serve_config_examples/blob/master/stable_diffusion/stable_diffusion.py
+
 from io import BytesIO
 
 from fastapi import FastAPI
@@ -21,6 +23,8 @@ import torch
 
 from ray import serve
 from ray.serve.handle import DeploymentHandle
+
+app = FastAPI()
 
 @serve.deployment(num_replicas=1)
 @serve.ingress(app)
@@ -67,5 +71,5 @@ class StableDiffusionV2:
             image = self.pipe(prompt, height=img_size, width=img_size).images[0]
             return image
 
-app = FastAPI()
+
 entrypoint = APIIngress.bind(StableDiffusionV2.bind())
