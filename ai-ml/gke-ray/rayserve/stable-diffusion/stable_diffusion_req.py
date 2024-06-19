@@ -1,7 +1,6 @@
 import requests
 
-# TODO: Set your prompt here
-prompt = "a cute cat is dancing on the grass."
+prompt = "a dog wearing a Kubernetes shirt"
 input = "%20".join(prompt.split(" "))
 resp = requests.get(f"http://127.0.0.1:8000/imagine?prompt={input}")
 

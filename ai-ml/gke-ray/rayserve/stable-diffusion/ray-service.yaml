@@ -6,9 +6,9 @@ spec:
   serveConfigV2: |
     applications:
       - name: stable_diffusion
-        import_path: stable_diffusion.stable_diffusion:entrypoint
+        import_path: ai-ml.gke-ray.rayserve.stable-diffusion.stable_diffusion:entrypoint
         runtime_env:
-          working_dir: "https://github.com/ray-project/serve_config_examples/archive/d6acf9b99ef076a1848f506670e1290a11654ec2.zip"
+          working_dir: "https://github.com/andrewsykim/kubernetes-engine-samples/archive/ray-samples.zip"
           pip: ["diffusers==0.12.1"]
   rayClusterConfig:
     rayVersion: '2.9.0'
@@ -32,18 +32,16 @@ spec:
             resources:
               limits:
                 cpu: "2"
-                memory: "8G"
+                memory: "8Gi"
               requests:
                 cpu: "2"
-                memory: "8G"
+                memory: "8Gi"
     workerGroupSpecs:
-    # The pod replicas in this group typed worker
     - replicas: 1
       minReplicas: 1
-      maxReplicas: 10
+      maxReplicas: 4
       groupName: gpu-group
       rayStartParams: {}
-      # Pod template
       template:
         spec:
           containers:
@@ -52,15 +50,9 @@ spec:
             resources:
               limits:
                 cpu: 4
-                memory: "16G"
+                memory: "16Gi"
                 nvidia.com/gpu: 1
               requests:
                 cpu: 3
-                memory: "12G"
+                memory: "16Gi"
                 nvidia.com/gpu: 1
-          # Please add the following taints to the GPU node.
-          # tolerations:
-          #   - key: "ray.io/node-type"
-          #     operator: "Equal"
-          #     value: "worker"
-          #     effect: "NoSchedule"
