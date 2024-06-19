@@ -55,5 +55,4 @@ class StableDiffusionV2:
             image = self.pipe(prompt, height=img_size, width=img_size).images[0]
             return image
 
-
 entrypoint = APIIngress.bind(StableDiffusionV2.bind())

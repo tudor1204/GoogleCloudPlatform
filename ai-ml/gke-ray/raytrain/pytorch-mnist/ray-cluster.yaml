@@ -1,7 +1,7 @@
 apiVersion: ray.io/v1
 kind: RayCluster
 metadata:
-  name: ray-train-cluster
+  name: pytorch-mnist-cluster
 spec:
   rayVersion: '2.9.0'
   headGroupSpec:

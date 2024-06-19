@@ -8,7 +8,7 @@ spec:
       - name: stable_diffusion
         import_path: ai-ml.gke-ray.rayserve.stable-diffusion.stable_diffusion:entrypoint
         runtime_env:
-          working_dir: "https://github.com/andrewsykim/kubernetes-engine-samples/archive/ray-samples.zip"
+          working_dir: "https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/archive/main.zip"
           pip: ["diffusers==0.12.1"]
   rayClusterConfig:
     rayVersion: '2.9.0'
