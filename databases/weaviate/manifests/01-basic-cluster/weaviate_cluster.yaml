@@ -1,20 +1,9 @@
 image:
-  # registry where weaviate image is stored
   registry: cr.weaviate.io
-  # Tag of weaviate image to deploy
-  # Note: We strongly recommend you overwrite this value in your own values.yaml.
-  # Otherwise a mere upgrade of the chart could lead to an unexpected upgrade
-  # of weaviate. In accordance with Infra-as-code, you should pin this value
-  # down and only change it if you explicitly want to upgrade the Weaviate
-  # version.
   tag: 1.25.0
   repo: semitechnologies/weaviate
-  # Image pull policy: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
   pullPolicy: IfNotPresent
   pullSecrets: []
-
-# overwrite command and args if you want to run specific startup scripts, for
-# example setting the nofile limit
 command: ["/bin/weaviate"]
 args:
   - '--host'
@@ -27,23 +16,6 @@ args:
   - '/weaviate-config/conf.yaml'
   - --read-timeout=60s 
   - --write-timeout=60s
-
-# below is an example that can be used to set an arbitrary nofile limit at
-# startup:
-#
-# command: 
-#   - "/bin/sh"
-# args: 
-#   - "-c"
-#   - "ulimit -n 65535 && /bin/weaviate --host 0.0.0.0 --port 8080 --scheme http --config-file /weaviate-config/conf.yaml"
-
-
-# it is possible to change the sysctl's 'vm.max_map_count' using initContainer for Weaviate,
-# the init Container runs before Weaviate Container and sets the value for the WHOLE node
-# to the one provided below.
-# it is possible to run additional initContainer before Weaviate is up and running. You can specify the
-# containers as a list in `extraInitContainers`, exactly how they are defined in a kubernetes manifest:
-#   https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 initContainers:
   sysctlInitContainer:
     enabled: true
@@ -55,25 +27,10 @@ initContainers:
       pullPolicy: IfNotPresent
   
   extraInitContainers: {}
-  # - image: some-image
-  #   name: some-name
-
-# Scale replicas of Weaviate. Note that as of v1.8.0 dynamic scaling is limited
-# to cases where no data is imported yet. Scaling down after importing data may
-# break usability. Full dynamic scalability will be added in a future release.
 replicas: 3
-
-# Define how pods will be created. Possible values: OrderedReady | Parallel
-# OrderedReady - pods will be created one after another
-# Parallel - all pods will be created at once
 podManagementPolicy: Parallel
 updateStrategy:
   type: RollingUpdate
-  # This setting is only available in K8s v1.24 and higher.
-  # Setting maxUnavailable to 100% results in removing all of the pods
-  # and re-creating them in parallel all at once.
-  # rollingUpdate:
-  #   maxUnavailable: 100%
 resources: 
    requests:
      cpu: '500m'
@@ -82,54 +39,22 @@ resources:
      cpu: '1000m'
      memory: '1Gi'
 
-# security Context for the Weaviate Pods. The configurations are the same as setting them
-# as described here: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 securityContext: {}
-
-# Security context for the Weaviate container. Override overlapping settings made at the Pod level.
 containerSecurityContext: {}
-
-
-# Add a service account ot the Weaviate pods if you need Weaviate to have permissions to
-# access kubernetes resources or cloud provider resources. For example for it to have
-# access to a backup up bucket, or if you want to restrict Weaviate pod in any way.
-# By default, use the default ServiceAccount
 serviceAccountName:
-
-# Kubernetes Cluster domain name, used for resolving intra-cluster requests, i.e
-# between instances of weaviate.
-# Note: The final '.' on the end of the hostname makes it a FQDN, and is required for
-# DNS to resolve in all kubernetes environments. 
-# See https://github.com/weaviate/weaviate-helm/issues/175 for details.
 clusterDomain: cluster.local.
-
-# The Persistent Volume Claim settings for Weaviate. If there's a
-# storage.fullnameOverride field set, then the default pvc will not be
-# created, instead the one defined in fullnameOverride will be used
 storage:
   size: 32Gi
   storageClassName: "standard"
-
-# The service controls how weaviate is exposed to the outside world. If you
-# don't want a public load balancer, you can also choose 'ClusterIP' to make
-# weaviate only accessible within your cluster.
 service:
   name: weaviate
   ports:
     - name: http
       protocol: TCP
       port: 80
-      # Target port is going to be the same for every port
   type: ClusterIP
-  # optionally set cluster IP if you want to set a static IP
   clusterIP:
   annotations: {}
-
-# The service controls how weaviate gRPC endpoint is exposed to the outside world.
-# If you don't want a public load balancer, you can also choose 'ClusterIP' or `NodePort`
-# to make weaviate gRPC port be only accessible within your cluster.
-# This service is by default enabled but if you don't want it to be deployed in your
-# environment then it can be disabled by setting enabled: false option.
 grpcService:
   enabled: true
   name: weaviate-grpc
@@ -137,30 +62,16 @@ grpcService:
     - name: grpc
       protocol: TCP
       port: 50051
-      # Target port is going to be the same for every port
   type: ClusterIP
-
-  # optionally set cluster IP if you want to set a static IP
   clusterIP:
   annotations: {}
 
-# The service monitor defines prometheus monitoring for a set of services
-# https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
 serviceMonitor:
   enabled: false
   interval: 30s
   scrapeTimeout: 10s
 
-# Adjust liveness, readiness and startup probes configuration
-# below is an example that can be used to switch the probeType to exec command
-# readinessProbe: # (Compatible with liveness, readiness and startup probe configurations)
-#   probeType: exec
-#   probe:
-#     exec:
-#       command: ["/bin/sh", "-c", "wget --spider --server-response --tries=1 --timeout=30 -o /dev/null localhost:8080/v1/.well-known/ready"]
-
 startupProbe:
-  # For kubernetes versions prior to 1.18 startupProbe is not supported thus can be disabled.
   enabled: false
   probeType: httpGet
   probe:
@@ -196,46 +107,9 @@ readinessProbe:
   failureThreshold: 3
   successThreshold: 1
   timeoutSeconds: 3
-
-
 terminationGracePeriodSeconds: 600
 
-# Weaviate Config
-#
-# The following settings allow you to customize Weaviate to your needs, for
-# example set authentication and authorization options. See weaviate docs
-# (https://www.weaviate.io/developers/weaviate/) for all
-# configuration.
-
-  # This configuration allows to add API keys to Weaviate. This configuration allows only
-  # plain text API Keys, if you want to store the API Keys in a Kubernetes secret you can
-  # configure the same configuration with ENV Vars. Read the `env` section below on what
-  # needs to be configured. If using ENV Vars over this make sure to comment out the whole
-  # `apikey` section (as it is by default). ENV Vars has priority over this config.
-  # apikey:
-  #   enabled: false
-  #   # Any number of allowed API Keys as plain text
-  #   allowed_keys:
-  #     - readOnly-plainText-API-Key
-  #     - admin-plainText-API-Key
-  #   # You can either set a single user for all the listed Allowed API keys OR
-  #   # one user per API Key, i.e. length(apikey.allowed_keys) == length(apikey.users) OR
-  #   # length(apikey.users) == 1
-  #   # NOTE: Make sure the lister Users are added to the Authorization as well.
-  #   users:
-  #     - api-key-user-readOnly
-  #     - api-key-user-admin
 authentication:
-#  apikey:
-#    enabled: true
-#    allowed_keys:
-#      - readonly-key
-#      - secr3tk3y
-#    users:
-#      - readonly@example.com
-#      - admin@example.com
-#  anonymous_access:
-#    enabled: false
 authorization:
   admin_list:
     enabled: true
@@ -246,110 +120,24 @@ query_defaults:
   limit: 100
 debug: false
 
-
-# Insert any custom environment variables or envSecrets by putting the exact name
-# and desired value into the settings below. Any env name passed will be automatically
-# set for the statefulSet.
 env:
   CLUSTER_GOSSIP_BIND_PORT: 7000
   CLUSTER_DATA_BIND_PORT: 7001
-
-  # Set RAFT cluster expected number of voter nodes at bootstrap.
-  # By default helm automatically sets this value based on the cluster size.
-  # RAFT_BOOTSTRAP_EXPECT: 1
-
-  # Set RAFT cluster bootstrap timeout (in seconds), default is 90 (seconds)
-  # RAFT_BOOTSTRAP_TIMEOUT: 90
-
-  # Set manually RAFT voter nodes.
-  # RAFT_JOIN value is automatically generated by "raft_configuration"
-  # template, but if someone wants to set this value manually then it can be done
-  # by setting RAFT_JOIN environment variable, example: RAFT_JOIN: "weaviate-0,weaviate-1"
-  # Please notice that in this case RAFT_BOOTSTRAP_EXPECT setting needs to be also adjusted manually
-  # to match the number of RAFT voters, so if there are 2 nodes set using RAFT_JOIN variable
-  # then RAFT_BOOTSTRAP_EXPECT needs to be equal 2 also.
-  # RAFT_JOIN: "weaviate-0"
-
-  # Set to true if voters nodes should handle only schema. With this setting enabled
-  # voter nodes will not accept any data, one needs to resize the cluster using replicas
-  # setting so that replicas > voters.
-  # RAFT_METADATA_ONLY_VOTERS: false
-
-  # The aggressiveness of the Go Garbage Collector. 100 is the default value.
   GOGC: 100
-  # Maximum results Weaviate can query with/without pagination
-  # NOTE: Affects performance, do NOT set to a very high value.
-  # The default is 100K
   QUERY_MAXIMUM_RESULTS: 100000
-
-  # whether to enable vector dimensions tracking metric
   TRACK_VECTOR_DIMENSIONS: false
-
-  # whether to re-index/-compute the vector dimensions metric (needed if upgrading from weaviate < v1.16.0)
   REINDEX_VECTOR_DIMENSIONS_AT_STARTUP: false
   AUTHENTICATION_APIKEY_ENABLED: 'true'
-  # List one or more user identities, separated by commas. You can have only one User for all the keys or one user per key.
-  # The User/s can be a simple name or an email, no matter if it exists or not.
-  # NOTE: Make sure to add the users to the authorization above overwise they will not be allowed to interact with Weaviate.
   AUTHENTICATION_APIKEY_USERS: 'admin@example.com,readonly@user.com'
 
 envSecrets:
-  # create a Kubernetes secret with AUTHENTICATION_APIKEY_ALLOWED_KEYS key and its respective value ( name-of-the-k8s-secret-containing-the-comma-separated-api-keys)
   AUTHENTICATION_APIKEY_ALLOWED_KEYS: apikeys
-
-# Configure backup providers
-backups:
-  # The backup-filesystem module enables creation of the DB backups in
-  # the local filesystem
-  filesystem:
-    enabled: false
-    envconfig:
-      # Configure folder where backups should be saved
-      BACKUP_FILESYSTEM_PATH: /tmp/backups
- 
-  gcs:
-    enabled: false
-    envconfig:
-      # Configure bucket where backups should be saved, this setting is mandatory
-      BACKUP_GCS_BUCKET: weaviate-backups
-
-      # Optional setting. Defaults to empty string.
-      # Set this option if you want to save backups to a given location
-      # inside the bucket
-      # BACKUP_GCS_PATH: path/inside/bucket
-
-      # You can pass environment Google settings here:
-      # Define the project
-      # GOOGLE_CLOUD_PROJECT: project-id
-
-    # For Weaviate to be able to create bucket objects it needs a ServiceAccount credentials to authenticate to GCP.
-    # The ServiceAccount must have permissions to read/create/delete bucket objects.
-    # You can pass the ServiceAccount credentials (as JSON) in 2 ways:
-    # 1. by setting the GOOGLE_APPLICATION_CREDENTIALS json as plain text in the `secrets` section below
-    #     this chart will create a kubernetes secret for you with this key-values pairs
-    # 2. create a Kubernetes secret with GOOGLE_APPLICATION_CREDENTIALS key and its respective value
-    #     Set the Key and the secret where it is set in `envSecrets` section below
-    secrets: {}
-    #   GOOGLE_APPLICATION_CREDENTIALS: credentials-json-string (plain text)
-
-    # If one has already defined a secret with GOOGLE_APPLICATION_CREDENTIALS one can pass them using
-    # this setting:
-    envSecrets: {}
-    #   GOOGLE_APPLICATION_CREDENTIALS: name-of-the-k8s-secret-containing-the-key
-
-# Pass any annotations to Weaviate pods
 annotations:
-
 extraVolumeMounts:
-
 extraVolumes:
-
 nodeSelector:
-
 tolerations:
-
 hostAliases:
-
 affinity:
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
@@ -362,10 +150,6 @@ affinity:
                 operator: In
                 values:
                   - weaviate
-
-## Optionally specify priorityClass name for the pod
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#pod-priority
-##
 priorityClassName: ""
 globalPriorityClassName: ""
 
