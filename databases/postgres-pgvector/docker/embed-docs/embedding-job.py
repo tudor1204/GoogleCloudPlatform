@@ -32,6 +32,8 @@ blob.download_to_filename("/documents/" + filename)
 loader = PyPDFLoader("/documents/" + filename)
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 documents = loader.load_and_split(text_splitter)
+for document in documents:
+    document.page_content = document.page_content.replace('\x00', '')
 # [END gke_databases_postgres_pgvector_docker_embed_docs_split]
 
 # [START gke_databases_postgres_pgvector_docker_embed_docs_embed]
@@ -54,6 +56,7 @@ db = PGVector.from_documents(
     documents=documents,
     collection_name=COLLECTION_NAME,
     connection_string=CONNECTION_STRING,
+    use_jsonb=True
 )
 # [END gke_databases_postgres_pgvector_docker_embed_docs_storage]
 
