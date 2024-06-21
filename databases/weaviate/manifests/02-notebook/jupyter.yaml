@@ -63,6 +63,11 @@ spec:
           mountPath: /usr/local/dataset
         - name: notebook
           mountPath: /tf
+      tolerations:
+      - effect: NoSchedule
+        key: app.stateful/component
+        operator: Equal
+        value: weaviate
       volumes:
       - name: books-dataset
         configMap:
