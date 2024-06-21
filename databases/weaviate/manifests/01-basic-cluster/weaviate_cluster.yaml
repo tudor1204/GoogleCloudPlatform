@@ -115,7 +115,6 @@ authorization:
     enabled: true
     users:
       - admin@example.com
-      - readonly@user.com
 query_defaults:
   limit: 100
 debug: false
@@ -128,7 +127,7 @@ env:
   TRACK_VECTOR_DIMENSIONS: false
   REINDEX_VECTOR_DIMENSIONS_AT_STARTUP: false
   AUTHENTICATION_APIKEY_ENABLED: 'true'
-  AUTHENTICATION_APIKEY_USERS: 'admin@example.com,readonly@user.com'
+  AUTHENTICATION_APIKEY_USERS: 'admin@example.com'
 
 envSecrets:
   AUTHENTICATION_APIKEY_ALLOWED_KEYS: apikeys
