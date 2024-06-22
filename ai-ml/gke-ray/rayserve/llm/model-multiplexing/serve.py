@@ -17,6 +17,7 @@
 import json
 import os
 from typing import AsyncGenerator
+import random
 
 from fastapi import BackgroundTasks
 from starlette.requests import Request
@@ -27,6 +28,7 @@ from vllm.sampling_params import SamplingParams
 from vllm.utils import random_uuid
 
 from ray import serve
+from ray.serve.handle import DeploymentHandle
 
 
 @serve.deployment(name="VLLMDeployment")
@@ -81,7 +83,7 @@ class VLLMDeployment:
     async def may_abort_request(self, request_id) -> None:
         await self.engine.abort(request_id)
 
-    async def __call__(self, request: Request) -> Response:
+    async def __call__(self, request_dict: dict) -> str:
         """Generate completion for the request.
 
         The request should be a JSON object with the following fields:
@@ -89,7 +91,7 @@ class VLLMDeployment:
         - stream: whether to stream the results or not.
         - other fields: the sampling parameters (See `SamplingParams` for details).
         """
-        request_dict = await request.json()
+        # request_dict = await request.json()
         prompt = request_dict.pop("prompt")
         stream = request_dict.pop("stream", False)
         sampling_params = SamplingParams(**request_dict)
@@ -105,13 +107,8 @@ class VLLMDeployment:
                 self.stream_results(results_generator), background=background_tasks
             )
 
-        # Non-streaming case
         final_output = None
         async for request_output in results_generator:
-            if await request.is_disconnected():
-                # Abort the request if the client disconnects.
-                await self.engine.abort(request_id)
-                return Response(status_code=499)
             final_output = request_output
 
         assert final_output is not None
@@ -119,10 +116,35 @@ class VLLMDeployment:
         text_outputs = [
             prompt + output.text for output in final_output.outputs]
         ret = {"text": text_outputs}
-        return Response(content=json.dumps(ret))
+        return json.dumps(ret)
 
 
-model = VLLMDeployment.bind(
-    model=os.environ['MODEL_ID'],
-    tensor_parallel_size=int(os.environ['TENSOR_PARALLELISM']),
-)
+@serve.deployment
+class MultiModelDeployment:
+    def __init__(self, models: dict[str, DeploymentHandle]):
+        self.models = models
+
+    async def __call__(self, request: Request) -> Response:
+        model_request = await request.json()
+        model_id = serve.get_multiplexed_model_id()
+        if model_id in self.models:
+            response = await self.models[model_id].remote(model_request)
+        elif not model_id:
+            model_id = random.choice(list(self.models.keys()))
+            response = await self.models[model_id].remote(model_request)
+        else:
+            return Response(status_code=400, content=json.dumps({"message": "invalid model ID"}))
+
+        return Response(content=response)
+
+
+multi_model = MultiModelDeployment.bind({
+    os.environ['MODEL_1_ID']: VLLMDeployment.options(ray_actor_options={"num_cpus": 8}).bind(
+        model=os.environ['MODEL_1_ID'],
+        tensor_parallel_size=int(os.environ['MODEL_1_TENSOR_PARALLELISM']),
+    ),
+    os.environ['MODEL_2_ID']: VLLMDeployment.options(ray_actor_options={"num_cpus": 8}).bind(
+        model=os.environ['MODEL_2_ID'],
+        tensor_parallel_size=int(os.environ['MODEL_2_TENSOR_PARALLELISM']),
+    )
+})
