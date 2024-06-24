@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_ai_ml_gke_ray_rayserve_llm_llama_2_70b]
+# [START gke_ai_ml_gke_ray_rayserve_llm_mistral_7b]
 apiVersion: ray.io/v1
 kind: RayService
 metadata:
@@ -100,4 +100,4 @@ spec:
                 nvidia.com/gpu: "2"
           nodeSelector:
             cloud.google.com/gke-accelerator: nvidia-l4
-# [END gke_ai_ml_gke_ray_rayserve_llm_llama_2_70b]
+# [END gke_ai_ml_gke_ray_rayserve_llm_mistral_7b]

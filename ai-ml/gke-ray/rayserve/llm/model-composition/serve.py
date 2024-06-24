@@ -19,8 +19,9 @@ import os
 from typing import AsyncGenerator
 import random
 
+from fastapi import BackgroundTasks
 from starlette.requests import Request
-from starlette.responses import Response
+from starlette.responses import Response, StreamingResponse
 from vllm.engine.arg_utils import AsyncEngineArgs
 from vllm.engine.async_llm_engine import AsyncLLMEngine
 from vllm.sampling_params import SamplingParams

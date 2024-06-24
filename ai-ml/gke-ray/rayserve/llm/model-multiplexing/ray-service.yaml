@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_ai_ml_gke_ray_rayserve_llm_gemma_7b_it]
+# [START gke_ai_ml_gke_ray_rayserve_llm_model_multiplexing]
 apiVersion: ray.io/v1
 kind: RayService
 metadata:
@@ -102,4 +102,4 @@ spec:
                 nvidia.com/gpu: "2"
           nodeSelector:
             cloud.google.com/gke-accelerator: nvidia-l4
-# [END gke_ai_ml_gke_ray_rayserve_llm_gemma_7b_it]
+# [END gke_ai_ml_gke_ray_rayserve_llm_model_multiplexing]
