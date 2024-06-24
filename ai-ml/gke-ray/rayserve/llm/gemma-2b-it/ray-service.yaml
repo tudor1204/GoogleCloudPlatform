@@ -30,7 +30,7 @@ spec:
           num_cpus: 8
           num_gpus: 1
       runtime_env:
-        working_dir: "https://github.com/andrewsykim/kubernetes-engine-samples/archive/ray-llms.zip"
+        working_dir: "https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/archive/main.zip"
         pip: ["vllm==0.4.3"]
         env_vars:
           MODEL_ID: "google/gemma-2b-it"

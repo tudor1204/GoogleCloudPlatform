@@ -30,7 +30,7 @@ spec:
           num_cpus: 2
           # NOTE: num_gpus is set automatically based on TENSOR_PARALLELISM
       runtime_env:
-        working_dir: "https://github.com/andrewsykim/kubernetes-engine-samples/archive/ray-llms.zip"
+        working_dir: "https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/archive/main.zip"
         pip: ["vllm==0.4.3"]
         env_vars:
           MODEL_1_ID: "google/gemma-7b-it"
