@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/compute/metadata v0.3.0
 	cloud.google.com/go/monitoring v1.19.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240610135401-a8a62080eff3
-	google.golang.org/protobuf v1.34.1
+	google.golang.org/protobuf v1.34.2
 )
 
 require (
