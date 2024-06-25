@@ -62,7 +62,7 @@ spec:
         - name: books-dataset
           mountPath: /usr/local/dataset
         - name: notebook
-          mountPath: /tf
+          mountPath: /tfnew
       tolerations:
       - effect: NoSchedule
         key: app.stateful/component

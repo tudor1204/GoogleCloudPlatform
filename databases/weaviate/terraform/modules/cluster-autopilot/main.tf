@@ -15,7 +15,7 @@
 # [START gke_autopilot_private_regional_cluster]
 module "weaviate_cluster" {
   source                   = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-private-cluster"
-  version                  = "~> 29.0"
+  version                  = "~> 31.0"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
   regional                 = true

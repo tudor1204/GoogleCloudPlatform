@@ -1,51 +1,18 @@
-image:
-  registry: cr.weaviate.io
-  tag: 1.25.0
-  repo: semitechnologies/weaviate
-  pullPolicy: IfNotPresent
-  pullSecrets: []
-command: ["/bin/weaviate"]
-args:
-  - '--host'
-  - '0.0.0.0'
-  - '--port'
-  - '8080'
-  - '--scheme'
-  - 'http'
-  - '--config-file'
-  - '/weaviate-config/conf.yaml'
-  - --read-timeout=60s 
-  - --write-timeout=60s
 initContainers:
   sysctlInitContainer:
-    enabled: true
-    sysctlVmMaxMapCount: 524288
-    image:
-      registry: docker.io
-      repo: alpine
-      tag: latest
-      pullPolicy: IfNotPresent
-  
+    enabled: false
   extraInitContainers: {}
-replicas: 3
-podManagementPolicy: Parallel
-updateStrategy:
-  type: RollingUpdate
 resources: 
    requests:
-     cpu: '500m'
-     memory: '300Mi'
+     cpu: '1'
+     memory: '4Gi'
    limits:
-     cpu: '1000m'
-     memory: '1Gi'
-
-securityContext: {}
-containerSecurityContext: {}
-serviceAccountName:
-clusterDomain: cluster.local.
+     cpu: '2'
+     memory: '4Gi'
+replicas: 3
 storage:
-  size: 32Gi
-  storageClassName: "standard"
+  size: 10Gi
+  storageClassName: "premium-rwo"
 service:
   name: weaviate
   ports:
@@ -65,78 +32,25 @@ grpcService:
   type: ClusterIP
   clusterIP:
   annotations: {}
-
-serviceMonitor:
-  enabled: false
-  interval: 30s
-  scrapeTimeout: 10s
-
-startupProbe:
-  enabled: false
-  probeType: httpGet
-  probe:
-    httpGet:
-      path: /v1/.well-known/ready
-      port: 8080
-  initialDelaySeconds: 300
-  periodSeconds: 60
-  failureThreshold: 50
-  successThreshold: 1
-  timeoutSeconds: 3
-
-livenessProbe:
-  probeType: httpGet
-  probe:
-    httpGet:
-      path: /v1/.well-known/live
-      port: 8080
-  initialDelaySeconds: 900
-  periodSeconds: 10
-  failureThreshold: 30
-  successThreshold: 1
-  timeoutSeconds: 3
-
-readinessProbe:
-  probeType: httpGet
-  probe:
-    httpGet:
-      path: /v1/.well-known/ready
-      port: 8080
-  initialDelaySeconds: 3
-  periodSeconds: 10
-  failureThreshold: 3
-  successThreshold: 1
-  timeoutSeconds: 3
-terminationGracePeriodSeconds: 600
-
 authentication:
+  anonymous_access:
+    enabled: false
 authorization:
   admin_list:
     enabled: true
     users:
       - admin@example.com
-query_defaults:
-  limit: 100
-debug: false
-
 env:
-  CLUSTER_GOSSIP_BIND_PORT: 7000
-  CLUSTER_DATA_BIND_PORT: 7001
-  GOGC: 100
-  QUERY_MAXIMUM_RESULTS: 100000
-  TRACK_VECTOR_DIMENSIONS: false
-  REINDEX_VECTOR_DIMENSIONS_AT_STARTUP: false
   AUTHENTICATION_APIKEY_ENABLED: 'true'
   AUTHENTICATION_APIKEY_USERS: 'admin@example.com'
 
 envSecrets:
   AUTHENTICATION_APIKEY_ALLOWED_KEYS: apikeys
-annotations:
-extraVolumeMounts:
-extraVolumes:
-nodeSelector:
 tolerations:
-hostAliases:
+  - key: "app.stateful/component"
+    operator: "Equal"
+    value: "weaviate"
+    effect: NoSchedule
 affinity:
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
@@ -149,6 +63,4 @@ affinity:
                 operator: In
                 values:
                   - weaviate
-priorityClassName: ""
-globalPriorityClassName: ""
 

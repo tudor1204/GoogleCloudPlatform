@@ -15,7 +15,7 @@
 # [START gke_standard_private_regional_cluster]
 module "weaviate_cluster" {
   source                        = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version                       = "30.2.0"
+  version                       = "~> 31.0"
   project_id                    = var.project_id
   name                          = "${var.cluster_prefix}-cluster"
   regional                      = true
@@ -34,7 +34,9 @@ module "weaviate_cluster" {
   enable_cost_allocation        = true
   deletion_protection           = false
   initial_node_count            = 1
-  kubernetes_version            = "1.28"
+  stateful_ha                   = true
+  kubernetes_version            = "latest"
+  release_channel               = "RAPID"
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"
