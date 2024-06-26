@@ -38,7 +38,7 @@ static_resources:
               "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
           codec_type: AUTO
           stat_prefix: ingress_https
-          # [START grpc_gke_nlb_tutorial_envoy_route_config]
+          # [START gke_networking_grpc_gke_nlb_tutorial_envoy_route_config]
           route_config:
             name: local_route
             virtual_hosts:
@@ -54,7 +54,7 @@ static_resources:
                   prefix: "/api.Reverse/"
                 route:
                   cluster: reverse-grpc
-          # [END grpc_gke_nlb_tutorial_envoy_route_config]
+          # [END gke_networking_grpc_gke_nlb_tutorial_envoy_route_config]
           http_filters:
           - name: envoy.filters.http.health_check
             typed_config:
@@ -79,7 +79,7 @@ static_resources:
                 filename: /etc/ssl/envoy/tls.crt
               private_key:
                 filename: /etc/ssl/envoy/tls.key
-  # [START grpc_gke_nlb_tutorial_envoy_cluster_echo]
+  # [START gke_networking_grpc_gke_nlb_tutorial_envoy_cluster_echo]
   clusters:
   - name: echo-grpc
     connect_timeout: 0.5s
@@ -102,7 +102,7 @@ static_resources:
       unhealthy_threshold: 2
       healthy_threshold: 2
       grpc_health_check: {}
-  # [END grpc_gke_nlb_tutorial_envoy_cluster_echo]
+  # [END gke_networking_grpc_gke_nlb_tutorial_envoy_cluster_echo]
   - name: reverse-grpc
     connect_timeout: 0.5s
     type: STRICT_DNS

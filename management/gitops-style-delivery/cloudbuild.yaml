@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START cloudbuild]
+# [START management_gitops_delivery_cloudbuild]
 steps:
 # This step runs the unit tests on the app
 - name: 'python:3.7-slim'
@@ -39,4 +39,4 @@ steps:
   args:
   - 'push'
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/my-repository/hello-cloudbuild:$SHORT_SHA'
-# [END cloudbuild]
+# [END management_gitops_delivery_cloudbuild]

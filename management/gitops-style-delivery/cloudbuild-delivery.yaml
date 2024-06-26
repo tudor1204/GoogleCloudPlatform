@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START cloudbuild-delivery]
+# [START management_gitops_delivery_cloudbuild_delivery]
 steps:
 # This step deploys the new version of our container image
 # in the hello-cloudbuild Kubernetes Engine cluster.
@@ -46,4 +46,4 @@ steps:
     $(git log --format=%B -n 1 $COMMIT_SHA)" && \
     # Push the changes back to Cloud Source Repository
     git push origin production
-# [END cloudbuild-delivery]
+# [END management_gitops_delivery_cloudbuild_delivery]
