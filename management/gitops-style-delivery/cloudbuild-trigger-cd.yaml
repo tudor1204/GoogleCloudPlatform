@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START management_gitops_delivery_cloudbuild]
+# [START gke_management_gitops_delivery_cloudbuild]
 steps:
 # This step runs the unit tests on the app
 - name: 'python:3.7-slim'
@@ -39,9 +39,9 @@ steps:
   args:
   - 'push'
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/my-repository/hello-cloudbuild:$SHORT_SHA'
-# [END management_gitops_delivery_cloudbuild]
+# [END gke_management_gitops_delivery_cloudbuild]
 
-# [START management_gitops_delivery_cloudbuild_trigger_cd]
+# [START gke_management_gitops_delivery_cloudbuild_trigger_cd]
 # This step clones the hello-cloudbuild-env repository
 - name: 'gcr.io/cloud-builders/gcloud'
   id: Clone env repository
@@ -79,4 +79,4 @@ steps:
     Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
     git push origin candidate
 
-# [END management_gitops_delivery_cloudbuild_trigger_cd]
+# [END gke_management_gitops_delivery_cloudbuild_trigger_cd]

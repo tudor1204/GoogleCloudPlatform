@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START management_gitops_delivery_dockerfile]
+# [START gke_management_gitops_delivery_dockerfile]
 FROM python:3.7-slim
 RUN pip install flask
 WORKDIR /app
 COPY app.py /app/app.py
 ENTRYPOINT ["python"]
 CMD ["/app/app.py"]
-# [END management_gitops_delivery_dockerfile]
+# [END gke_management_gitops_delivery_dockerfile]

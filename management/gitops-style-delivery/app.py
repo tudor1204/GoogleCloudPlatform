@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START management_gitops_delivery_hello_app]
+# [START gke_management_gitops_delivery_hello_app]
 from flask import Flask
 app = Flask('hello-cloudbuild')
 
@@ -22,4 +22,4 @@ def hello():
 
 if __name__ == '__main__':
   app.run(host = '0.0.0.0', port = 8080)
-# [END management_gitops_delivery_hello_app]
+# [END gke_management_gitops_delivery_hello_app]
