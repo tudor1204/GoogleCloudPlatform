@@ -1,10 +1,5 @@
-# Deploying an ASP.NET web application with Integrated Windows Authentication in Windows containers on GKE
+# Deploy ASP.NET apps with Windows Authentication in GKE Windows containers
 
-This is the repository for the [Deploying an ASP.NET web application with Integrated Windows Authentication in Windows containers on GKE](https://cloud.google.com/architecture/deploying-aspnet-with-windows-authentication-in-gke-windows-containers) tutorial. 
+These samples show how to create an ASP.NET web application that uses IIS with Integrated Windows Authentication, and how to deploy it using a Windows container to a Google Kubernetes Engine (GKE) cluster that has domain-joined Windows Server nodes.
 
-The reporistory contains YAML files and an ASP.NET web application, written in .NET Framework 4.x.
-
-## License
-
-All files in this repository are under the
-[Apache License, Version 2.0](LICENSE) unless noted otherwise.
+Visit https://cloud.google.com/kubernetes-engine/docs/how-to/deploying-aspnet-with-windows-authentication-in-gke-windows-containers to follow the tutorial.

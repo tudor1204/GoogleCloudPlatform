@@ -1,9 +1,5 @@
-# gke-multicluster-upgrades
+# Upgrading a multi-cluster GKE environment with Multi Cluster Ingress
 
-Copyright Google LLC 2022
+These samples show how to upgrade a multi-cluster Google Kubernetes Engine (GKE) environment using Multi Cluster Ingress.
 
-## Overview
-
-This repository contains example code and configuration to accompany the ["Upgrading a multi-cluster GKE environment with Multi Cluster Ingress"](https://cloud.google.com/architecture/upgrading-multi-cluster-gke-environment-multi-cluster-ingress) tutorial.
-
-Please note that the content of this repository is for example use only. This is not a Google product.
+Visit https://cloud.google.com/kubernetes-engine/docs/tutorials/upgrading-multi-cluster-gke-environment-multi-cluster-ingress to follow the tutorial.
