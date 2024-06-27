@@ -20,8 +20,6 @@ service:
       protocol: TCP
       port: 80
   type: ClusterIP
-  clusterIP:
-  annotations: {}
 grpcService:
   enabled: true
   name: weaviate-grpc
@@ -30,8 +28,6 @@ grpcService:
       protocol: TCP
       port: 50051
   type: ClusterIP
-  clusterIP:
-  annotations: {}
 authentication:
   anonymous_access:
     enabled: false
@@ -43,7 +39,7 @@ authorization:
 env:
   AUTHENTICATION_APIKEY_ENABLED: 'true'
   AUTHENTICATION_APIKEY_USERS: 'admin@example.com'
-
+  PROMETHEUS_MONITORING_ENABLED: true
 envSecrets:
   AUTHENTICATION_APIKEY_ALLOWED_KEYS: apikeys
 tolerations:
@@ -51,16 +47,4 @@ tolerations:
     operator: "Equal"
     value: "weaviate"
     effect: NoSchedule
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 1
-        podAffinityTerm:
-          topologyKey: "kubernetes.io/hostname"
-          labelSelector:
-            matchExpressions:
-              - key: "app"
-                operator: In
-                values:
-                  - weaviate
 
