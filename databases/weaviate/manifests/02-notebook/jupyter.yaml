@@ -58,6 +58,10 @@ spec:
             secretKeyRef:
               name: apikeys
               key: AUTHENTICATION_APIKEY_ALLOWED_KEYS
+        - name: WEAVIATE_ENDPOINT
+          value: "weaviate.weaviate"
+        - name: WEAVIATE_GRPC_ENDPOINT
+          value: "weaviate-grpc.weaviate" 
         volumeMounts:
         - name: books-dataset
           mountPath: /usr/local/dataset
