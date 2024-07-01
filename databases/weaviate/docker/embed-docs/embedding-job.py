@@ -16,6 +16,7 @@ from langchain_google_vertexai import VertexAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import weaviate
+from weaviate.connect import ConnectionParams
 from langchain_weaviate.vectorstores import WeaviateVectorStore
 from google.cloud import storage
 import os
@@ -53,8 +54,9 @@ client = weaviate.WeaviateClient(
     auth_client_secret=auth_config
 )
 client.connect()
-
-db = WeaviateVectorStore.from_documents(documents, embeddings, client=client, index_name="training-docs")
+if not client.collections.exists("trainingdocs"):
+    collection = client.collections.create(name="trainingdocs")
+db = WeaviateVectorStore.from_documents(documents, embeddings, client=client, index_name="trainingdocs")
 # [END gke_databases_postgres_pgvector_docker_embed_docs_storage]
 
 print(filename + " was successfully embedded") 

@@ -17,6 +17,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_google_vertexai import VertexAIEmbeddings
 from langchain.memory import ConversationBufferWindowMemory
 import weaviate
+from weaviate.connect import ConnectionParams
 from langchain_weaviate.vectorstores import WeaviateVectorStore
 import streamlit as st
 import os
@@ -63,8 +64,9 @@ client = weaviate.WeaviateClient(
     ),
     auth_client_secret=auth_config
 )
+client.connect()
 
-weaviate_vector_search = Weaviate(client, "training-docs", "content")
+weaviate_vector_search = WeaviateVectorStore.from_documents([],embedding_model,client=client, index_name="trainingdocs")
 # [END gke_databases_postgres_pgvector_docker_chat_client]
 
 def format_docs(docs):
