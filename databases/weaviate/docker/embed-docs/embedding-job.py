@@ -20,7 +20,7 @@ from weaviate.connect import ConnectionParams
 from langchain_weaviate.vectorstores import WeaviateVectorStore
 from google.cloud import storage
 import os
-# [START gke_databases_postgres_pgvector_docker_embed_docs_retrieval]
+# [START gke_databases_weaviate_docker_embed_docs_retrieval]
 bucketname = os.getenv("BUCKET_NAME")
 filename = os.getenv("FILE_NAME")
 
@@ -28,19 +28,19 @@ storage_client = storage.Client()
 bucket = storage_client.bucket(bucketname)
 blob = bucket.blob(filename)
 blob.download_to_filename("/documents/" + filename)
-# [END gke_databases_postgres_pgvector_docker_embed_docs_retrieval]
+# [END gke_databases_weaviate_docker_embed_docs_retrieval]
 
-# [START gke_databases_postgres_pgvector_docker_embed_docs_split]
+# [START gke_databases_weaviate_docker_embed_docs_split]
 loader = PyPDFLoader("/documents/" + filename)
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 documents = loader.load_and_split(text_splitter)
-# [END gke_databases_postgres_pgvector_docker_embed_docs_split]
+# [END gke_databases_weaviate_docker_embed_docs_split]
 
-# [START gke_databases_postgres_pgvector_docker_embed_docs_embed]
+# [START gke_databases_weaviate_docker_embed_docs_embed]
 embeddings = VertexAIEmbeddings("textembedding-gecko@001")
-# [END gke_databases_postgres_pgvector_docker_embed_docs_embed]
+# [END gke_databases_weaviate_docker_embed_docs_embed]
 
-# [START gke_databases_postgres_pgvector_docker_embed_docs_storage]
+# [START gke_databases_weaviate_docker_embed_docs_storage]
 auth_config = weaviate.auth.AuthApiKey(api_key=os.getenv("APIKEY"))
 client = weaviate.WeaviateClient(
     connection_params=ConnectionParams.from_params(
@@ -57,7 +57,7 @@ client.connect()
 if not client.collections.exists("trainingdocs"):
     collection = client.collections.create(name="trainingdocs")
 db = WeaviateVectorStore.from_documents(documents, embeddings, client=client, index_name="trainingdocs")
-# [END gke_databases_postgres_pgvector_docker_embed_docs_storage]
+# [END gke_databases_weaviate_docker_embed_docs_storage]
 
 print(filename + " was successfully embedded") 
 print(f"# of vectors = {len(documents)}")
