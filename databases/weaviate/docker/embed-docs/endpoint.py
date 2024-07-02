@@ -43,7 +43,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 # Setup K8 configs
 config.load_incluster_config()
 # [START gke_databases_postgres_pgvector_docker_embed_endpoint_job]
-def kube_create_job_object(name, container_image, bucket_name, f_name, namespace="weaviate", container_name="jobcontainer", env_vars={}):
+def kube_create_job_object(name, container_image, bucket_name, f_name, namespace, container_name="jobcontainer", env_vars={}):
 
     body = client.V1Job(api_version="batch/v1", kind="Job")
     body.metadata = client.V1ObjectMeta(namespace=namespace, name=name)
@@ -74,11 +74,12 @@ def kube_test_credentials():
 
 def kube_create_job(bckt, f_name, id):
     container_image = os.getenv("JOB_IMAGE")
+    namespace = os.getenv("JOB_NAMESPACE")
     name = "docs-embedder" + id
-    body = kube_create_job_object(name, container_image, bckt, f_name)
+    body = kube_create_job_object(name, container_image, bckt, f_name, namespace)
     v1=client.BatchV1Api()
     try: 
-        v1.create_namespaced_job("weaviate", body, pretty=True)
+        v1.create_namespaced_job(namespace, body, pretty=True)
     except ApiException as e:
         print("Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e)
     return
