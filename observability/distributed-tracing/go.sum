@@ -24,12 +24,16 @@ github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.22.
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.22.0/go.mod h1:P69hhmQh4zwnU5iEdGVowFWg1DiP9x2KsCYBOIaP4us=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.23.0 h1:5A4O4OdC7yzkIEPl4GrS+PRYV15zsboaWBT52g3Hc0k=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.23.0/go.mod h1:zO73rmlwRYxQF/6Nul4PA/UIAYJo9BtDAMgPfMthXnw=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.24.0 h1:TBo1ql03qmVkZzEndpfkS4i9dOgCVvO0rQP7HEth110=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.24.0/go.mod h1:pix4dhb6R3oDGZgQhkEGGC+5ZTz6kcxOhS4lhsSJhrE=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/cloudmock v0.46.0 h1:vaXjFX09ygxNxAiHwByzPBVKltYFVZR8HN4U3TR4vn8=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/cloudmock v0.46.0/go.mod h1:V28hx+cUCZC9e3qcqszMb+Sbt8cQZtHTiXOmyDzoDOg=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.46.0 h1:xlfPHZ5QFvHad9KmrVDoaPpJUT/XluwNDMNHn+k7z/s=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.46.0/go.mod h1:mzI44HpPp75Z8/a1sJP1asdHdu7Wui7t10SZ9EEPPnM=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.47.0 h1:TOjDcFzPkoglwb5sa6+704TXwYgs+XsN5HYc98ksK+M=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.47.0/go.mod h1:ZC7rjqRzdhRKDK223jQ7Tsz89ZtrSSLH/VFzf7k5Sb0=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.0 h1:ng6QH9Z4bAXCf0Z1cjR5hKESyc1BUiOrfIOhN+nHfRU=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.0/go.mod h1:ZC7rjqRzdhRKDK223jQ7Tsz89ZtrSSLH/VFzf7k5Sb0=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
