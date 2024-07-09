@@ -51,6 +51,9 @@ authorization:
     enabled: true
     users:
       - admin@example.com
+modules:
+  text2vec-palm:
+    enabled: true
 env:
   AUTHENTICATION_APIKEY_ENABLED: 'true'
   AUTHENTICATION_APIKEY_USERS: 'admin@example.com'
