@@ -31,16 +31,20 @@ module "postgres_cluster" {
 
   node_pools = [
     {
-      name            = "pool-model-train""
-      disk_size_gb    = 20
-      disk_type       = "pd-standard"
-      autoscaling     = true
-      min_count       = 1
-      max_count       = 2
-      max_surge       = 1
-      max_unavailable = 0
-      machine_type    = "e2-standard-2"
-      auto_repair     = true
+      name                = "model-train-pool"
+      disk_size_gb        = var.node_disk_size
+      disk_type           = "pd-balanced"
+      node_locations      = var.node_location
+      autoscaling         = true
+      min_count           = 0
+      max_count           = var.autoscaling_max_count
+      max_surge           = 1
+      max_unavailable     = 0
+      machine_type        = "g2-standard-4"
+      auto_repair         = true
+      accelerator_count   = 1
+      accelerator_type    = "nvidia-l4"
+      gpu_driver_version  = "LATEST"
     }
   ]
   node_pools_labels = {
@@ -66,4 +70,3 @@ output "kubectl_connection_command" {
   description = "Connection command"
 }
 # [END gke_model_train_standard_private_regional_cluster]
-
