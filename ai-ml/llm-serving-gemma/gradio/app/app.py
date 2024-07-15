@@ -21,6 +21,10 @@ if "MODEL_ID" in os.environ:
 else:
   model_id = "gradio"
 
+disable_system_message = False
+if "DISABLE_SYSTEM_MESSAGE" in os.environ:
+  disable_system_message = os.environ["DISABLE_SYSTEM_MESSAGE"]
+
 def inference_interface(message, history, model_temperature, top_p, max_tokens):
 
   json_message = {}
@@ -32,10 +36,21 @@ def inference_interface(message, history, model_temperature, top_p, max_tokens):
     llm_engine = "openai-chat"
 
   match llm_engine:
-    case "vllm":
+    case "max":
       json_message.update({"temperature": model_temperature})
       json_message.update({"top_p": top_p})
       json_message.update({"max_tokens": max_tokens}) 
+      final_message = process_message(message, history)
+
+      json_message.update({"prompt": final_message})
+      json_data = post_request(json_message)
+
+      temp_output = json_data["response"]
+      output = temp_output
+    case "vllm":
+      json_message.update({"temperature": model_temperature})
+      json_message.update({"top_p": top_p})
+      json_message.update({"max_tokens": max_tokens})
       final_message = process_message(message, history)
 
       json_message.update({"prompt": final_message})
@@ -59,8 +74,11 @@ def inference_interface(message, history, model_temperature, top_p, max_tokens):
       print("* History: " + str(history))
       json_message.update({"model": model_id})
       json_message.update({"messages": []})
-      system_message = {"role": "system", "content": "You are a helpful assistant."}
-      json_message["messages"].append(system_message)
+      # originally this was defaulted, so user would have to manually set this value to disable the prompt
+      if not disable_system_message:
+        system_message = {"role": "system", "content": "You are a helpful assistant."}
+        json_message["messages"].append(system_message)
+
       json_message['temperature'] = model_temperature
 
       if len(history) > 0:
@@ -107,7 +125,7 @@ def process_message(message, history):
   new_user_message = user_prompt_format.replace("prompt", message)
   
   # append the history with the new message and close with the turn
-  aggregated_message = history_message + new_user_message + system_prompt_format.replace("prompt", "")
+  aggregated_message = history_message + new_user_message
   return aggregated_message
 
 def post_request(json_message):

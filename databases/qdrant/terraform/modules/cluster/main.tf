@@ -15,7 +15,7 @@
 # [START gke_qdrant_standard_private_regional_cluster]
 module "qdrant_cluster" {
   source                        = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version                       = "30.2.0"
+  version                       = "30.3.0"
   project_id                    = var.project_id
   name                          = "${var.cluster_prefix}-cluster"
   regional                      = true
@@ -25,6 +25,7 @@ module "qdrant_cluster" {
   ip_range_pods                 = "k8s-pod-range"
   ip_range_services             = "k8s-service-range"
   create_service_account        = true
+  grant_registry_access         = true
   enable_private_endpoint       = false
   enable_private_nodes          = true
   master_ipv4_cidr_block        = "172.16.0.0/28"
