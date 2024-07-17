@@ -27,7 +27,7 @@
         "width": 15,
         "height": 16,
         "widget": {
-          "title": "Passed experiments",
+          "title": "Finished experiments",
           "xyChart": {
             "chartOptions": {
               "mode": "COLOR"
