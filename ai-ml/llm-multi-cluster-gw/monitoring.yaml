@@ -1,0 +1,16 @@
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: my-prometheus-http-app
+  labels:
+    app.kubernetes.io/name: my-prometheus-http-app
+    app.kubernetes.io/part-of: google-cloud-managed-prometheus
+spec:
+  endpoints:
+  - port: web
+    scheme: http
+    interval: 30s
+    path: /metrics
+  selector:
+    matchLabels:
+      app: gemma-server
