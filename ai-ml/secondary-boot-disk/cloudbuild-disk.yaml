@@ -15,9 +15,3 @@ steps:
     - --timeout=120m
     - --container-image=${_CONTAINER_IMAGE}
     - --image-pull-auth=ServiceAccountToken
-
-timeout: 7200s
-#logsBucket: 'gs://kfilatau-cloud-build-logs'
-
-  #options:
-  #  logging: GCS_ONLY

@@ -9,7 +9,7 @@ steps:
         apt-get update && \
         apt-get install -y git-lfs && \
         git lfs install && \
-        git lfs clone https://$$HF_USERNAME:$$HF_TOKEN@huggingface.co/google/${_MODEL_PATH} ./${_MODEL_PATH} && \
+        git lfs clone https://$$HF_USERNAME:$$HF_TOKEN@huggingface.co/google/${_MODEL_PATH} ./${_MODEL_PATH}
     secretEnv: ['HF_USERNAME', 'HF_TOKEN']
 
   # Build step 2 where we build our Docker image
@@ -19,18 +19,15 @@ steps:
       - '--build-arg'
       - 'MODEL_PATH=${_MODEL_PATH}'
       - '-t'
-      - 'us-central1-docker.pkg.dev/$_PROJECT_ID/$_REPOSITORY_NAME/$_IMAGE_NAME'
+      - '$_REGION-docker.pkg.dev/$_PROJECT_ID/$_REPOSITORY_NAME/$_IMAGE_NAME:${_IMAGE_TAG}'
       - '.'
-
-logsBucket: 'gs://kfilatau-cloud-build-logs'
 
 options:
   machineType: 'E2_HIGHCPU_32'
-  diskSizeGb: 100
-  logging: GCS_ONLY
+  diskSizeGb: 250
 
 images: 
-  - 'us-central1-docker.pkg.dev/$_PROJECT_ID/$_REPOSITORY_NAME/$_IMAGE_NAME'
+  - '$_REGION-docker.pkg.dev/$_PROJECT_ID/$_REPOSITORY_NAME/$_IMAGE_NAME:${_IMAGE_TAG}'
 
 availableSecrets:
   secretManager:
