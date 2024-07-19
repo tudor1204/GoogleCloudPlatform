@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: inference-server
-        image: us-docker.pkg.dev/vertex-ai/vertex-vision-model-garden-dockers/pytorch-hf-tgi-serve:20240220_0936_RC01
+        image: ghcr.io/huggingface/text-generation-inference:2.0.2
         resources:
           requests:
             cpu: "2"
