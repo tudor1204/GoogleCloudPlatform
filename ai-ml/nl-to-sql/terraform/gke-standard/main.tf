@@ -49,7 +49,7 @@ module "sqlgen_cluster" {
       disk_type           = "pd-balanced"
       node_locations      = var.node_location
       autoscaling         = true
-      min_count           = 0
+      min_count           = 1
       max_count           = var.autoscaling_max_count
       max_surge           = 1
       max_unavailable     = 0
