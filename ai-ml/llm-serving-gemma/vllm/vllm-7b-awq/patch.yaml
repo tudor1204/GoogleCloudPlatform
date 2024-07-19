@@ -30,7 +30,7 @@ spec:
         - --quantization=awq
         env:
         - name: MODEL_ID
-          value: dganochenko/gemma-7b-AWQ
+          value: google/gemma-7b-AWQ
         resources:
           requests:
             nvidia.com/gpu: 1

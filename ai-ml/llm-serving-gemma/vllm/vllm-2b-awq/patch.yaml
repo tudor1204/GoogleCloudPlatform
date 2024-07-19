@@ -30,5 +30,5 @@ spec:
         - --quantization=awq
         env:
         - name: MODEL_ID
-          value: dganochenko/gemma-2b-AWQ
+          value: google/gemma-2b-AWQ
 
