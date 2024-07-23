@@ -13,6 +13,10 @@ export PROJECT_ID=$(gcloud config get project) \
 && export MODEL_PATH=MODEL_PATH_NAME \
 && export ROLE_NAME=ROLE_NAME
 
+# Add the Hugging Face username and Hugging Face user token to the cloud secrets
+echo -n 'YOUR_HUGGINGFACE_USER_NAME' | gcloud secrets create hf-username --data-file=-
+echo -n 'YOUR_HUGGINGFACE_USER_TOKEN' | gcloud secrets create hf-token --data-file=-
+
 # Create a GKE Autopilot cluster
 gcloud container clusters create-auto ${CLUSTER_NAME} \
   --project=${PROJECT_ID} \
