@@ -26,6 +26,8 @@ spec:
       app: tgi-runtime
   template:
     metadata:
+      annotations:
+        gke-gcsfuse/volumes: "true"
       labels:
         app: tgi-runtime
         ai.gke.io/model: llama-3-8b

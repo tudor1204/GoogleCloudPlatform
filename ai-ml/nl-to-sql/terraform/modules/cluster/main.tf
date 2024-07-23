@@ -35,6 +35,7 @@ module "sqlgen_cluster" {
   deletion_protection      = false
   initial_node_count       = 1
   kubernetes_version       = "1.28"
+  gcs_fuse_csi_driver      = true
   
 
   cluster_resource_labels = {
