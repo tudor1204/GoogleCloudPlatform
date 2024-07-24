@@ -47,7 +47,7 @@ gcloud container node-pools create ${NODEPOOL_NAME} \
 # Add the required permissions to the default Cloud Build service account
 gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
     --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
-    --role="roles/storage.objectUser" \
+    --role="roles/storage.admin" \
     --condition=None
 
 # Run the Cloud Build command with all required substitutions
@@ -55,5 +55,22 @@ gcloud builds submit \
   --config cloudbuild.yaml \
 --substitutions=_BUCKET_NAME=$BUCKET_NAME,_CLUSTER_NAME=$CLUSTER_NAME,_REGION=$REGION,_KSA_NAME=$KSA_NAME,_PROJECT_NUMBER=$PROJECT_NUMBER,_PROJECT_ID=$PROJECT_ID,_ROLE_NAME=$ROLE_NAME,_MODEL_PATH=$MODEL_PATH 
 
+# Check if files are downloaded to the Cloud Storage bucket
+gsutil ls gs://$BUCKET_NAME/$MODEL_PATH
+
 # Apply the manifest and change the placeholder with the name of the requred bucket
 sed "s|<BUCKET_NAME>|$BUCKET_NAME|" model-deployment.yaml | kubectl apply -f -
+
+# Clean-up
+gcloud secrets delete hf-username \
+  --quiet \
+&& gcloud secrets delete hf-token \
+    --quiet \
+&& gcloud container clusters delete ${CLUSTER_NAME} \
+    --region=${REGION} \
+    --quiet \
+&& gcloud projects remove-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
+    --role="roles/storage.admin" \
+    --condition=None \
+&& gsutil rm -rmf gs://$BUCKET_NAME
