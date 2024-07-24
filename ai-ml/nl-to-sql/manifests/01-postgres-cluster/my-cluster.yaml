@@ -13,6 +13,7 @@
 # limitations under the License.
 
 # [START gke_ai_ml_nl_to_sql_manifests_01_postgres_cluster]
+---
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
@@ -84,4 +85,20 @@ spec:
         value: "$(POSTGRES_USER)"
       - name: "DATA_SOURCE_PASS"
         value: "$(POSTGRES_PASSWORD)"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-ilb
+  annotations:
+    networking.gke.io/load-balancer-type: "Internal"
+spec:
+  selector:
+    spilo-role: master
+  type: LoadBalancer
+  ports:
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
 # [END gke_ai_ml_nl_to_sql_manifests_01_postgres_cluster]

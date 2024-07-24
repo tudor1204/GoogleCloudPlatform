@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
       - name: inference-server
-        image: ghcr.io/huggingface/text-generation-inference:2.0.2
+        image: ghcr.io/huggingface/text-generation-inference:2.1.1
         resources:
           requests:
             cpu: "2"
@@ -54,6 +54,7 @@ spec:
         env:
         - name: MODEL_ID
           value: /models/llama3/llama3-8b-chat-hf
+          #value: dganochenko/llama-3-8b-chat
         - name: HUGGINGFACE_OFFLINE
           value: "1"
         - name: PORT
@@ -77,6 +78,9 @@ spec:
           driver: gcsfuse.csi.storage.gke.io
           volumeAttributes:
             bucketName: vertex-model-garden-public-us
+            mountOptions: "implicit-dirs"
+            fileCacheCapacity: 5Gi
+            fileCacheForRangeRead: "true"
       tolerations:
       - key: "nvidia.com/gpu"
         operator: "Equal"
@@ -88,11 +92,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: llm-service
+  name: llm-ilb
+  annotations:
+    networking.gke.io/load-balancer-type: "Internal"
 spec:
   selector:
     app: tgi-runtime
-  type: ClusterIP
+  type: LoadBalancer
   ports:
   - protocol: TCP
     port: 8000
