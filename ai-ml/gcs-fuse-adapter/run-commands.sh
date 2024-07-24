@@ -73,4 +73,4 @@ gcloud secrets delete hf-username \
     --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
     --role="roles/storage.admin" \
     --condition=None \
-&& gsutil rm -rmf gs://$BUCKET_NAME
+&& gsutil -m rm -rf gs://$BUCKET_NAME
