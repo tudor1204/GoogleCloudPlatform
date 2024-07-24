@@ -8,13 +8,12 @@ export PROJECT_ID=$(gcloud config get project) \
 && export ZONE=$REGION-a \
 && export REPOSITORY_NAME=AR_REPOSITORY_NAME \
 && export MODEL_PATH=MODEL_PATH_NAME \
-&& export IMAGE_NAME=CONTAINER_IMAGE_NAME\
+&& export IMAGE_NAME=$MODEL_PATH-container-image\
 && export IMAGE_TAG=IMAGE_VERSION_TAG \
-&& export DISK_IMAGE=DISK_IMAGE_NAME \
+&& export DISK_IMAGE=$MODEL_PATH-disk-image\
 && export CONTAINER_IMAGE=$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME/$IMAGE_NAME:$IMAGE_TAG \
 && export BUCKET_NAME=gs://BUCKET_FOR_LOGS_NAME/ \
-&& export STANDARD_CLUSTER_NAME=STANDARD_CLUSTER_NAME \
-&& export STANDARD_NODEPOOL_NAME=STANDARD_NODEPOOL_NAME
+&& export CLUSTER_NAME=CLUSTER_NAME
 
 # Add the Hugging Face username and Hugging Face user token to the cloud secrets
 echo -n 'YOUR_HUGGINGFACE_USER_NAME' | gcloud secrets create hf-username --data-file=-
@@ -31,6 +30,7 @@ gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
     --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
     --role="roles/compute.instanceAdmin.v1" \
     --role="roles/iam.serviceAccountUser" \
+    --role="roles/secretmanager.secretAccessor" \
     --condition=None
 
 # Run the Cloud Build command with substitutions
@@ -52,7 +52,7 @@ gcloud builds submit --config cloudbuild-disk.yaml --no-source \
 gcloud compute images list --no-standard-images
 
 # Create a GKE Standard cluster
-gcloud container clusters create ${STANDARD_CLUSTER_NAME} \
+gcloud container clusters create ${CLUSTER_NAME} \
   --project=${PROJECT_ID} \
   --region=${REGION} \
   --workload-pool=${PROJECT_ID}.svc.id.goog \
@@ -67,7 +67,7 @@ gcloud beta container node-pools create ${STANDARD_NODEPOOL_NAME} \
   --project=${PROJECT_ID} \
   --location=${REGION} \
   --node-locations=${ZONE} \
-  --cluster=${STANDARD_CLUSTER_NAME} \
+  --cluster=${CLUSTER_NAME} \
   --machine-type=g2-standard-24 \
   --num-nodes=1 \
   --disk-size 200 \
@@ -76,3 +76,24 @@ gcloud beta container node-pools create ${STANDARD_NODEPOOL_NAME} \
 
 # Apply the deployment and change the placeholder with the name of the container image
 sed "s|<CONTAINER_IMAGE>|$CONTAINER_IMAGE|" model-deployment.yaml | kubectl apply -f -
+
+# Clean-up section
+gcloud secrets delete hf-username \
+  --quiet \
+&& gcloud secrets delete hf-token \
+    --quiet \
+&& gcloud artifacts repositories delete $REPOSITORY_NAME \
+    --location=$REGION \
+    --quiet \
+&& gcloud projects remove-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
+    --role="roles/compute.instanceAdmin.v1" \
+    --role="roles/iam.serviceAccountUser" \
+    --role="roles/secretmanager.secretAccessor" \
+    --condition=None \
+&& gsutil -m rm -rf $BUCKET_NAME \
+&& gcloud compute images delete $DISK_IMAGE \
+    --quiet \
+&& gcloud container clusters delete $CLUSTER_NAME \
+    --region=$REGION \
+    --quiet
