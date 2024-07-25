@@ -97,8 +97,8 @@ resource "google_container_node_pool" "gpu_pool" {
   name       = "gpu-pool"
   location   = var.region
   node_count = var.num_nodes
-  count      = var.enable_autopilot || var.enable_tpu ? 0 : 1
-  cluster    = var.enable_autopilot || var.enable_tpu ? null : google_container_cluster.ml_cluster[0].name
+  count      = var.enable_autopilot ? 0 : 1
+  cluster    = var.enable_autopilot ? null : google_container_cluster.ml_cluster[0].name
 
   node_locations = var.gpu_pool_node_locations
   
@@ -121,12 +121,6 @@ resource "google_container_node_pool" "gpu_pool" {
       "https://www.googleapis.com/auth/service.management.readonly",
       "https://www.googleapis.com/auth/servicecontrol",
     ]
-    service_account = data.google_service_account.default.email
-
-    labels = {
-      "cloud.google.com/gke-profile" = "ray"
-      env                            = var.project_id
-    }
 
     guest_accelerator {
       type  = var.gpu_pool_accelerator_type

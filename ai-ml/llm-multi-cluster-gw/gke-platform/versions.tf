@@ -22,20 +22,5 @@ terraform {
       source  = "hashicorp/google-beta"
       version = "~> 5.30"
     }
-    helm = {
-      source  = "hashicorp/helm"
-      version = "~> 2.13.0"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.29.0"
-    }
-    kubectl = {
-      source  = "alekc/kubectl"
-      version = "2.0.4"
-    }
-  }
-  provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-kubernetes-engine:kuberay/v0.1.0"
   }
 }

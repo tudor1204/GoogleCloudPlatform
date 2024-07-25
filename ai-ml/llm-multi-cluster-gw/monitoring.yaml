@@ -1,10 +1,9 @@
 apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
-  name: my-prometheus-http-app
+  name: llm-prometheus
   labels:
-    app.kubernetes.io/name: my-prometheus-http-app
-    app.kubernetes.io/part-of: google-cloud-managed-prometheus
+    app.kubernetes.io/name: llm-prometheus
 spec:
   endpoints:
   - port: web
