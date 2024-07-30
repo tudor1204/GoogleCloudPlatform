@@ -29,6 +29,7 @@ spec:
     protocol: TCP
     targetPort: 5432
   selector:
+    role: primary
     cnpg.io/cluster: gke-pg-cluster
   type: LoadBalancer
 # [END gke_databases_pgvector_01_basic_cluster_qdrant_ilb]
