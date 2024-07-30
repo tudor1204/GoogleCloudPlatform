@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_databases_pgvector_01_basic_cluster_qdrant_ilb]
+# [START gke_databases_elasticsearch_02_elasticsearch_ilb]
 apiVersion: v1
 kind: Service
 metadata:
@@ -20,15 +20,16 @@ metadata:
     #cloud.google.com/neg: '{"ingress": true}'
     networking.gke.io/load-balancer-type: "Internal"
   labels:
-    app.kubernetes.io/name: gke-pg-cluster
-  name: pg-ilb
+    app.kubernetes.io/name: elasticsearch
+  name: elastic-ilb
 spec:
   ports:
-  - name: http
-    port: 8080
+  - name: https
+    port: 9200
     protocol: TCP
-    targetPort: 5432
+    targetPort: 9200
   selector:
-    cnpg.io/cluster: gke-pg-cluster
+    common.k8s.elastic.co/type: elasticsearch
+    elasticsearch.k8s.elastic.co/cluster-name: elasticsearch-ha
   type: LoadBalancer
-# [END gke_databases_pgvector_01_basic_cluster_qdrant_ilb]
+# [END gke_databases_elasticsearch_02_elasticsearch_ilb]
