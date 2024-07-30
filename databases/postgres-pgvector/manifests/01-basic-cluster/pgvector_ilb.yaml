@@ -25,7 +25,7 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 8080
+    port: 5432
     protocol: TCP
     targetPort: 5432
   selector:
