@@ -16,8 +16,8 @@ export PROJECT_ID=$(gcloud config get project) \
 && export CLUSTER_NAME=CLUSTER_NAME
 
 # Add the Hugging Face username and Hugging Face user token to the cloud secrets
-echo -n 'YOUR_HUGGINGFACE_USER_NAME' | gcloud secrets create hf-username --data-file=-
-echo -n 'YOUR_HUGGINGFACE_USER_TOKEN' | gcloud secrets create hf-token --data-file=-
+echo -n 'YOUR_HUGGINGFACE_USER_NAME' | gcloud secrets create hf-username --data-file=- \
+&& echo -n 'YOUR_HUGGINGFACE_USER_TOKEN' | gcloud secrets create hf-token --data-file=-
 
 # create a repository in the artifact registr
 gcloud artifacts repositories create $REPOSITORY_NAME \
@@ -41,12 +41,9 @@ gcloud builds submit \
 # Check the existing container image
 gcloud artifacts docker images list $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME
 
-# Create a Cloud Storage bucket to store the execution logs
-gsutil mb gs://$BUCKET_NAME
-
 # Run the Cloud Build command with substitutions
 gcloud builds submit --config cloudbuild-disk.yaml --no-source \
---substitutions=_DISK_IMAGE=$DISK_IMAGE,_CONTAINER_IMAGE=$CONTAINER_IMAGE,_BUCKET_NAME=$BUCKET_NAME,_ZONE=$ZONE
+--substitutions=_DISK_IMAGE=$DISK_IMAGE,_CONTAINER_IMAGE=$CONTAINER_IMAGE,_BUCKET_NAME=$BUCKET_NAME,_REGION=$REGION,_ZONE=$ZONE
 
 # check the existing disk image
 gcloud compute images list --no-standard-images
@@ -62,7 +59,7 @@ gcloud container clusters create ${CLUSTER_NAME} \
   --enable-image-streaming
 
 # Create a node pool with a secondary boot disk
-gcloud beta container node-pools create ${STANDARD_NODEPOOL_NAME} \
+gcloud beta container node-pools create gpupool \
   --accelerator type=nvidia-l4,count=2,gpu-driver-version=latest \
   --project=${PROJECT_ID} \
   --location=${REGION} \
