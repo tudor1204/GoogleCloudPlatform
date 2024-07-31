@@ -47,11 +47,11 @@ resource "google_container_cluster" "ml_cluster" {
   }
   dynamic "fleet" {
     for_each = var.enable_fleet ? [1] : []
-      content {
-        project = var.fleet_project_id
-      }
+    content {
+      project = var.fleet_project_id
+    }
   }
-  
+
   dynamic "gateway_api_config" {
     for_each = local.gateway_api_config
 
@@ -63,7 +63,7 @@ resource "google_container_cluster" "ml_cluster" {
   workload_identity_config {
     workload_pool = "${var.project_id}.svc.id.goog"
   }
-  
+
   release_channel {
     channel = "RAPID"
   }
@@ -100,7 +100,7 @@ resource "google_container_node_pool" "gpu_pool" {
   cluster    = var.enable_autopilot ? null : google_container_cluster.ml_cluster[0].name
 
   node_locations = var.gpu_pool_node_locations
-  
+
   autoscaling {
     min_node_count = "1"
     max_node_count = "3"

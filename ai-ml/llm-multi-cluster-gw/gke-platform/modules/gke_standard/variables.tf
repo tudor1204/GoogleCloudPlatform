@@ -31,9 +31,9 @@ variable "cluster_name" {
 }
 
 variable "cluster_labels" {
-  type        = map
+  type        = map(any)
   description = "GKE cluster labels"
-  default     =  {
+  default = {
     created-by = "ai-on-gke"
   }
 }
@@ -62,18 +62,18 @@ variable "gpu_pool_accelerator_type" {
 }
 
 variable "gpu_pool_node_locations" {
-  type        = list
+  type        = list(any)
   description = "Specify the gpu-pool node zone locations"
   default     = ["us-central1-a", "us-central1-c", "us-central1-f"]
 }
 
 variable "enable_fleet" {
-  type = bool
+  type    = bool
   default = false
 }
 
 variable "fleet_project_id" {
-  type = string
+  type    = string
   default = ""
 }
 

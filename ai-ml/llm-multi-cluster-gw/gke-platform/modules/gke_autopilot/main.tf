@@ -35,12 +35,12 @@ resource "google_container_cluster" "ml_cluster" {
       enabled = "true"
     }
   }
-  
+
   dynamic "fleet" {
     for_each = var.enable_fleet ? [1] : []
-      content {
-        project = var.fleet_project_id
-      }
+    content {
+      project = var.fleet_project_id
+    }
   }
 
   ip_allocation_policy {

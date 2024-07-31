@@ -31,9 +31,9 @@ variable "cluster_name" {
 }
 
 variable "cluster_labels" {
-  type        = map
+  type        = map(any)
   description = "GKE cluster labels"
-  default     =  {
+  default = {
     created-by = "ai-on-gke"
   }
 }
@@ -50,11 +50,11 @@ variable "enable_autopilot" {
 }
 
 variable "enable_fleet" {
-  type = bool
+  type    = bool
   default = false
 }
 
 variable "fleet_project_id" {
-  type = string
+  type    = string
   default = ""
 }
