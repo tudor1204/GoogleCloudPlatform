@@ -15,7 +15,7 @@
 variable "project_id" {
   type        = string
   description = "GCP project id"
-  default     = "ricliu-gke-dev"
+  default     = null
 }
 
 variable "region" {
@@ -38,14 +38,8 @@ variable "cluster_labels" {
   }
 }
 
-variable "namespace" {
-  type        = string
-  description = "Kubernetes namespace where resources are deployed"
-  default     = "ray"
-}
-
 variable "num_nodes" {
-  description = "Number of GPU / TPU nodes in the cluster"
+  description = "Number of GPU nodes in the cluster"
   default     = 1
 }
 
@@ -55,16 +49,10 @@ variable "enable_autopilot" {
   default     = false
 }
 
-variable "enable_tpu" {
-  type        = bool
-  description = "Set to true to create TPU node pool"
-  default     = false
-}
-
 variable "gpu_pool_machine_type" {
   type        = string
   description = "Specify the gpu-pool machine type"
-  default     = "n1-standard-16"
+  default     = "n1-standard-4"
 }
 
 variable "gpu_pool_accelerator_type" {
@@ -77,10 +65,6 @@ variable "gpu_pool_node_locations" {
   type        = list
   description = "Specify the gpu-pool node zone locations"
   default     = ["us-central1-a", "us-central1-c", "us-central1-f"]
-}
-
-variable "service_account" {
-  type = string
 }
 
 variable "enable_fleet" {
@@ -97,4 +81,10 @@ variable "gateway_api_channel" {
   type        = string
   description = "The gateway api channel of this cluster. Accepted values are `CHANNEL_STANDARD` and `CHANNEL_DISABLED`."
   default     = null
+}
+
+variable "gpu_driver_version" {
+  type        = string
+  description = "the NVIDIA driver version to install"
+  default     = "DEFAULT"
 }

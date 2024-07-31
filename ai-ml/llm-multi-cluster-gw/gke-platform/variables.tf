@@ -56,24 +56,29 @@ variable "enable_autopilot" {
   default     = false
 }
 
-variable "enable_tpu" {
-  type        = bool
-  description = "Set to true to create TPU node pool"
-  default     = false
-}
-
-variable "gpu_pool_machine_type" {
+variable "gpu_pool_machine_type_1" {
   type        = string
   description = "Specify the gpu-pool machine type"
-  default     = "n1-standard-16"
+  default     = "n1-standard-4"
 }
 
-variable "gpu_pool_accelerator_type" {
+variable "gpu_pool_machine_type_2" {
+  type        = string
+  description = "Specify the gpu-pool machine type"
+  default     = "n1-standard-4"
+}
+
+variable "gpu_pool_accelerator_type_1" {
   type        = string
   description = "Specify the gpu accelerator type"
   default     = "nvidia-tesla-t4"
 }
 
+variable "gpu_pool_accelerator_type_2" {
+  type        = string
+  description = "Specify the gpu accelerator type"
+  default     = "nvidia-tesla-t4"
+}
 variable "gpu_pool_node_locations_1" {
   type        = list(any)
   description = "Specify the gpu-pool node zone locations"
@@ -86,9 +91,6 @@ variable "gpu_pool_node_locations_2" {
   default     = ["europe-west4-a", "europe-west4-b", "europe-west4-c"]
 }
 
-variable "service_account" {
-  type = string
-}
 
 variable "enable_fleet" {
   type    = bool

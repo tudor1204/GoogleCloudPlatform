@@ -12,16 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-data "google_client_config" "provider" {}
-
-
 provider "google" {
   project = var.project_id
 }
 
 provider "google-beta" {
   project = var.project_id
-  region  = var.region
 }
 
 
@@ -33,7 +29,6 @@ module "gke_autopilot_1" {
   cluster_name     = var.cluster_name_1
   cluster_labels   = var.cluster_labels
   enable_autopilot = var.enable_autopilot
-  service_account  = var.service_account
   enable_fleet     = var.enable_fleet
   fleet_project_id = var.fleet_project_id
 }
@@ -46,7 +41,6 @@ module "gke_autopilot_2" {
   cluster_name     = var.cluster_name_2
   cluster_labels   = var.cluster_labels
   enable_autopilot = var.enable_autopilot
-  service_account  = var.service_account
   enable_fleet     = var.enable_fleet
   fleet_project_id = var.fleet_project_id
 }
@@ -60,11 +54,9 @@ module "gke_standard_1" {
   cluster_name              = var.cluster_name_1
   cluster_labels            = var.cluster_labels
   enable_autopilot          = var.enable_autopilot
-  enable_tpu                = var.enable_tpu
-  gpu_pool_machine_type     = var.gpu_pool_machine_type
-  gpu_pool_accelerator_type = var.gpu_pool_accelerator_type
+  gpu_pool_machine_type     = var.gpu_pool_machine_type_1
+  gpu_pool_accelerator_type = var.gpu_pool_accelerator_type_1
   gpu_pool_node_locations   = var.gpu_pool_node_locations_1
-  service_account           = var.service_account
   enable_fleet              = var.enable_fleet
   fleet_project_id          = var.fleet_project_id
   gateway_api_channel       = var.gateway_api_channel
@@ -78,14 +70,10 @@ module "gke_standard_2" {
   cluster_name              = var.cluster_name_2
   cluster_labels            = var.cluster_labels
   enable_autopilot          = var.enable_autopilot
-  enable_tpu                = var.enable_tpu
-  gpu_pool_machine_type     = var.gpu_pool_machine_type
-  gpu_pool_accelerator_type = var.gpu_pool_accelerator_type
+  gpu_pool_machine_type     = var.gpu_pool_machine_type_2
+  gpu_pool_accelerator_type = var.gpu_pool_accelerator_type_2
   gpu_pool_node_locations   = var.gpu_pool_node_locations_2
-  service_account           = var.service_account
   enable_fleet              = var.enable_fleet
   fleet_project_id          = var.fleet_project_id
   gateway_api_channel       = var.gateway_api_channel
 }
-
-
