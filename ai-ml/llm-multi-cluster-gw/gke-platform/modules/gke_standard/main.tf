@@ -125,6 +125,9 @@ resource "google_container_node_pool" "gpu_pool" {
     guest_accelerator {
       type  = var.gpu_pool_accelerator_type
       count = 1
+      gpu_driver_installation_config {
+        gpu_driver_version = var.gpu_driver_version
+      }
     }
 
     # preemptible  = true

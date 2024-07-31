@@ -105,3 +105,9 @@ variable "gateway_api_channel" {
   description = "The gateway api channel of this cluster. Accepted values are `CHANNEL_STANDARD` and `CHANNEL_DISABLED`."
   default     = null
 }
+
+variable "gpu_driver_version" {
+  type        = string
+  description = "the NVIDIA driver version to install"
+  default     = "DEFAULT"
+}

@@ -25,11 +25,13 @@
         "widget": {
           "title": "Requests",
           "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
             "dataSets": [
               {
                 "breakdowns": [],
                 "dimensions": [],
-                "legendTemplate": "Success",
                 "measures": [],
                 "plotType": "LINE",
                 "targetAxis": "Y1",
@@ -41,17 +43,20 @@
               {
                 "breakdowns": [],
                 "dimensions": [],
-                "legendTemplate": "Error: ${labels.err}",
                 "measures": [],
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum(increase(tgi_request_failure{location=~\"${location.value}\"}[1m])) by (err)",
+                  "prometheusQuery": "sum(increase(tgi_request_failure{cluster=~\"${cluster.value}\",location=~\"${location.value}\"}[1m])) by (err)",
                   "unitOverride": ""
                 }
               }
             ],
-            "thresholds": []
+            "thresholds": [],
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
           }
         }
       },
@@ -62,11 +67,13 @@
         "widget": {
           "title": "Latency quantiles",
           "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
             "dataSets": [
               {
                 "breakdowns": [],
                 "dimensions": [],
-                "legendTemplate": "p50",
                 "measures": [],
                 "plotType": "LINE",
                 "targetAxis": "Y1",
@@ -78,29 +85,31 @@
               {
                 "breakdowns": [],
                 "dimensions": [],
-                "legendTemplate": "p90",
                 "measures": [],
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_duration_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_duration_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               },
               {
                 "breakdowns": [],
                 "dimensions": [],
-                "legendTemplate": "p99",
                 "measures": [],
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_duration_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_duration_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               }
             ],
-            "thresholds": []
+            "thresholds": [],
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
           }
         }
       },
@@ -246,7 +255,7 @@
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_skipped_tokens_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_skipped_tokens_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               },
@@ -258,7 +267,7 @@
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_skipped_tokens_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_skipped_tokens_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               }
@@ -296,7 +305,7 @@
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_generated_tokens_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_generated_tokens_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               },
@@ -308,7 +317,7 @@
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_generated_tokens_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_generated_tokens_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               }
@@ -396,7 +405,7 @@
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_queue_duration_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_queue_duration_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               },
@@ -408,7 +417,7 @@
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_queue_duration_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_queue_duration_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               }
@@ -446,7 +455,7 @@
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_inference_duration_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.9, sum by (le) (rate(tgi_request_inference_duration_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               },
@@ -458,7 +467,7 @@
                 "plotType": "LINE",
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
-                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_inference_duration_bucket{location=~\"${location.value}\"}[10m])))",
+                  "prometheusQuery": "histogram_quantile(0.99, sum by (le) (rate(tgi_request_inference_duration_bucket{cluster=~\"${cluster.value}\", location=~\"${location.value}\"}[10m])))",
                   "unitOverride": ""
                 }
               }
