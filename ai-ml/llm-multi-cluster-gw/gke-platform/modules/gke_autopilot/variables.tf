@@ -49,6 +49,10 @@ variable "enable_autopilot" {
   default     = false
 }
 
+variable "service_account" {
+  type = string
+}
+
 variable "enable_fleet" {
   type    = bool
   default = false

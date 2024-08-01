@@ -20,6 +20,17 @@ provider "google-beta" {
   project = var.project_id
 }
 
+resource "google_service_account" "service_account" {
+  account_id   = "gke-llm-sa"
+  display_name = "LLM clusters Service Account"
+}
+
+# Grant permissions to write metrics for monitoring purposes
+resource "google_project_iam_member" "project" {
+  project = var.project_id
+  role    = "roles/monitoring.metricWriter"
+  member  = "serviceAccount:${google_service_account.service_account.email}"
+}
 
 module "gke_autopilot_1" {
   source = "./modules/gke_autopilot"
@@ -29,6 +40,7 @@ module "gke_autopilot_1" {
   cluster_name     = var.cluster_name_1
   cluster_labels   = var.cluster_labels
   enable_autopilot = var.enable_autopilot
+  service_account  = google_service_account.service_account.email
   enable_fleet     = var.enable_fleet
   fleet_project_id = var.fleet_project_id
 }
@@ -41,6 +53,7 @@ module "gke_autopilot_2" {
   cluster_name     = var.cluster_name_2
   cluster_labels   = var.cluster_labels
   enable_autopilot = var.enable_autopilot
+  service_account  = google_service_account.service_account.email
   enable_fleet     = var.enable_fleet
   fleet_project_id = var.fleet_project_id
 }
@@ -57,6 +70,7 @@ module "gke_standard_1" {
   gpu_pool_machine_type     = var.gpu_pool_machine_type_1
   gpu_pool_accelerator_type = var.gpu_pool_accelerator_type_1
   gpu_pool_node_locations   = var.gpu_pool_node_locations_1
+  service_account           = google_service_account.service_account.email
   enable_fleet              = var.enable_fleet
   fleet_project_id          = var.fleet_project_id
   gateway_api_channel       = var.gateway_api_channel
@@ -73,6 +87,7 @@ module "gke_standard_2" {
   gpu_pool_machine_type     = var.gpu_pool_machine_type_2
   gpu_pool_accelerator_type = var.gpu_pool_accelerator_type_2
   gpu_pool_node_locations   = var.gpu_pool_node_locations_2
+  service_account           = google_service_account.service_account.email
   enable_fleet              = var.enable_fleet
   fleet_project_id          = var.fleet_project_id
   gateway_api_channel       = var.gateway_api_channel

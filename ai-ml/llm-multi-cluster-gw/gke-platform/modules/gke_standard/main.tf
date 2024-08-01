@@ -35,6 +35,15 @@ resource "google_container_cluster" "ml_cluster" {
   initial_node_count       = 1
   min_master_version       = "1.29"
 
+  node_config {
+    service_account = data.google_service_account.default.email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+    reservation_affinity {
+      consume_reservation_type = "NO_RESERVATION"
+    }
+  }
   logging_config {
     enable_components = ["SYSTEM_COMPONENTS", "WORKLOADS"]
   }
@@ -64,11 +73,16 @@ resource "google_container_cluster" "ml_cluster" {
     workload_pool = "${var.project_id}.svc.id.goog"
   }
 
+
   release_channel {
     channel = "RAPID"
   }
 
   resource_labels = var.cluster_labels
+}
+
+data "google_service_account" "default" {
+  account_id = var.service_account
 }
 
 resource "google_container_node_pool" "cpu_pool" {
@@ -88,7 +102,11 @@ resource "google_container_node_pool" "cpu_pool" {
   }
 
   node_config {
-    machine_type = "n1-standard-4"
+    machine_type    = "n1-standard-4"
+    service_account = data.google_service_account.default.email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
   }
 }
 
@@ -120,6 +138,11 @@ resource "google_container_node_pool" "gpu_pool" {
       "https://www.googleapis.com/auth/service.management.readonly",
       "https://www.googleapis.com/auth/servicecontrol",
     ]
+    service_account = data.google_service_account.default.email
+
+    labels = {
+      env = var.project_id
+    }
 
     guest_accelerator {
       type  = var.gpu_pool_accelerator_type

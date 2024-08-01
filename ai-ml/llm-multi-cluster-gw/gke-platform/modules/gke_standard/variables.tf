@@ -67,6 +67,10 @@ variable "gpu_pool_node_locations" {
   default     = ["us-central1-a", "us-central1-c", "us-central1-f"]
 }
 
+variable "service_account" {
+  type = string
+}
+
 variable "enable_fleet" {
   type    = bool
   default = false

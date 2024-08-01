@@ -17,6 +17,10 @@ provider "google" {
   region  = var.region
 }
 
+data "google_service_account" "default" {
+  account_id = var.service_account
+}
+
 # GKE cluster
 resource "google_container_cluster" "ml_cluster" {
   name     = var.cluster_name
@@ -28,7 +32,24 @@ resource "google_container_cluster" "ml_cluster" {
   logging_config {
     enable_components = ["SYSTEM_COMPONENTS", "WORKLOADS"]
   }
-
+  node_config {
+    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    service_account = data.google_service_account.default.email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+    reservation_affinity {
+      consume_reservation_type = "NO_RESERVATION"
+    }
+  }
+  cluster_autoscaling {
+    auto_provisioning_defaults {
+      service_account = data.google_service_account.default.email
+      oauth_scopes = [
+        "https://www.googleapis.com/auth/cloud-platform"
+      ]
+    }
+  }
   monitoring_config {
     enable_components = ["SYSTEM_COMPONENTS"]
     managed_prometheus {
