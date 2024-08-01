@@ -30,9 +30,6 @@ spec:
       nodeSelector:
         cloud.google.com/gke-tpu-topology: 2x4
         cloud.google.com/gke-tpu-accelerator: tpu-v5-lite-podslice
-      volumes:
-        - name: data-volume
-          emptyDir: {}
       containers:
       - name: tgi-tpu
         image: REGION_NAME-docker.pkg.dev/PROJECT_ID/optimum-tpu/tgi-tpu:latest
@@ -50,9 +47,6 @@ spec:
                 key: hf_api_token
         ports:
         - containerPort: 80
-        volumeMounts:
-            - name: data-volume
-              mountPath: /data
         resources:
           limits:
             google.com/tpu: 8
@@ -75,3 +69,5 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 80
+
+# [END gke_ai_ml_llm_serving_optimum_tpu_llama3_8b_2x4]
