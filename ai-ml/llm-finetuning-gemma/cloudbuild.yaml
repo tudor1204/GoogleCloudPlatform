@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,18 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_ap_autopilot_quickstart_providers_terraform]
-terraform {
-  required_providers {
-    google = {
-      source = "hashicorp/google"
-      version = "5.39.1"
-    }
-    kubernetes = {
-      source = "hashicorp/kubernetes"
-      version = "2.31.0"
-    }
-  }
-  required_version = ">= 0.13"
-}
-# [END gke_ap_autopilot_quickstart_providers_terraform]
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'us-docker.pkg.dev/$PROJECT_ID/gemma/finetune-gemma-gpu:1.0.0', '.' ]
+images:
+- 'us-docker.pkg.dev/$PROJECT_ID/gemma/finetune-gemma-gpu:1.0.0'
