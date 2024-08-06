@@ -47,7 +47,7 @@ spec:
 apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
-  name: "prometheus-to-prometheus"
+  name: "custom-metrics-exporter"
 spec:
   selector:
     matchLabels:

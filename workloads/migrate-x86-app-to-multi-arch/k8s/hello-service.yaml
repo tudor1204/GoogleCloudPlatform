@@ -1,4 +1,3 @@
-#!/usr/bin/env sh
 # Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,18 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source scripts/variables.sh
-
-echo "*********************************"
-echo "Deleting GCP resources"
-echo "*********************************"
-
-echo "Deleting GKE cluster..."
-gcloud container clusters delete ${CLUSTER_NAME} \
-    --project=${PROJECT_ID} --zone=${ZONE}
-echo "GKE cluster '${CLUSTER_NAME}' deleted."
-
-echo "Deleting Filestore instance..."
-gcloud filestore instances delete ${FILESTORE_ID} --zone=${ZONE}
-echo "Filestore instance '${FILESTORE_ID}' deleted."
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-service
+  labels:
+    app: hello
+    tier: web
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: hello
+    tier: web
