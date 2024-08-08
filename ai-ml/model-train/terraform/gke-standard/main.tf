@@ -21,7 +21,7 @@ module "network" {
 }
 
 # [START gke_model_train_standard_private_regional_cluster]
-module "postgres_cluster" {
+module "training_cluster" {
   source                   = "../modules/cluster"
   project_id               = var.project_id
   region                   = var.region
@@ -36,29 +36,32 @@ module "postgres_cluster" {
       disk_type           = "pd-balanced"
       node_locations      = var.node_location
       autoscaling         = true
-      min_count           = 0
+      min_count           = 1
       max_count           = var.autoscaling_max_count
       max_surge           = 1
       max_unavailable     = 0
-      machine_type        = "g2-standard-4"
+      #machine_type        = "g2-standard-4"
+      machine_type        = "n2-standard-2"
+      local_ssd_count     = 1
       auto_repair         = true
-      accelerator_count   = 1
-      accelerator_type    = "nvidia-l4"
-      gpu_driver_version  = "LATEST"
+      #accelerator_count   = 1
+      #accelerator_type    = "nvidia-l4"
+      #gpu_driver_version  = "LATEST"
     }
   ]
+  
   node_pools_labels = {
     all = {}
-    pool-model-train" = {
-      "app.stateful/component" = "model_train""
+    model-train-pool = {
+      "app.stateful/component" = "model-train"
     }
   }
   node_pools_taints = {
     all = []
-    pool-postgres = [
+    model-train-pool = [
       {
         key    = "app.stateful/component"
-        value  = "model-train""
+        value  = "model-train"
         effect = "NO_SCHEDULE"
       }
     ]

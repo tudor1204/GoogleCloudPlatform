@@ -9,11 +9,12 @@
 export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
 export PROJECT_ID="your project"
 export REGION="us-central1"
-export CLUSTER_PREFIX="postgres"
+export CLUSTER_PREFIX="model-train"
+export GPU_ZONE=$(gcloud compute accelerator-types list --filter="zone ~ $REGION AND name=nvidia-l4" --limit=1 --format="value(zone)")
 
 terraform init
-terraform plan -var project_id=$PROJECT_ID -var region=${REGION} -var cluster_prefix=${CLUSTER_PREFIX}
-terraform apply -var project_id=$PROJECT_ID -var region=${REGION} -var cluster_prefix=${CLUSTER_PREFIX}
+terraform plan -var project_id=$PROJECT_ID -var region=${REGION} -var cluster_prefix=${CLUSTER_PREFIX} -var node_location=${GPU_ZONE}
+terraform apply -var project_id=$PROJECT_ID -var region=${REGION} -var cluster_prefix=${CLUSTER_PREFIX} -var node_location=${GPU_ZONE}
 ```
 ## Clean up
 **NOTE:** Be very careful when destroying any resource, not recommended for production!
@@ -22,5 +23,6 @@ terraform apply -var project_id=$PROJECT_ID -var region=${REGION} -var cluster_p
 terraform destroy \
 -var project_id=$PROJECT_ID \
 -var region=${REGION} \
--var cluster_prefix=${CLUSTER_PREFIX}
+-var cluster_prefix=${CLUSTER_PREFIX} \
+-var node_location=${GPU_ZONE}
 

@@ -13,9 +13,9 @@
 # limitations under the License.
 
 # [START gke_model_train_standard_private_regional_cluster]
-module "postgres_cluster" {
-  source                   = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version                  = "~> 29.0"
+module "training_cluster" {
+  source                   = "terraform-google-modules/kubernetes-engine/google//modules/beta-private-cluster"
+  version                  = "~> 31.0"
   project_id               = var.project_id
   name                     = "${var.cluster_prefix}-cluster"
   regional                 = true
@@ -31,22 +31,26 @@ module "postgres_cluster" {
   network_policy           = true
   logging_enabled_components = ["SYSTEM_COMPONENTS","WORKLOADS"]
   monitoring_enabled_components = ["SYSTEM_COMPONENTS"]
-  enable_cost_allocation = true
-  deletion_protection = false
-  initial_node_count = 1
-  kubernetes_version       = "1.28"
+  enable_cost_allocation   = true
+  deletion_protection      = false
+  initial_node_count       = 1
+  stateful_ha              = true
+  grant_registry_access    = true
+  kubernetes_version       = "latest"
+  release_channel          = "RAPID"
 
   cluster_resource_labels = {
     name      = "${var.cluster_prefix}-cluster"
-    component = "${var.cluster_prefix}-operator"
+    component = "${var.cluster_prefix}-training"
   }
 
   monitoring_enable_managed_prometheus = true
   gke_backup_agent_config = true
  
-  node_pools        = var.node_pools
-  node_pools_labels = var.node_pools_labels
-  node_pools_taints = var.node_pools_taints
-  gce_pd_csi_driver = true
+  node_pools          = var.node_pools
+  node_pools_labels   = var.node_pools_labels
+  node_pools_taints   = var.node_pools_taints
+  gce_pd_csi_driver   = true
+  gcs_fuse_csi_driver = true
 }
 # [END gke_model_train_standard_private_regional_cluster]

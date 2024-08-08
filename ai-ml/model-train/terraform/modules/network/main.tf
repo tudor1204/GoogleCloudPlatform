@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_postgres_zalando_vpc_multi_region_network]
+# [START gke_model_train_vpc_multi_region_network]
 module "gcp-network" {
   source  = "terraform-google-modules/network/google"
   version = "~> 8.1.0"
@@ -44,6 +44,24 @@ module "gcp-network" {
   }
 }
 
+module "firewall_rules" {
+  source       = "terraform-google-modules/network/google//modules/firewall-rules"
+  version = "~> 8.0"
+  project_id   = var.project_id
+  network_name = module.gcp-network.network_name
+
+  ingress_rules = [{
+    name                    = "allow-ssh-for-cloudbuild"
+    description             = "open webhook port"
+    source_ranges           = ["35.235.240.0/20"]
+    allow = [{
+      protocol = "tcp"
+      ports    = ["22"]
+    }]
+    deny = []
+  }]
+}
+
 output "network_name" {
   value = module.gcp-network.network_name
 }
@@ -51,9 +69,9 @@ output "network_name" {
 output "subnet_name" {
   value = module.gcp-network.subnets_names[0]
 }
-# [END gke_postgres_zalando_vpc_multi_region_network]
+# [END gke_model_train_vpc_multi_region_network]
 
-# [START gke_postgres_zalando_cloudnat_simple_create]
+# [START gke_model_train_cloudnat_simple_create]
 module "cloud_router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 6.0"
@@ -65,4 +83,4 @@ module "cloud_router" {
     name = "${var.cluster_prefix}-nat"
   }]
 }
-# [END gke_postgres_zalando_cloudnat_simple_create]
+# [END gke_model_train_cloudnat_simple_create]

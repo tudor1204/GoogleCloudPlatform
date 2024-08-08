@@ -23,7 +23,7 @@ variable "region" {
 
 variable "cluster_prefix" {
   description = "The prefix for all cluster resources"
-  default     = "model_train""
+  default     = "model-train"
 }
 
 variable "node_location" {
