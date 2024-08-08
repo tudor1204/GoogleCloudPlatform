@@ -53,4 +53,8 @@ module "training_cluster" {
   gce_pd_csi_driver   = true
   gcs_fuse_csi_driver = true
 }
+
+data "google_project" "project" {
+  project_id               = var.project_id
+}
 # [END gke_model_train_standard_private_regional_cluster]
