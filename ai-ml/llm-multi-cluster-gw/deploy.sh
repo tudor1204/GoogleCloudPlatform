@@ -18,7 +18,7 @@ gcloud services enable container.googleapis.com \
 # Create terraform.tfvars file 
 cat <<EOF >gke-platform/terraform.tfvars
 project_id                  = "$PROJECT_ID"
-enable_autopilot            = true
+enable_autopilot            = false
 region_1                    = "$REGION_1"
 region_2                    = "$REGION_2"
 gpu_pool_machine_type_1     = "$GPU_POOL_MACHINE_TYPE_1"
@@ -79,18 +79,23 @@ NAMESPACE=llm
 # Deploy workloads in gke-us
 kubectl config use-context gke-us
 kubectl create ns $NAMESPACE
-kubectl apply -f secret.yaml -n $NAMESPACE
-sed -e "s/GPU_ACCELERATOR_TYPE/$GPU_POOL_ACCELERATOR_TYPE_1/g" tgi-2b-it-1.1.yaml |kubectl apply -f - -n $NAMESPACE
-# kubectl apply -f gradio-tgi-us.yaml -n $NAMESPACE
+kubectl create secret generic hf-secret \
+--from-literal=hf_api_token=$HF_TOKEN \
+--dry-run=client -o yaml | kubectl apply --context=gke-us -n $NAMESPACE -f -
+
+# sed -e "s/GPU_ACCELERATOR_TYPE/$GPU_POOL_ACCELERATOR_TYPE_1/g" tgi-2b-it-1.1.yaml |kubectl apply -f - -n $NAMESPACE
+
 # Deploy serviceExport 
 kubectl apply -f export-us.yaml -n $NAMESPACE
 
 # Deploy workloads in gke-eu
 kubectl config use-context gke-eu
 kubectl create ns  $NAMESPACE
-kubectl apply -f secret.yaml -n $NAMESPACE
+kubectl create secret generic hf-secret \
+--from-literal=hf_api_token=$HF_TOKEN \
+--dry-run=client -o yaml | kubectl apply --context=gke-eu -n $NAMESPACE -f -
+
 sed -e "s/GPU_ACCELERATOR_TYPE/$GPU_POOL_ACCELERATOR_TYPE_2/g" tgi-2b-it-1.1.yaml |kubectl apply -f - -n $NAMESPACE
-# kubectl apply -f gradio-tgi-eu.yaml -n $NAMESPACE
 
 # Deploy serviceExport 
 kubectl apply -f export-eu.yaml -n $NAMESPACE
@@ -102,3 +107,19 @@ kubectl apply -f gateway.yaml -n $NAMESPACE
 sleep 360
 kubectl apply -f monitoring.yaml -n $NAMESPACE --context=gke-us
 kubectl apply -f monitoring.yaml -n $NAMESPACE --context=gke-eu
+
+#Grant your user the ability to create required authorization roles:
+kubectl create clusterrolebinding cluster-admin-binding \
+    --clusterrole cluster-admin --user "$(gcloud config get-value account)"
+
+#Deploy the custom metrics adapter on your cluster:
+kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/k8s-stackdriver/master/custom-metrics-stackdriver-adapter/deploy/production/adapter_new_resource_model.yaml --context=gke-eu
+kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/k8s-stackdriver/master/custom-metrics-stackdriver-adapter/deploy/production/adapter_new_resource_model.yaml --context=gke-us
+
+gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
+  --role roles/monitoring.viewer \
+  --condition=None \
+  --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/custom-metrics/sa/custom-metrics-stackdriver-adapter
+
+kubectl apply -f hpa-custom-metrics.yaml -n llm --context=gke-us 
+kubectl apply -f hpa-custom-metrics.yaml -n llm --context=gke-eu
