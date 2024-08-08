@@ -1,5 +1,10 @@
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bucket-access
+---
+apiVersion: v1
 kind: Service
 metadata:
   labels: &labels
@@ -27,6 +32,7 @@ spec:
         gke-gcsfuse/volumes: "true"
       labels: *labels
     spec:
+      serviceAccountName: bucket-access
       containers:
       - name: jupyter
         image: tensorflow/tensorflow:2.15.0-jupyter
