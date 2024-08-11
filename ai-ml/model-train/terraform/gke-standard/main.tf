@@ -40,13 +40,12 @@ module "training_cluster" {
       max_count           = var.autoscaling_max_count
       max_surge           = 1
       max_unavailable     = 0
-      #machine_type        = "g2-standard-4"
-      machine_type        = "n2-standard-2"
-      local_ssd_count     = 1
+      machine_type        = "g2-standard-8"
+      local_nvme_ssd_count     = 1
       auto_repair         = true
-      #accelerator_count   = 1
-      #accelerator_type    = "nvidia-l4"
-      #gpu_driver_version  = "LATEST"
+      accelerator_count   = 1
+      accelerator_type    = "nvidia-l4"
+      gpu_driver_version  = "LATEST"
     }
   ]
   

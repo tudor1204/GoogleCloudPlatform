@@ -7,13 +7,13 @@ spec:
   accessModes:
   - ReadWriteMany
   capacity:
-    storage: 15Gi
+    storage: 16Gi
   storageClassName: example-storage-class
   mountOptions:
     - implicit-dirs
   csi:
     driver: gcsfuse.csi.storage.gke.io
-    volumeHandle: <CLUSTER_PREFIX>-model-train
+    volumeHandle: <PROJECT_ID>-<CLUSTER_PREFIX>-model-train
     volumeAttributes:
       fileCacheCapacity: 5Gi
       fileCacheForRangeRead: "true"
@@ -27,6 +27,6 @@ spec:
   - ReadWriteMany
   resources:
     requests:
-      storage: 15Gi
+      storage: 16Gi
   volumeName: gcs-fuse-pv
   storageClassName: example-storage-class
