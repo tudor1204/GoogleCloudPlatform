@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_ai_ml_llm_serving_gemma_jetstream_pytorch_job_llama_3_8b]
+# [START gke_ai_ml_llm_serving_tpus_jetstream_pytorch_job_llama_3_8b]
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -49,4 +49,4 @@ spec:
         secret:
           defaultMode: 0400
           secretName: huggingface-secret
-# [END gke_ai_ml_llm_serving_gemma_jetstream_pytorch_job_llama_3_8b]
+# [END gke_ai_ml_llm_serving_tpus_jetstream_pytorch_job_llama_3_8b]
