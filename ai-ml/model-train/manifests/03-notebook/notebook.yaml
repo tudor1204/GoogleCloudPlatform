@@ -1,3 +1,37 @@
+#---
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: pip-cache-pv
+#spec:
+#  capacity:
+#    storage: 20Gi
+#  accessModes: ["ReadWriteOnce"]
+#  persistentVolumeReclaimPolicy: Retain
+#  storageClassName: local-storage
+#  local:
+#    path: /mnt/disks/ssd0
+#  nodeAffinity:
+#    required:
+#      nodeSelectorTerms:
+#      - matchExpressions:
+#        - key: "node_pool"
+#          operator: "In"
+#          values:
+#          - "model-train-pool"
+#---
+#  kind: PersistentVolumeClaim
+#  apiVersion: v1
+#  metadata:
+#    name: pip-cache-claim
+#  spec:
+#    accessModes:
+#    - ReadWriteOnce
+#    storageClassName: local-storage
+#    volumeName: pip-cache-pv
+#    resources:
+#      requests:
+#        storage: 20Gi
 ---
 apiVersion: v1
 kind: Service
@@ -37,18 +71,18 @@ spec:
           requests:
             cpu: "2"
             memory: "16Gi"
-            ephemeral-storage: "5Gi"
             nvidia.com/gpu: 1
           limits:
             cpu: "2"
             memory: "16Gi"
-            ephemeral-storage: "5Gi"
             nvidia.com/gpu: 1
         ports:
         - containerPort: 8888
         volumeMounts:
           #- name: dshm
           #  mountPath: /dev/shm
+#          - name: pip-cache
+#            mountPath: /pip-cache
           - name: local-ssd-storage
             mountPath: /local-ssd
           - name: ram-disk-storage
@@ -62,6 +96,9 @@ spec:
         #- name: dshm
         #emptyDir:
         #  medium: Memory
+#      - name: pip-cache
+#        persistentVolumeClaim:
+#          claimName: pip-cache-claim
       - name: local-ssd-storage
         persistentVolumeClaim:
           claimName: local-ssd-claim
