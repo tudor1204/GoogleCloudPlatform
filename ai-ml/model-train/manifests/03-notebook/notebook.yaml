@@ -46,7 +46,8 @@ spec:
           - name: dshm
             mountPath: /dev/shm
           - name: notebook
-            mountPath: /tf
+            mountPath: "/home/jovyan/model-train.ipynb"
+            subPath: "model-train.ipynb"
           - name: local-ssd-storage
             mountPath: /local-ssd
           - name: ram-disk-storage
