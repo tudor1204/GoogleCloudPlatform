@@ -30,11 +30,7 @@ spec:
       serviceAccountName: bucket-access
       containers:
       - name: jupyter
-        #image: quay.io/jupyter/pytorch-notebook:cuda11-python-3.11
         image: quay.io/jupyter/pytorch-notebook:cuda12-pytorch-2.4.0
-        #image: tensorflow/tensorflow:2.17.0-gpu-jupyter
-        #command: [ "/bin/bash", "-c", "--" ]
-        #args: [ "while true; do sleep 30; done;" ]
         resources:
           requests:
             cpu: "2"
@@ -49,24 +45,21 @@ spec:
         volumeMounts:
           - name: dshm
             mountPath: /dev/shm
-#          - name: pip-cache
-#            mountPath: /pip-cache
+          - name: notebook
+            mountPath: /tf
           - name: local-ssd-storage
             mountPath: /local-ssd
           - name: ram-disk-storage
             mountPath: /ram-disk
           - name: gcs-fuse-storage
             mountPath: /bucket
-        env:
-        - name: BUCKET_NAME
-          value: <PROJECT_ID>-<CLUSTER_PREFIX>-model-train
       volumes:
       - name: dshm
         emptyDir:
           medium: Memory
-#      - name: pip-cache
-#        persistentVolumeClaim:
-#          claimName: pip-cache-claim
+      - name: notebook
+        configMap:
+          name: notebook
       - name: local-ssd-storage
         persistentVolumeClaim:
           claimName: local-ssd-claim
