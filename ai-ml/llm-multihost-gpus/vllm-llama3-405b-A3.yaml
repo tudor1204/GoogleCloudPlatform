@@ -112,7 +112,7 @@ spec:
           emptyDir:
             medium: Memory
             sizeLimit: 15Gi
--------
+---
 apiVersion: v1
 kind: Service
 metadata:
