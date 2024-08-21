@@ -9,7 +9,9 @@ steps:
       sudo mount -t tmpfs -o size=16g tmpfs /mnt/disks/ram-disk && \
       sudo mkfs.ext4 -F /dev/disk/by-id/google-local-ssd-block0 && \
       sudo mkdir -p /mnt/disks/ssd0 && \
-      sudo mount /dev/disk/by-id/google-local-ssd-block0 /mnt/disks/ssd0"
+      sudo mount /dev/disk/by-id/google-local-ssd-block0 /mnt/disks/ssd0 && \
+      sudo mkdir -p /mnt/disks/ssd0/outputs && \
+      sudo chmod -R 777 /mnt/disks/ssd0/outputs" 
 substitutions:
   _ZONE: us-central1-a
   _INSTANCE_NAME: model-train-vm
