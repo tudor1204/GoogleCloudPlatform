@@ -28,14 +28,16 @@ data:
     apt-get update -y && \
       apt-get install -y --no-install-recommends \
       git git-lfs rsync
-    git lfs install 
-    cd /local-ssd
-    echo "Saving dataset into Local SSD..."
+    git lfs install
+    cd /tmp
+    echo "Saving dataset into tmp..."
     time git clone --depth=1 "$DATASET_REPO"
+    echo "Saving dataset into Local SSD..."
+    time rsync --info=progress2 -a /tmp/dataset/dataset/ /local-ssd/dataset/
     echo "Saving dataset into Ram disk..."
-    time rsync --info=progress2 -a /local-ssd/dataset/dataset/ /ram-disk/dataset/
+    time rsync --info=progress2 -a /tmp/dataset/dataset/ /ram-disk/dataset/
     echo "Saving dataset into Bucket..."
-    time gsutil -q -m cp -r /local-ssd/dataset/dataset/ gs://$BUCKET_NAME/dataset/
+    time gsutil -q -m cp -r /tmp/dataset/dataset/ gs://$BUCKET_NAME/
     echo "Dataset was successfully saved in all storages!"
 ---
 apiVersion: batch/v1
