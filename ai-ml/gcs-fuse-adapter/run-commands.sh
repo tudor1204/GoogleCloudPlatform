@@ -8,14 +8,14 @@ export PROJECT_ID=$(gcloud config get project) \
 && export ZONE=$REGION-a \
 && export CLUSTER_NAME=CLUSTER_NAME \
 && export NODEPOOL_NAME=NODEPOOL_NAME \
-&& export BUCKET_NAME=gs://MODEL_FILES_BUCKET_NAME/ \
+&& export BUCKET_NAME=MODEL_FILES_BUCKET_NAME \
 && export KSA_NAME=K8S_SERVICE_ACCOUNT_NAME \
 && export MODEL_PATH=MODEL_PATH_NAME \
 && export ROLE_NAME=ROLE_NAME
 
 # Add the Hugging Face username and Hugging Face user token to the cloud secrets
-echo -n 'YOUR_HUGGINGFACE_USER_NAME' | gcloud secrets create hf-username --data-file=-
-echo -n 'YOUR_HUGGINGFACE_USER_TOKEN' | gcloud secrets create hf-token --data-file=-
+echo -n 'YOUR_HUGGINGFACE_USER_NAME' | gcloud secrets create hf-username --data-file=- \
+&& echo -n 'YOUR_HUGGINGFACE_USER_TOKEN' | gcloud secrets create hf-token --data-file=-
 
 # Create a GKE Autopilot cluster
 gcloud container clusters create-auto ${CLUSTER_NAME} \
@@ -35,7 +35,7 @@ gcloud container clusters create ${CLUSTER_NAME} \
   --addons GcsFuseCsiDriver
 
 # Create a node pool
-gcloud container node-pools create ${NODEPOOL_NAME} \
+gcloud container node-pools create gpupool \
   --accelerator type=nvidia-l4,count=2,gpu-driver-version=latest \
   --project=${PROJECT_ID} \
   --location=${REGION} \
@@ -45,10 +45,15 @@ gcloud container node-pools create ${NODEPOOL_NAME} \
   --num-nodes=1
 
 # Add the required permissions to the default Cloud Build service account
-gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
+gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
     --role="roles/storage.admin" \
+    --condition=None \
+&& gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
+    --role="roles/secretmanager.secretAccessor" \
     --condition=None
+
 
 # Run the Cloud Build command with all required substitutions
 gcloud builds submit \
@@ -58,8 +63,8 @@ gcloud builds submit \
 # Check if files are downloaded to the Cloud Storage bucket
 gsutil ls gs://$BUCKET_NAME/$MODEL_PATH
 
-# Apply the manifest and change the placeholder with the name of the requred bucket
-sed "s|<BUCKET_NAME>|$BUCKET_NAME|" model-deployment.yaml | kubectl apply -f -
+# Apply the manifest and change the placeholder with the name of the requred bucket and required k8s service account
+sed "s/<BUCKET_NAME>/$BUCKET_NAME/g; s/<KSA_NAME>/$KSA_NAME/g" model-deployment.yaml | kubectl apply -f -
 
 # Clean-up
 gcloud secrets delete hf-username \
@@ -72,5 +77,9 @@ gcloud secrets delete hf-username \
 && gcloud projects remove-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
     --role="roles/storage.admin" \
+    --condition=None \
+&& gcloud projects remove-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
+    --role="roles/secretmanager.secretAccessor" \
     --condition=None \
 && gsutil -m rm -rf gs://$BUCKET_NAME

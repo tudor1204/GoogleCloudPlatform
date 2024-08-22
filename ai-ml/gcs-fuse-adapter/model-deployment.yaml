@@ -44,7 +44,7 @@ spec:
         - name: gcs-fuse-csi-ephemeral
           mountPath: /model
           readOnly: false
-      serviceAccountName: gsfuse-sa-test
+      serviceAccountName: <KSA_NAME>
       volumes:
       - name: gcs-fuse-csi-ephemeral
         csi:
