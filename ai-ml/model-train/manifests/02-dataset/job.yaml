@@ -36,6 +36,8 @@ data:
     time rsync --info=progress2 -a /tmp/dataset/dataset/ /local-ssd/dataset/
     echo "Saving dataset into Ram disk..."
     time rsync --info=progress2 -a /tmp/dataset/dataset/ /ram-disk/dataset/
+    echo "Saving dataset into Persistent disk..."
+    time rsync --info=progress2 -a /tmp/dataset/dataset/ /pd-ssd/dataset/
     echo "Saving dataset into Bucket..."
     time gsutil -q -m cp -r /tmp/dataset/dataset/ gs://$BUCKET_NAME/
     echo "Dataset was successfully saved in all storages!"
@@ -79,6 +81,8 @@ spec:
           mountPath: /local-ssd
         - name: ram-disk-storage
           mountPath: /ram-disk
+        - name: pd-ssd-storage
+          mountPath: /pd-ssd
         - name: scripts-volume
           mountPath: "/scripts/"
           readOnly: true
@@ -96,6 +100,9 @@ spec:
       - name: gcs-fuse-storage
         persistentVolumeClaim:    
           claimName: gcs-fuse-claim
+      - name: pd-ssd-storage
+        persistentVolumeClaim:    
+          claimName: pd-ssd-claim
       tolerations:
       - key: "nvidia.com/gpu"
         operator: "Equal"

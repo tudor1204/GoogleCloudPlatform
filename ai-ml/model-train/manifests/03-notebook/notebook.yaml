@@ -68,6 +68,8 @@ spec:
             mountPath: /ram-disk
           - name: gcs-fuse-storage
             mountPath: /bucket
+          - name: pd-ssd-storage
+            mountPath: /pd-ssd
       volumes:
       - name: dshm
         emptyDir:
@@ -84,6 +86,9 @@ spec:
       - name: gcs-fuse-storage
         persistentVolumeClaim:    
           claimName: gcs-fuse-claim
+      - name: pd-ssd-storage
+        persistentVolumeClaim:    
+          claimName: pd-ssd-claim
       tolerations:
       - key: "nvidia.com/gpu"
         operator: "Equal"
