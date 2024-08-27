@@ -37,15 +37,15 @@ spec:
                   fieldRef:
                     fieldPath: metadata.annotations['leaderworkerset.sigs.k8s.io/size']
               - name: HUGGING_FACE_HUB_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: hf-secret
-                key: hf_api_token
+                valueFrom:
+                  secretKeyRef:
+                    name: hf-secret
+                    key: hf_api_token
             command:
               - sh
               - -c
               - "/workspace/vllm/examples/ray_init.sh leader --ray_cluster_size=$RAY_CLUSTER_SIZE; 
-                python3 -m vllm.entrypoints.api_server --port 8080 --model meta-llama/Meta-Llama-3.1-405B-Instruct --tensor-parallel-size 8 --pipeline-parallel-size 2"
+                python3 -m vllm.entrypoints.openai.api_server --port 8080 --model meta-llama/Meta-Llama-3.1-405B-Instruct --tensor-parallel-size 8 --pipeline-parallel-size 2"
             resources:
               limits:
                 nvidia.com/gpu: "8"
@@ -100,10 +100,10 @@ spec:
                   fieldRef:
                     fieldPath: metadata.labels['leaderworkerset.sigs.k8s.io/name']
               - name: HUGGING_FACE_HUB_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: hf-secret
-                key: hf_api_token
+                valueFrom:
+                  secretKeyRef:
+                    name: hf-secret
+                    key: hf_api_token
             volumeMounts:
               - mountPath: /dev/shm
                 name: dshm   
