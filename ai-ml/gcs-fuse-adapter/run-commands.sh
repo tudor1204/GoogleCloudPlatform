@@ -21,8 +21,7 @@ echo -n 'YOUR_HUGGINGFACE_USER_NAME' | gcloud secrets create hf-username --data-
 gcloud container clusters create-auto ${CLUSTER_NAME} \
   --project=${PROJECT_ID} \
   --region=${REGION} \
-  --release-channel=rapid \
-  --cluster-version=1.28
+  --release-channel=rapid
 
 # Create a GKE Standard cluster
 gcloud container clusters create ${CLUSTER_NAME} \
@@ -30,7 +29,6 @@ gcloud container clusters create ${CLUSTER_NAME} \
   --region=${REGION} \
   --workload-pool=${PROJECT_ID}.svc.id.goog \
   --release-channel=rapid \
-  --cluster-version=1.28 \
   --num-nodes=1 \
   --addons GcsFuseCsiDriver
 

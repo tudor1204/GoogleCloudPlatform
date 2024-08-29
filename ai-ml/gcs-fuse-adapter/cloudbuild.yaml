@@ -40,7 +40,7 @@ steps:
     args: ['cp', '-r', './${_MODEL_PATH}', 'gs://${_BUCKET_NAME}/${_MODEL_PATH}']
 
 options:
-  machineType: 'E2_HIGHCPU_32'
+  machineType: 'E2_MEDIUM'
   diskSizeGb: 100
 
 availableSecrets:
