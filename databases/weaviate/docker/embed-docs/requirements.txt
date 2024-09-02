@@ -1,5 +1,5 @@
 google-cloud-storage==2.18.2
-google-cloud-aiplatform==1.62.0
+google-cloud-aiplatform==1.63.0
 langchain==0.2.14
 langchain-community==0.2.12
 langchain-google-vertexai==1.0.10
@@ -11,5 +11,5 @@ Flask==2.3.3
 itsdangerous==2.2.0
 Jinja2==3.1.4
 MarkupSafe==2.1.5
-Werkzeug==3.0.3
+Werkzeug==3.0.4
 kubernetes==28.1.0
