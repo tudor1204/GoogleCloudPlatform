@@ -87,6 +87,9 @@ spec:
         volumeMounts:
         - name: ram-disk-storage
           mountPath: /ram-disk
+        - name: scripts-volume
+          mountPath: "/scripts/"
+          readOnly: true
       volumes:
       - name: scripts-volume
         configMap:
