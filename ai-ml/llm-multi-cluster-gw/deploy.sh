@@ -8,7 +8,7 @@
 # export GPU_POOL_ACCELERATOR_TYPE_1="nvidia-tesla-a100"
 # export GPU_POOL_MACHINE_TYPE_2="g2-standard-4"
 # export GPU_POOL_ACCELERATOR_TYPE_2="nvidia-l4"
- 
+set -e
 
 PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
 
@@ -18,7 +18,7 @@ gcloud services enable container.googleapis.com \
 # Create terraform.tfvars file 
 cat <<EOF >gke-platform/terraform.tfvars
 project_id                  = "$PROJECT_ID"
-enable_autopilot            = false
+enable_autopilot            = true
 region_1                    = "$REGION_1"
 region_2                    = "$REGION_2"
 gpu_pool_machine_type_1     = "$GPU_POOL_MACHINE_TYPE_1"
@@ -33,8 +33,10 @@ gateway_api_channel         = "CHANNEL_STANDARD"
 EOF
 
 # Create clusters
-terraform -chdir=gke-platform apply --auto-approve
+terraform -chdir=gke-platform init
+terraform -chdir=gke-platform apply
 
+set +e
 # Get cluster credentials
 gcloud container clusters get-credentials llm-cluster-1 \
     --region=$REGION_1 \
@@ -64,6 +66,10 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 gcloud container fleet ingress enable \
     --config-membership=projects/$PROJECT_ID/locations/$REGION_1/memberships/llm-cluster-1 \
     --project=$PROJECT_ID
+# Add second cluster
+gcloud container fleet ingress update \
+    --config-membership=projects/$PROJECT_ID/locations/$REGION_2/memberships/llm-cluster-2 \
+    --project=$PROJECT_ID
 
 
 # Grant Identity and Access Management (IAM) permissions required by the multi-cluster Gateway controller
@@ -83,7 +89,7 @@ kubectl create secret generic hf-secret \
 --from-literal=hf_api_token=$HF_TOKEN \
 --dry-run=client -o yaml | kubectl apply --context=gke-us -n $NAMESPACE -f -
 
-# sed -e "s/GPU_ACCELERATOR_TYPE/$GPU_POOL_ACCELERATOR_TYPE_1/g" tgi-2b-it-1.1.yaml |kubectl apply -f - -n $NAMESPACE
+sed -e "s/GPU_ACCELERATOR_TYPE/$GPU_POOL_ACCELERATOR_TYPE_1/g" tgi-2b-it-1.1.yaml |kubectl apply -f - -n $NAMESPACE
 
 # Deploy serviceExport 
 kubectl apply -f export-us.yaml -n $NAMESPACE
@@ -101,10 +107,11 @@ sed -e "s/GPU_ACCELERATOR_TYPE/$GPU_POOL_ACCELERATOR_TYPE_2/g" tgi-2b-it-1.1.yam
 kubectl apply -f export-eu.yaml -n $NAMESPACE
 
 # Deploy multicluster gateway in config cluster 
-kubectl config use-context gke-us
-kubectl apply -f gateway.yaml -n $NAMESPACE
 
-sleep 360
+kubectl apply -f gateway.yaml -n $NAMESPACE --context=gke-us
+kubectl apply -f gateway.yaml -n $NAMESPACE --context=gke-eu
+
+sleep 360 # wait for monitoring 
 kubectl apply -f monitoring.yaml -n $NAMESPACE --context=gke-us
 kubectl apply -f monitoring.yaml -n $NAMESPACE --context=gke-eu
 

@@ -38,6 +38,9 @@ resource "google_container_cluster" "ml_cluster" {
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
+    gvnic { 
+        enabled = true
+    }
     reservation_affinity {
       consume_reservation_type = "NO_RESERVATION"
     }
@@ -64,10 +67,6 @@ resource "google_container_cluster" "ml_cluster" {
     }
   }
 
-  ip_allocation_policy {
-    cluster_ipv4_cidr_block  = ""
-    services_ipv4_cidr_block = ""
-  }
 
   enable_autopilot = true
 
@@ -75,7 +74,7 @@ resource "google_container_cluster" "ml_cluster" {
     channel = "RAPID"
   }
 
-  min_master_version = "1.29"
+  min_master_version = "1.30"
 
   resource_labels = var.cluster_labels
 }
