@@ -16,9 +16,12 @@ steps:
     args:
       - 'build'
       - '-t'
+      - 'gcr.io/google-samples/workload-metrics:1.0'
+      - '-t'
       - 'us-docker.pkg.dev/google-samples/containers/workload-metrics:1.0'
       - '.'
     dir: 'observability/workload-metrics'
 
 images:
+  - 'gcr.io/google-samples/workload-metrics:1.0'
   - 'us-docker.pkg.dev/google-samples/containers/workload-metrics:1.0'
