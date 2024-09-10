@@ -21,12 +21,9 @@ steps:
   args:
     - 'build'
     - '-t'
-    - 'gcr.io/google-samples/pubsub-sample:v2'
-    - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/pubsub-sample:v2'
     - '.'
   dir: 'databases/cloud-pubsub'
 
 images:
-  - 'gcr.io/google-samples/pubsub-sample:v2'
   - 'us-docker.pkg.dev/google-samples/containers/gke/pubsub-sample:v2'

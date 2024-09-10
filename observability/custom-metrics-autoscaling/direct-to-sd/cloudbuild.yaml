@@ -21,12 +21,9 @@ steps:
   args:
     - 'build'
     - '-t'
-    - 'gcr.io/google-samples/sd-dummy-exporter:v0.3.0'
-    - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/sd-dummy-exporter:v0.3.0'
     - '.'
   dir: 'observability/custom-metrics-autoscaling/direct-to-sd'
 
 images:
-  - 'gcr.io/google-samples/sd-dummy-exporter:v0.3.0'
   - 'us-docker.pkg.dev/google-samples/containers/gke/sd-dummy-exporter:v0.3.0'

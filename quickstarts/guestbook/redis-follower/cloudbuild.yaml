@@ -21,12 +21,9 @@ steps:
   args:
     - 'build'
     - '-t'
-    - 'gcr.io/google-samples/gb-redis-follower:v2'
-    - '-t'
     - 'us-docker.pkg.dev/google-samples/containers/gke/gb-redis-follower:v2'
     - '.'
   dir: 'quickstarts/guestbook/redis-follower'
 
 images:
-  - 'gcr.io/google-samples/gb-redis-follower:v2'
   - 'us-docker.pkg.dev/google-samples/containers/gke/gb-redis-follower:v2'
