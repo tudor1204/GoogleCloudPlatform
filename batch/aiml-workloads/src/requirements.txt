@@ -17,11 +17,11 @@ python-dateutil==2.9.0.post0
     # via pandas
 pytz==2024.1
     # via pandas
-redis==5.0.7
+redis==5.0.8
     # via -r requirements.in
 scikit-learn==1.5.1
     # via -r requirements.in
-scipy==1.14.0
+scipy==1.14.1
     # via scikit-learn
 six==1.16.0
     # via python-dateutil
