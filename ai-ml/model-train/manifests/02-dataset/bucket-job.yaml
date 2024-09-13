@@ -53,15 +53,15 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: dataset-downloader
+  name: bucket-dataset-downloader
   labels:
-    app: dataset-downloader
+    app: bucket-dataset-downloader
 spec:
   ttlSecondsAfterFinished: 120
   template:
     metadata:
       labels:
-        app: dataset-downloader
+        app: bucket-dataset-downloader
     spec:
       restartPolicy: OnFailure
       serviceAccountName: bucket-access
