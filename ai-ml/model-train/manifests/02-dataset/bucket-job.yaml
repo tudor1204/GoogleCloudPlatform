@@ -70,11 +70,11 @@ spec:
         image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
         resources:
           requests:
-            cpu: "2"
-            memory: "12Gi"
+            cpu: "1"
+            memory: "3Gi"
           limits:
             cpu: "2"
-            memory: "12Gi"
+            memory: "3Gi"
         command:
         - /scripts/download.sh
         env:

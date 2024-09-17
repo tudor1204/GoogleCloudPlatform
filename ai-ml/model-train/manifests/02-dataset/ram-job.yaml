@@ -70,7 +70,7 @@ spec:
         image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
         resources:
           requests:
-            cpu: "2"
+            cpu: "1"
             memory: "12Gi"
           limits:
             cpu: "2"
