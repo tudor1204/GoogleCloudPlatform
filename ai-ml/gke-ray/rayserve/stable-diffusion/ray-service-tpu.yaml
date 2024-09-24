@@ -31,7 +31,7 @@ spec:
             - -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
             - fastapi
   rayClusterConfig:
-    rayVersion: '2.36.1.999f76-py311'
+    rayVersion: '2.36.1'
     headGroupSpec:
       rayStartParams: {}
       template:
