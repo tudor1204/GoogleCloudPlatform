@@ -1,8 +1,8 @@
 uvicorn[standard]==0.30.6
 fastapi[all]==0.114.0
 pillow
-jax==0.4.31
-jaxlib==0.4.31
+#jax==0.4.31 # installed in Dockerfile
+#jaxlib==0.4.31 # installed in Dockerfile
 google-cloud-storage
 absl-py
 transformers>=4.25.1
