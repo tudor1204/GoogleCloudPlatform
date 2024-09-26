@@ -68,6 +68,8 @@ spec:
             sizeLimit: 15Gi
     workerTemplate:
       spec:
+        nodeSelector:
+          cloud.google.com/gke-accelerator: nvidia-h100-80gb
         containers:
           - name: vllm-worker
             image: us-docker.pkg.dev/vertex-ai/vertex-vision-model-garden-dockers/pytorch-vllm-serve:20240821_1034_RC00
