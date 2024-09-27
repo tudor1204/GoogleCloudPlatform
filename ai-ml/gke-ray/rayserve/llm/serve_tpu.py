@@ -30,8 +30,6 @@ from vllm import LLM, SamplingParams
 
 logger = logging.getLogger("ray.serve")
 
-model_id = "meta-llama/Meta-Llama-3-70B"
-
 app = FastAPI()
 
 @serve.deployment(name="VLLMDeployment")
@@ -39,10 +37,10 @@ app = FastAPI()
 class VLLMDeployment:
     def __init__(
         self,
-        num_tpu_chips,  
+        num_tpu_chips,
     ):
         self.llm = LLM(
-            model=model_id,
+            model=os.environ['MODEL_ID'],
             tensor_parallel_size=num_tpu_chips,
             enforce_eager=True,
         )
@@ -86,10 +84,6 @@ def get_num_tpu_chips() -> int:
 def build_app(cli_args: Dict[str, str]) -> serve.Application:
     """Builds the Serve app based on CLI arguments."""
     ray.init(ignore_reinit_error=True)
-
-    # Set the model to use, defaults to Llama-3-70B.
-    if 'MODEL_ID' in os.environ:
-        model_id = os.environ.get('MODEL_ID')
 
     num_tpu_chips = get_num_tpu_chips()
     pg_resources = []
