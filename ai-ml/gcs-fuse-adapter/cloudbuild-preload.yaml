@@ -5,7 +5,13 @@ steps:
     args:
       - "-c"
       - |
-        gcloud storage buckets list | grep "${_BUCKET_NAME}" || gcloud storage buckets create gs://${_BUCKET_NAME} --location=${_REGION} --uniform-bucket-level-access
+        if ! gcloud storage ls "gs://${_BUCKET_NAME}" >/dev/null 2>&1; then
+          echo "Bucket '${_BUCKET_NAME}' does not exist, creating the bucket..."
+          gcloud storage buckets create gs://${_BUCKET_NAME} --location=${_REGION} --uniform-bucket-level-access
+        else
+          echo "Bucket '${_BUCKET_NAME}' already exists, skipping creation."
+        fi
+  
   # Build step 2 where the kubernetes service account is created
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
@@ -13,7 +19,8 @@ steps:
       - '-c'
       - |
           gcloud container clusters get-credentials ${_CLUSTER_NAME} --location=${_REGION}
-          kubectl get sa | grep ${_KSA_NAME} || kubectl create serviceaccount ${_KSA_NAME}
+          kubectl get sa ${_KSA_NAME} 2>/dev/null || kubectl create serviceaccount ${_KSA_NAME}
+
   # Build step 3 where the permissions to kubernetes service account are added
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
@@ -23,21 +30,37 @@ steps:
           gcloud storage buckets add-iam-policy-binding gs://${_BUCKET_NAME} \
             --member "principal://iam.googleapis.com/projects/${_PROJECT_NUMBER}/locations/global/workloadIdentityPools/${_PROJECT_ID}.svc.id.goog/subject/ns/default/sa/${_KSA_NAME}" \
             --role "${_ROLE_NAME}"
+  
   # Build step 4 where the model weights and configuration files are cloned
   - name: 'gcr.io/cloud-builders/git'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        df -h && \
-        apt-get update && \
-        apt-get install -y git-lfs && \
-        git lfs install && \
-        git lfs clone https://$$HF_USERNAME:$$HF_TOKEN@huggingface.co/google/${_MODEL_PATH} ./${_MODEL_PATH}
+        if gcloud storage ls gs://${_BUCKET_NAME}/ | grep -qw ${_MODEL_PATH}; then
+          echo "Folder ${_MODEL_PATH} already exists in the bucket, skipping cloning."
+        else
+          echo "Folder ${_MODEL_PATH} does not exist in the bucket, cloning files..."
+          df -h && \
+          apt-get update && \
+          apt-get install -y git-lfs && \
+          git lfs install && \
+          git lfs clone https://$$HF_USERNAME:$$HF_TOKEN@huggingface.co/google/${_MODEL_PATH} ./${_MODEL_PATH}
+        fi
     secretEnv: ['HF_USERNAME', 'HF_TOKEN']
+
   # Build step 5 where the files are uploaded to the bucket
-  - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['cp', '-r', './${_MODEL_PATH}', 'gs://${_BUCKET_NAME}/${_MODEL_PATH}']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if gcloud storage ls gs://${_BUCKET_NAME}/ | grep -qw ${_MODEL_PATH}; then
+          echo "Folder ${_MODEL_PATH} already exists in the bucket, skipping copy."
+        else
+          echo "Folder ${_MODEL_PATH} does not exist in the bucket, copying files..."
+          gcloud storage cp -r ./${_MODEL_PATH} gs://${_BUCKET_NAME}/${_MODEL_PATH}
+        fi
 
 options:
   machineType: 'E2_MEDIUM'

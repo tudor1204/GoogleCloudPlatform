@@ -19,7 +19,13 @@ spec:
     spec:
       containers:
       - name: inference-server
-        image: us-docker.pkg.dev/vertex-ai/vertex-vision-model-garden-dockers/pytorch-vllm-serve:20240220_0936_RC01
+        image: <CONTAINER_IMAGE>
+        readinessProbe:
+          httpGet:
+            path: http://localhost/health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           requests:
             cpu: "2"
@@ -52,7 +58,7 @@ spec:
           readOnly: false
           volumeAttributes:
             bucketName: <BUCKET_NAME>
-            mountOptions: "implicit-dirs"
+            mountOptions: "implicit-dirs,metadata-cache:ttl-secs:-1,file-cache:max-size-mb:-1,file-cache:cache-file-for-range-read:true,file-cache:enable-parallel-downloads:true"
             gcsfuseLoggingSeverity: warning
       nodeSelector:
         cloud.google.com/gke-accelerator: nvidia-l4
