@@ -42,6 +42,7 @@ class VLLMDeployment:
         self.llm = LLM(
             model=os.environ['MODEL_ID'],
             tensor_parallel_size=num_tpu_chips,
+            max_model_len=1024,
             enforce_eager=True,
         )
 
