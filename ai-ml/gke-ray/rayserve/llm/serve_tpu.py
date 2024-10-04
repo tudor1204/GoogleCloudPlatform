@@ -42,7 +42,7 @@ class VLLMDeployment:
         self.llm = LLM(
             model=os.environ['MODEL_ID'],
             tensor_parallel_size=num_tpu_chips,
-            max_model_len=1024,
+            max_model_len=int(os.environ.get('MAX_MODEL_LEN')),
             enforce_eager=True,
         )
 
@@ -50,11 +50,12 @@ class VLLMDeployment:
     async def generate(self, request: Request):
         request_dict = await request.json()
         prompts = request_dict.pop("prompt")
+        max_toks = int(request_dict.pop("max_tokens"))
         print("Processing prompt ", prompts)
         sampling_params = SamplingParams(temperature=0.7,
                                          top_p=1.0,
                                          n=1,
-                                         max_tokens=1000)
+                                         max_tokens=max_toks)
 
         outputs = self.llm.generate(prompts, sampling_params)
         for output in outputs:
