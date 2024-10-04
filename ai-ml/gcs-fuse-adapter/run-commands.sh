@@ -5,15 +5,14 @@ gcloud config set project PROJECT_ID
 export PROJECT_ID=$(gcloud config get project) \
 && export PROJECT_NUMBER=$(gcloud projects list --filter="$PROJECT_ID" --format="value(PROJECT_NUMBER)") \
 && export REGION=REGION \
-&& export ZONE=$REGION-a \
+&& export ZONE=ZONE \
 && export CLUSTER_NAME=CLUSTER_NAME \
-&& export NODEPOOL_NAME=NODEPOOL_NAME \
 && export BUCKET_NAME=MODEL_FILES_BUCKET_NAME \
 && export KSA_NAME=K8S_SERVICE_ACCOUNT_NAME \
 && export MODEL_PATH=MODEL_PATH_NAME \
 && export ROLE_NAME=ROLE_NAME \
 && export DISK_IMAGE=DISK_IMAGE_NAME \
-&& export LOG_BUCKET_NAME=LOG_BUCKET_NAME \
+&& export LOG_BUCKET_NAME=$BUCKET_NAME-disk-creation-logs \
 && export CONTAINER_IMAGE=CONTAINER_IMAGE_NAME
 
 # Add the Hugging Face username and Hugging Face user token to the cloud secrets
@@ -77,7 +76,7 @@ gcloud secrets delete hf-username \
     --condition=None \
 && gcloud projects remove-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
-    --role="roles/container.Admin" \
+    --role="roles/container.clusterAdmin" \
     --condition=None \
 && gcloud projects remove-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
