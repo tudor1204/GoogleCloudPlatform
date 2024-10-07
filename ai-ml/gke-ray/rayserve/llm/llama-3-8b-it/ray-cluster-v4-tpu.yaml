@@ -41,8 +41,6 @@ spec:
                   secretKeyRef:
                     name: hf-secret
                     key: hf_api_token
-              - name: MODEL_ID
-                value: "meta-llama/Meta-Llama-3-8B-Instruct"
             ports:
               - containerPort: 6379
                 name: gcs
@@ -84,8 +82,6 @@ spec:
                   secretKeyRef:
                     name: hf-secret
                     key: hf_api_token
-              - name: MODEL_ID
-                value: "meta-llama/Meta-Llama-3-8B-Instruct"
         nodeSelector:
           cloud.google.com/gke-tpu-accelerator: tpu-v4-podslice
           cloud.google.com/gke-tpu-topology: 2x2x2

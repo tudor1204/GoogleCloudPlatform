@@ -41,10 +41,6 @@ spec:
                   secretKeyRef:
                     name: hf-secret
                     key: hf_api_token
-              - name: MODEL_ID
-                value: "llava-hf/llava-1.5-13b-hf"
-              - name: DTYPE
-                value: "bfloat16"
             ports:
               - containerPort: 6379
                 name: gcs
@@ -86,10 +82,6 @@ spec:
                   secretKeyRef:
                     name: hf-secret
                     key: hf_api_token
-              - name: MODEL_ID
-                value: "llava-hf/llava-1.5-13b-hf"
-              - name: DTYPE
-                value: "bfloat16"
         nodeSelector:
           cloud.google.com/gke-tpu-accelerator: tpu-v4-podslice
           cloud.google.com/gke-tpu-topology: 2x2x2
