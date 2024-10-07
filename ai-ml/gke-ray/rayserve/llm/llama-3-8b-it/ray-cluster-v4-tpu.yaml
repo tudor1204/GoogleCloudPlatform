@@ -52,10 +52,6 @@ spec:
                 name: client
               - containerPort: 8000
                 name: serve
-              - containerPort: 8471
-                name: slicebuilder
-              - containerPort: 8081
-                name: mxla
   workerGroupSpecs:
   - groupName: tpu-group
     replicas: 1
