@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_ai_ml_gke_ray_rayserve_llm_llama_3_1_70b_raycluster_tpu]
+# [START gke_ai_ml_gke_ray_rayserve_llm_llava_1_5_13b_raycluster_tpu_v5e]
 apiVersion: ray.io/v1
 kind: RayCluster
 metadata:
@@ -29,11 +29,11 @@ spec:
             resources:
               limits:
                 cpu: "8"
-                ephemeral-storage: 5Gi
+                ephemeral-storage: 8Gi
                 memory: 40G
               requests:
                 cpu: "8"
-                ephemeral-storage: 5Gi
+                ephemeral-storage: 8Gi
                 memory: 40G
             env:
               - name: HUGGING_FACE_HUB_TOKEN
@@ -42,7 +42,9 @@ spec:
                     name: hf-secret
                     key: hf_api_token
               - name: MODEL_ID
-                value: "meta-llama/Llama-3.1-70B"
+                value: "llava-hf/llava-1.5-13b-hf"
+              - name: DTYPE
+                value: "bfloat16"
             ports:
               - containerPort: 6379
                 name: gcs
@@ -60,7 +62,7 @@ spec:
   - groupName: tpu-group
     replicas: 1
     minReplicas: 0
-    maxReplicas: 1
+    maxReplicas: 2
     numOfHosts: 2
     rayStartParams: {}
     template:
@@ -73,22 +75,26 @@ spec:
               limits:
                 cpu: "100"
                 google.com/tpu: "4"
-                ephemeral-storage: 150Gi
-                memory: 200G
+                ephemeral-storage: 200Gi
+                memory: 150G
               requests:
                 cpu: "100"
                 google.com/tpu: "4"
-                ephemeral-storage: 150Gi
-                memory: 200G
+                ephemeral-storage: 200Gi
+                memory: 150G
             env:
+              - name: JAX_PLATFORMS
+                value: "tpu"
               - name: HUGGING_FACE_HUB_TOKEN
                 valueFrom:
                   secretKeyRef:
                     name: hf-secret
                     key: hf_api_token
               - name: MODEL_ID
-                value: "meta-llama/Llama-3.1-70B"
+                value: "llava-hf/llava-1.5-13b-hf"
+              - name: DTYPE
+                value: "bfloat16"
         nodeSelector:
-          cloud.google.com/gke-tpu-accelerator: tpu-v4-podslice
-          cloud.google.com/gke-tpu-topology: 2x2x2
-# [END gke_ai_ml_gke_ray_rayserve_llm_llama_3_1_70b_raycluster_tpu]
+          cloud.google.com/gke-tpu-accelerator: tpu-v5-lite-podslice
+          cloud.google.com/gke-tpu-topology: 2x4
+# [END gke_ai_ml_gke_ray_rayserve_llm_llava_1_5_13b_raycluster_tpu_v5e]

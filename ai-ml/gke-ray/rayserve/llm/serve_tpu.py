@@ -38,11 +38,16 @@ class VLLMDeployment:
     def __init__(
         self,
         num_tpu_chips,
+        max_model_len,
+        tokenizer_mode,
+        dtype,
     ):
         self.llm = LLM(
-            model=os.environ['MODEL_ID'],
+            model=os.environ['MODEL_ID'], # Error if not provided.
             tensor_parallel_size=num_tpu_chips,
-            max_model_len=int(os.environ.get('MAX_MODEL_LEN')),
+            max_model_len=max_model_len,
+            dtype=dtype,
+            tokenizer_mode=tokenizer_mode,
             enforce_eager=True,
         )
 
@@ -83,6 +88,21 @@ def get_num_tpu_chips() -> int:
         return 0
     return int(ray.cluster_resources()["TPU"])
 
+def get_max_model_len() -> Optional[int]:
+    if 'MAX_MODEL_LEN' in os.environ:
+        return int(os.environ['MAX_MODEL_LEN'])
+    return None
+
+def get_tokenizer_mode() -> str:
+    if 'TOKENIZER_MODE' in os.environ:
+        return os.environ['TOKENIZER_MODE']
+    return "auto"
+
+def get_dtype() -> str:
+    if 'DTYPE' in os.environ:
+        return os.environ['DTYPE']
+    return "auto"
+
 def build_app(cli_args: Dict[str, str]) -> serve.Application:
     """Builds the Serve app based on CLI arguments."""
     ray.init(ignore_reinit_error=True)
@@ -96,6 +116,6 @@ def build_app(cli_args: Dict[str, str]) -> serve.Application:
     # Use PACK strategy since the deployment may use more than one TPU node.
     return VLLMDeployment.options(
         placement_group_bundles=pg_resources,
-        placement_group_strategy="PACK").bind(num_tpu_chips)
+        placement_group_strategy="PACK").bind(num_tpu_chips, get_max_model_len(), get_tokenizer_mode(), get_dtype())
 
 model = build_app({})

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gke_ai_ml_gke_ray_rayserve_llm_llama_3_1_70b_rayservice_tpu]
+# [START gke_ai_ml_gke_ray_rayserve_llm_llama_3_1_70b_rayservice_tpu_v4]
 apiVersion: ray.io/v1
 kind: RayService
 metadata:
@@ -26,10 +26,11 @@ spec:
         - name: VLLMDeployment
           num_replicas: 1
         runtime_env:
-          working_dir: "htthttps://github.com/GoogleCloudPlatform/kubernetes-engine-samples/archive/main.zip"
+          working_dir: "https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/archive/main.zip"
           env_vars:
             MODEL_ID: "meta-llama/Meta-Llama-3.1-70B"
-            TPU_CHIPS: "8"
+            MAX_MODEL_LEN: "4096"
+            TPU_CHIPS: "16"
   rayClusterConfig:
     rayVersion: 2.34.0
     headGroupSpec:
@@ -38,7 +39,7 @@ spec:
         spec:
           containers:
           - name: ray-head
-            image: ryanaoleary/vllm:tpu
+            image: $VLLM_IMAGE
             imagePullPolicy: IfNotPresent
             ports:
             - containerPort: 6379
@@ -58,35 +59,39 @@ spec:
             resources:
               limits:
                 cpu: "8"
+                ephemeral-storage: 8Gi
                 memory: 40G
               requests:
                 cpu: "8"
+                ephemeral-storage: 8Gi
                 memory: 40G
     workerGroupSpecs:
     - groupName: tpu-group
       replicas: 1
       minReplicas: 0
       maxReplicas: 2
-      numOfHosts: 2
+      numOfHosts: 4
       rayStartParams: {}
       template:
         spec:
           containers:
             - name: ray-worker
-              image: ryanaoleary/vllm:tpu
+              image: $VLLM_IMAGE
               imagePullPolicy: IfNotPresent
               resources:
                 limits:
                   cpu: "100"
                   google.com/tpu: "4"
-                  ephemeral-storage: 150Gi
-                  memory: 100G
+                  ephemeral-storage: 200Gi
+                  memory: 150G
                 requests:
                   cpu: "100"
                   google.com/tpu: "4"
-                  ephemeral-storage: 150Gi
-                  memory: 100G
+                  ephemeral-storage: 200Gi
+                  memory: 150G
               env:
+                - name: JAX_PLATFORMS
+                  value: "tpu"
                 - name: HUGGING_FACE_HUB_TOKEN
                   valueFrom:
                     secretKeyRef:
@@ -94,5 +99,5 @@ spec:
                       key: hf_api_token
           nodeSelector:
             cloud.google.com/gke-tpu-accelerator: tpu-v4-podslice
-            cloud.google.com/gke-tpu-topology: 2x2x2
-# [END gke_ai_ml_gke_ray_rayserve_llm_llama_3_1_70b_rayservice_tpu]
+            cloud.google.com/gke-tpu-topology: 2x2x4
+# [END gke_ai_ml_gke_ray_rayserve_llm_llama_3_1_70b_rayservice_tpu_v4]
