@@ -42,7 +42,7 @@ spec:
                     name: hf-secret
                     key: hf_api_token
               - name: MODEL_ID
-                value: "meta-llama/Llama-3-8B-Instruct"
+                value: "meta-llama/Meta-Llama-3-8B-Instruct"
             ports:
               - containerPort: 6379
                 name: gcs
