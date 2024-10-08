@@ -1,0 +1,84 @@
+import boto3
+import csv
+
+def list_msk_clusters():
+    # Create a Boto3 client for the MSK service
+    client = boto3.client('kafka')
+
+    try:
+        # List all MSK clusters in the account
+        response = client.list_clusters()
+        clusters = response.get('ClusterInfoList', [])
+
+        if not clusters:
+            print("No MSK clusters found.")
+            return []
+
+        cluster_details = []
+        for cluster in clusters:
+            cluster_arn = cluster.get('ClusterArn')
+            cluster_info = describe_msk_cluster(cluster_arn)
+            if cluster_info:
+                cluster_details.append(cluster_info)
+
+        return cluster_details
+
+    except Exception as e:
+        print(f"Error listing MSK clusters: {e}")
+        return []
+
+def describe_msk_cluster(cluster_arn):
+    # Create a Boto3 client for the MSK service
+    client = boto3.client('kafka')
+
+    try:
+        # Get the cluster details using the ARN
+        response = client.describe_cluster(ClusterArn=cluster_arn)
+        cluster_info = response.get('ClusterInfo', {})
+
+        if not cluster_info:
+            print(f"No details found for MSK cluster with ARN: {cluster_arn}")
+            return None
+
+        # Extract relevant details
+        cluster_data = {
+            "Cluster Name": cluster_info.get('ClusterName'),
+            "Cluster ARN": cluster_info.get('ClusterArn'),
+            "State": cluster_info.get('State'),
+            "Broker Nodes": cluster_info.get('NumberOfBrokerNodes'),
+            "Zookeeper Connect String": cluster_info.get('ZookeeperConnectString'),
+            "Kafka Version": cluster_info.get('CurrentBrokerSoftwareInfo', {}).get('KafkaVersion')
+        }
+
+        return cluster_data
+
+    except Exception as e:
+        print(f"Error describing MSK cluster {cluster_arn}: {e}")
+        return None
+
+def write_to_csv(cluster_data, output_file):
+    # Specify CSV column headers
+    headers = ["Cluster Name", "Cluster ARN", "State", "Broker Nodes", "Zookeeper Connect String", "Kafka Version"]
+
+    try:
+        # Write data to CSV file
+        with open(output_file, mode='w', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=headers)
+            writer.writeheader()  # Write header
+            writer.writerows(cluster_data)  # Write data rows
+
+        print(f"Data successfully written to {output_file}")
+    
+    except Exception as e:
+        print(f"Error writing to CSV file: {e}")
+
+if __name__ == "__main__":
+    # Step 1: Get the MSK clusters details
+    cluster_details = list_msk_clusters()
+
+    # Step 2: Write the MSK details to CSV
+    if cluster_details:
+        output_file = 'msk_cluster_details.csv'
+        write_to_csv(cluster_details, output_file)
+    else:
+        print("No data available to write to CSV.")
