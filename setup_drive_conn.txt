@@ -1,0 +1,32 @@
+To push documentation to Google Docs, you'll need the Google Drive MCP server configured in Claude Code. Here's the full setup process:
+
+## Step 1 - Create Google OAuth credentials
+
+1. Go to Google Cloud Console (https://console.cloud.google.com/) and create or select a project.
+2. Enable the Google Drive API and Google Docs API under APIs & Services > Library.
+3. Go to APIs & Services > Credentials, click Create Credentials > OAuth client ID.
+4. Choose Desktop app, download the JSON file, and save it somewhere safe (e.g., ~/.config/gdrive-oauth.json).
+
+## Step 2 - Install the MCP server
+
+    npm install -g @modelcontextprotocol/server-gdrive
+
+## Step 3 - Configure Claude Code
+
+Add the server to your Claude Code settings at ~/.claude/settings.json:
+
+    {
+      "mcpServers": {
+        "gdrive": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-gdrive"],
+          "env": {
+            "GDRIVE_OAUTH_PATH": "/path/to/your/gdrive-oauth.json"
+          }
+        }
+      }
+    }
+
+## Step 4 - Authenticate
+
+The first time the server runs, it will open a browser for OAuth consent. After that, the token is cached and reused.
